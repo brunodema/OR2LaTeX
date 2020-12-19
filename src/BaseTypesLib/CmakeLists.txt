@@ -7,5 +7,3 @@ file(GLOB files
 )
 
 add_library(BaseTypesLib STATIC ${files})
-
-message(STATUS "cheguemos aqui!")

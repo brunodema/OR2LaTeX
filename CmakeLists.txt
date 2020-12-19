@@ -5,6 +5,7 @@ set(CMAKE_INSTALL_PREFIX "result")
 
 project(DEMALIB)
 
-add_subdirectory(src)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
+include(VarLogging.cmake)
 
-message(STATUS "deu certo!!!!")
+add_subdirectory(src)
