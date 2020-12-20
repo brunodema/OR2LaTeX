@@ -2,6 +2,7 @@
 #include "../src/BaseTypesLib/Vecxd.h"
 #include "../src/OR2LaTeX/OR2L_Types/INDEX.h"
 #include "../src/OR2LaTeX/OR2L_Types/VARIABLE.h"
+#include "../src/OR2LaTeX/OR2L_Types/EXPRESSION.h"
 #include <cassert>
 
 using namespace DEMALIB::BASE_TYPES;
@@ -55,6 +56,7 @@ std::vector< std::function<void()>> ModuleTester::tests =
 	assert(variables.at(2).at(2) == VARIABLE({ i,j }, "X"));
 	assert(variables.at(3).at(3) == VARIABLE({ i,j }, "X"));
 	assert(variables.at(4).at(4) == VARIABLE({ i,j }, "X"));
+
 }
 };
 

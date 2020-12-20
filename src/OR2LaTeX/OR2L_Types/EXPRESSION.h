@@ -1,6 +1,7 @@
 #pragma once
 #include <set>
 #include "VARIABLE.h"
+#include "COEFFICIENT.h"
 
 namespace OR2L
 {
