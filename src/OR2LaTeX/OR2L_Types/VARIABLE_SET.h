@@ -31,7 +31,7 @@ namespace OR2L
 		VARIABLE _variable;
 		DEMALIB::BASE_TYPES::Vecxd<VARIABLE_OBJECT> _variables;
 
-		bool CheckVariableFromCustomRule(const VARIABLE& var) { return _custom_rule.IsVariableValid(var); }
+		bool CheckVariableFromCustomRule(const VARIABLE& var) const { return _custom_rule.IsVariableValid(var); }
 	};
 }
 
