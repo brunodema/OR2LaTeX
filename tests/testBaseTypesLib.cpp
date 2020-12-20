@@ -1,4 +1,3 @@
-#pragma once
 #include "../src/BaseTypesLib/Vecxd.h"
 #include "../src/BaseTypesLib/Coordinates.h"
 #include "../src/BaseTypesLib/ModuleTester.h"

@@ -1,4 +1,3 @@
-#pragma once
 #include "../src/BaseTypesLib/ModuleTester.h"
 #include "../src/BaseTypesLib/Vecxd.h"
 #include "../src/OR2LaTeX/OR2L_Types/INDEX.h"
