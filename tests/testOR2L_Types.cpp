@@ -1,7 +1,8 @@
-#include "../../BaseTypesLib/BaseTypesLib/ModuleTester.h"
-#include "../../BaseTypesLib/BaseTypesLib/inc/Vecxd.h"
-#include "../OR2L_Types/INDEX.h"
-#include "../OR2L_Types/VARIABLE.h"
+#pragma once
+#include "../src/BaseTypesLib/ModuleTester.h"
+#include "../src/BaseTypesLib/Vecxd.h"
+#include "../src/OR2LaTeX/OR2L_Types/INDEX.h"
+#include "../src/OR2LaTeX/OR2L_Types/VARIABLE.h"
 #include <cassert>
 
 using namespace DEMALIB::BASE_TYPES;
