@@ -37,7 +37,7 @@ std::vector< std::function<void()>> ModuleTester::tests =
 	INDEX i(0, 20, "i");
 	INDEX j(0, 10, "j");
 	INDEX k(1110, 23210, "k");
-	VARIABLE var = VARIABLE("X", { i,j,k });
+	VARIABLE var = VARIABLE({ i,j,k }, "X");
 	Vecxd<VARIABLE> variables({ 1,2,3,4,5 }, var);
 	assert(variables.at(0).at(0) == var);
 	assert(variables.at(1).at(1) == var);
@@ -49,12 +49,12 @@ std::vector< std::function<void()>> ModuleTester::tests =
 {
 	INDEX i(0, 20, "i");
 	INDEX j(0, 10, "j");
-	Vecxd<VARIABLE> variables({ 1,2,3,4,5 }, VARIABLE("C", { i,j }));
-	assert(variables.at(0).at(0) == VARIABLE("C", { i,j }));
-	assert(variables.at(1).at(1) == VARIABLE("C", { i,j }));
-	assert(variables.at(2).at(2) == VARIABLE("C", { i,j }));
-	assert(variables.at(3).at(3) == VARIABLE("C", { i,j }));
-	assert(variables.at(4).at(4) == VARIABLE("C", { i,j }));
+	Vecxd<VARIABLE> variables({ 1,2,3,4,5 }, VARIABLE({ i,j }, "X"));
+	assert(variables.at(0).at(0) == VARIABLE({ i,j }, "X"));
+	assert(variables.at(1).at(1) == VARIABLE({ i,j }, "X"));
+	assert(variables.at(2).at(2) == VARIABLE({ i,j }, "X"));
+	assert(variables.at(3).at(3) == VARIABLE({ i,j }, "X"));
+	assert(variables.at(4).at(4) == VARIABLE({ i,j }, "X"));
 }
 };
 

@@ -10,15 +10,15 @@ namespace OR2L
 	class VARIABLE
 	{
 	public:
-		VARIABLE(const std::optional<std::string> name, const std::initializer_list<INDEX> index) : _name(name) 
+		VARIABLE(const std::initializer_list<INDEX> indexes = {}, std::string name = "") : _name(name) 
 		{
-			for (auto var : index)
+			for (auto index : indexes)
 			{
-				_index_map.insert(std::pair<std::string, INDEX>(var._name, var));
+				_index_map.insert(std::pair<std::string, INDEX>(index._name, index));
 			}
 		}
 
-		VARIABLE() {}
+		//VARIABLE() {}
 
 		VARIABLE(const VARIABLE&) = default;
 		VARIABLE(VARIABLE&&) = default;
@@ -35,7 +35,7 @@ namespace OR2L
 		INDEX index(const std::string& key) const { return _index_map.at(key); }
 		std::vector<size_t> GetIndexSizes() const;
 	private:
-		std::optional<std::string> _name = std::nullopt;
+		std::string _name = "";
 		std::unordered_map<std::string, INDEX> _index_map;
 	};
 
