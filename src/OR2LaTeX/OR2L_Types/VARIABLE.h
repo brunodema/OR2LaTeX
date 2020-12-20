@@ -18,8 +18,6 @@ namespace OR2L
 			}
 		}
 
-		//VARIABLE() {}
-
 		VARIABLE(const VARIABLE&) = default;
 		VARIABLE(VARIABLE&&) = default;
 		virtual VARIABLE& operator=(const VARIABLE&) = default;
@@ -34,6 +32,7 @@ namespace OR2L
 		std::size_t GetNumberOfIndexes() { return _index_map.size(); }
 		INDEX index(const std::string& key) const { return _index_map.at(key); }
 		std::vector<size_t> GetIndexSizes() const;
+
 	private:
 		std::string _name = "";
 		std::unordered_map<std::string, INDEX> _index_map;
