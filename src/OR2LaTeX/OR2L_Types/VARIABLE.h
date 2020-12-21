@@ -12,7 +12,7 @@ namespace OR2L
 	public:
 		VARIABLE(const std::initializer_list<INDEX> indexes = {}, std::string name = "") : _name(name) 
 		{
-			for (auto index : indexes)
+			for (auto& index : indexes)
 			{
 				_index_map.insert(std::pair<std::string, INDEX>(index._name, index));
 			}

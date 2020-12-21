@@ -38,22 +38,6 @@
             "problemMatcher": [
                 "$msCompile"
             ]
-        },
-        {
-            "label": "full-build",
-            "type": "shell",
-            "dependsOn":[
-                "cmake-precompile",
-                "cmake-build"
-            ],
-            "group": "build",
-            "presentation": {
-                "panel": "dedicated",
-                "reveal": "always"
-            },
-            "problemMatcher": [
-                "$msCompile"
-            ]
         }
     ]
 }

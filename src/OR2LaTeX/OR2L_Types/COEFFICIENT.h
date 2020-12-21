@@ -9,6 +9,8 @@ namespace OR2L
         COEFFICIENT(const VARIABLE &var = VARIABLE({}, ""), const double multiplier = 1.00) : _variable(var),
                                                                                               _multiplier(multiplier) {}
 
+        COEFFICIENT(const double &constant) : _multiplier(constant) {}
+
         COEFFICIENT(const COEFFICIENT &) = default;
         COEFFICIENT(COEFFICIENT &&) = default;
         virtual COEFFICIENT &operator=(const COEFFICIENT &) = default;

@@ -1,5 +1,5 @@
 #pragma once
-#include <set>
+#include <unordered_map>
 #include "VARIABLE.h"
 #include "COEFFICIENT.h"
 
@@ -10,14 +10,14 @@ namespace OR2L
     public:
         EXPRESSION(COEFFICIENT &coeff)
         {
-            if (_coeffs.contains(coeff.Variable()))
-            {
-                _coeffs.at(coeff.Variable()) += coeff.Multiplier();
-            }
-            else
-            {
-                _coeffs.try_emplace(coeff.Variable(), coeff.Multiplier());
-            }
+            // if (_coeffs.contains(coeff.Variable()))
+            // {
+            //     _coeffs.at(coeff.Variable()) += coeff.Multiplier();
+            // }
+            // else
+            // {
+            //     _coeffs.try_emplace(coeff.Variable(), coeff.Multiplier());
+            // }
         }
 
         EXPRESSION() {}
@@ -29,10 +29,10 @@ namespace OR2L
         virtual ~EXPRESSION() = default;
 
     private:
-        std::unordered_map<VARIABLE, double> _coeffs = {};
+        //std::unordered_map<VARIABLE, double> _coeffs;
     };
 
-    EXPRESSION operator+(const VARIABLE &A, const VARIABLE &B)
-    {
-    }
+    //EXPRESSION operator+(const VARIABLE &A, const VARIABLE &B)
+    //{
+    //}
 } // namespace OR2L
