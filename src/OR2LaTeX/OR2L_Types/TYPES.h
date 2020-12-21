@@ -9,7 +9,7 @@ namespace OR2L
 		VARIABLE,
 		EXPRESSION,
 		INEQUALITY
-	}
+	};
 }
 
 
