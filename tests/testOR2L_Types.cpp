@@ -56,7 +56,25 @@ std::vector< std::function<void()>> ModuleTester::tests =
 	assert(variables.at(2).at(2) == VARIABLE({ i,j }, "X"));
 	assert(variables.at(3).at(3) == VARIABLE({ i,j }, "X"));
 	assert(variables.at(4).at(4) == VARIABLE({ i,j }, "X"));
+},
+[]()
+{
+	INDEX i(0, 20, "i");
+	INDEX j(0, 10, "j");
+	INDEX k(5, 30, "k");
 
+	VARIABLE var1({i,j,k}, "Cost");
+	VARIABLE var2({i}, "Velocity");
+
+	COEFFICIENT coeff1(var1, 2.00);
+	COEFFICIENT coeff2(var2, 2.00);
+	COEFFICIENT coeff3(5.45);
+
+	//assert(variables.at(0).at(0) == VARIABLE({ i,j }, "X"));
+	//assert(variables.at(1).at(1) == VARIABLE({ i,j }, "X"));
+	//assert(variables.at(2).at(2) == VARIABLE({ i,j }, "X"));
+	//assert(variables.at(3).at(3) == VARIABLE({ i,j }, "X"));
+	//assert(variables.at(4).at(4) == VARIABLE({ i,j }, "X"));
 }
 };
 

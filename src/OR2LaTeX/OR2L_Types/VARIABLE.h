@@ -34,10 +34,18 @@ namespace OR2L
 		std::vector<size_t> GetIndexSizes() const;
 		inline std::string Name() const { return _name; }
 
-		friend std::vector<INDEX> GetIndexes(const VARIABLE &B);
-
 	private:
 		std::string _name = "";
 		std::unordered_map<std::string, INDEX> _index_map;
+	};
+
+	struct HASH_VARIABLE
+	{
+		std::size_t operator()(const OR2L::VARIABLE &k) const
+		{
+			// a completelly terrible hasher - used only for scientific reasons
+			// in the future, incorporate variable indexes into the mix - these should be a reasonable way to hash it
+			return std::hash<std::string>()(k.Name());
+		}
 	};
 } // namespace OR2L
