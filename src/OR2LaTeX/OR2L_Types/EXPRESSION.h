@@ -46,7 +46,7 @@ namespace OR2L
             return *this;
         }
 
-        EXPRESSION &operator+(COEFFICIENT &coeff)
+        EXPRESSION operator+(COEFFICIENT &coeff)
         {
             this->InsertOrUpdate(coeff);
             return *this;
