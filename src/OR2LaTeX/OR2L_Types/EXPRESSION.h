@@ -15,6 +15,14 @@ namespace OR2L
             InsertOrUpdate(coeff);
         }
 
+        EXPRESSION(const std::initializer_list<COEFFICIENT> coeffs)
+        {
+            for (auto &&coeff : coeffs)
+            {
+                InsertOrUpdate(coeff);
+            }
+        }
+
         EXPRESSION() {}
 
         EXPRESSION(const EXPRESSION &) = default;
@@ -22,6 +30,39 @@ namespace OR2L
         virtual EXPRESSION &operator=(const EXPRESSION &) = default;
         virtual EXPRESSION &operator=(EXPRESSION &&) = default;
         virtual ~EXPRESSION() = default;
+
+        EXPRESSION &operator+=(const EXPRESSION &B)
+        {
+            for (auto &&coeff : B._coeffs)
+            {
+                this->InsertOrUpdate({coeff.first, coeff.second});
+            }
+            return *this;
+        }
+
+        EXPRESSION &operator+=(const COEFFICIENT &coeff)
+        {
+            this->InsertOrUpdate(coeff);
+            return *this;
+        }
+
+        EXPRESSION &operator+(COEFFICIENT &coeff)
+        {
+            this->InsertOrUpdate(coeff);
+            return *this;
+        }
+
+        COEFFICIENT GetCoefficient(const VARIABLE &var) const
+        {
+            try
+            {
+                return {var, this->_coeffs.at(var)};
+            }
+            catch (const std::exception &e)
+            {
+                std::cerr << e.what() << '\n';
+            }
+        }
 
     private:
         void InsertOrUpdate(const COEFFICIENT &coeff)
@@ -39,8 +80,8 @@ namespace OR2L
         std::unordered_map<VARIABLE, double, HASH_VARIABLE> _coeffs;
     };
 
-    EXPRESSION operator+(const COEFFICIENT &A, const COEFFICIENT &B)
+    EXPRESSION operator+(const COEFFICIENT &coeffA, const COEFFICIENT &coeffB)
     {
-        return EXPRESSION(A);
+        return EXPRESSION({coeffA, coeffB});
     }
 } // namespace OR2L
