@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include "VARIABLE.h"
 #include "COEFFICIENT.h"
+#include "OR2LEXCEPTION.h"
 #include <varargs.h>
 #include <cstdarg>
 
@@ -54,7 +55,7 @@ namespace OR2L
 
         EXPRESSION operator-(COEFFICIENT &coeff)
         {
-            coeff.SetMultiplier(coeff.GetMultiplier() * -1); 
+            coeff.SetMultiplier(coeff.GetMultiplier() * -1);
             this->InsertOrUpdate(coeff);
             return *this;
         }
@@ -96,5 +97,12 @@ namespace OR2L
     {
         coeffB.SetMultiplier(coeffB.GetMultiplier() * -1);
         return EXPRESSION({coeffA, coeffB});
+    }
+
+    EXPRESSION operator*(const COEFFICIENT &coeffA, COEFFICIENT &coeffB)
+    {
+        // continue from here
+        
+        throw("");
     }
 } // namespace OR2L
