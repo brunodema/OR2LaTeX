@@ -17,8 +17,10 @@ namespace OR2L
         virtual COEFFICIENT &operator=(COEFFICIENT &&) = default;
         virtual ~COEFFICIENT() = default;
 
-        inline VARIABLE Variable() const { return _variable; }
-        inline double Multiplier() const { return _multiplier; }
+        inline VARIABLE GetVariable() const { return _variable; }
+        inline void SetVariable(const VARIABLE& var) { _variable = var; }
+        inline double GetMultiplier() const { return _multiplier; }
+        inline void SetMultiplier(const double val) { _multiplier = val; }
 
     private:
         VARIABLE _variable = VARIABLE({}, "");

@@ -74,6 +74,9 @@ std::vector< std::function<void()>> ModuleTester::tests =
 	EXPRESSION expr2 = coeff1 + coeff2 + coeff3;
 	EXPRESSION expr3 = expr1 + coeff1;
 
+	EXPRESSION expr4 = coeff1 - coeff2;
+	EXPRESSION expr5 = expr4 - coeff3;
+
 	//assert(variables.at(0).at(0) == VARIABLE({ i,j }, "X"));
 	//assert(variables.at(1).at(1) == VARIABLE({ i,j }, "X"));
 	//assert(variables.at(2).at(2) == VARIABLE({ i,j }, "X"));

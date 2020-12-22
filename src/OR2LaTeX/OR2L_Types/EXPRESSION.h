@@ -52,6 +52,13 @@ namespace OR2L
             return *this;
         }
 
+        EXPRESSION operator-(COEFFICIENT &coeff)
+        {
+            coeff.SetMultiplier(coeff.GetMultiplier() * -1); 
+            this->InsertOrUpdate(coeff);
+            return *this;
+        }
+
         COEFFICIENT GetCoefficient(const VARIABLE &var) const
         {
             try
@@ -67,13 +74,13 @@ namespace OR2L
     private:
         void InsertOrUpdate(const COEFFICIENT &coeff)
         {
-            if (_coeffs.contains(coeff.Variable()))
+            if (_coeffs.contains(coeff.GetVariable()))
             {
-                _coeffs.at(coeff.Variable()) += coeff.Multiplier();
+                _coeffs.at(coeff.GetVariable()) += coeff.GetMultiplier();
             }
             else
             {
-                _coeffs.try_emplace(coeff.Variable(), coeff.Multiplier());
+                _coeffs.try_emplace(coeff.GetVariable(), coeff.GetMultiplier());
             }
         }
 
@@ -82,6 +89,12 @@ namespace OR2L
 
     EXPRESSION operator+(const COEFFICIENT &coeffA, const COEFFICIENT &coeffB)
     {
+        return EXPRESSION({coeffA, coeffB});
+    }
+
+    EXPRESSION operator-(const COEFFICIENT &coeffA, COEFFICIENT &coeffB)
+    {
+        coeffB.SetMultiplier(coeffB.GetMultiplier() * -1);
         return EXPRESSION({coeffA, coeffB});
     }
 } // namespace OR2L
