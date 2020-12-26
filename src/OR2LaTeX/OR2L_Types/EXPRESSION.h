@@ -8,107 +8,112 @@ namespace OR2L
     class EXPRESSION
     {
     public:
-        EXPRESSION(const double coeff = 0.00) : _scalar_coefficient(coeff), _variable_map() {}
-        EXPRESSION(const VARIABLE var) : _scalar_coefficient(), _variable_map({{var, _scalar_coefficient}}) {}
+        EXPRESSION(const double coeff = 0.00) : scalar_coefficient_(coeff), variable_map_() {}
+        EXPRESSION(const VARIABLE var) : scalar_coefficient_(), variable_map_({ {var, scalar_coefficient_} }) {}
 
-        EXPRESSION(const EXPRESSION &) = default;
-        EXPRESSION(EXPRESSION &&) = default;
-        virtual EXPRESSION &operator=(const EXPRESSION &) = default;
-        virtual EXPRESSION &operator=(EXPRESSION &&) = default;
+        EXPRESSION(const EXPRESSION&) = default;
+        EXPRESSION(EXPRESSION&&) = default;
+        virtual EXPRESSION& operator=(const EXPRESSION&) = default;
+        virtual EXPRESSION& operator=(EXPRESSION&&) = default;
         virtual ~EXPRESSION() = default;
 
-        EXPRESSION &operator+=(const double coeff)
+        EXPRESSION& operator+=(const double coeff)
         {
-            this->_scalar_coefficient += coeff;
+            this->scalar_coefficient_ += coeff;
             return *this;
         }
 
-        EXPRESSION &operator-=(const double coeff)
+        EXPRESSION& operator-=(const double coeff)
         {
-            this->_scalar_coefficient -= coeff;
+            this->scalar_coefficient_ -= coeff;
             return *this;
         }
 
-        EXPRESSION &operator+=(const VARIABLE &var)
+        EXPRESSION& operator+=(const VARIABLE& var)
         {
-            if (this->_variable_map.contains(var))
+            if (this->variable_map_.contains(var))
             {
-                ++this->_variable_map.at(var);
+                ++this->variable_map_.at(var);
             }
             else
             {
-                this->_variable_map.emplace(var, 1.00);
+                this->variable_map_.emplace(var, 1.00);
             }
             return *this;
         }
 
-        EXPRESSION &operator-=(const VARIABLE &var)
+        EXPRESSION& operator-=(const VARIABLE& var)
         {
-            if (this->_variable_map.contains(var))
+            if (this->variable_map_.contains(var))
             {
-                --this->_variable_map.at(var);
+                --this->variable_map_.at(var);
             }
             else
             {
-                this->_variable_map.emplace(var, -1.00);
+                this->variable_map_.emplace(var, -1.00);
             }
             return *this;
         }
 
-        EXPRESSION &operator*=(const double coeff)
+        EXPRESSION& operator*=(const double coeff)
         {
-            this->_scalar_coefficient *= coeff;
+            this->scalar_coefficient_ *= coeff;
             return *this;
         }
 
-        EXPRESSION &operator/=(const double coeff)
+        EXPRESSION& operator/=(const double coeff)
         {
-            this->_scalar_coefficient /= coeff;
+            this->scalar_coefficient_ /= coeff;
             return *this;
         }
 
-        EXPRESSION &operator+(const EXPRESSION &expr)
+        EXPRESSION& operator+(const EXPRESSION& expr)
         {
-            for (auto &&var_coeff : expr._variable_map)
+            for (auto&& var_coeff : expr.variable_map_)
             {
-                this->_variable_map.at(var_coeff.first) += var_coeff.second;
+                this->variable_map_.at(var_coeff.first) += var_coeff.second;
             }
-            this->_scalar_coefficient += expr._scalar_coefficient;
+            this->scalar_coefficient_ += expr.scalar_coefficient_;
             return *this;
         }
 
-        EXPRESSION &operator-(const EXPRESSION &expr)
+        EXPRESSION& operator-(const EXPRESSION& expr)
         {
-            for (auto &&var_coeff : expr._variable_map)
+            for (auto&& var_coeff : expr.variable_map_)
             {
-                this->_variable_map.at(var_coeff.first) -= var_coeff.second;
+                this->variable_map_.at(var_coeff.first) -= var_coeff.second;
             }
-            this->_scalar_coefficient -= expr._scalar_coefficient;
+            this->scalar_coefficient_ -= expr.scalar_coefficient_;
             return *this;
         }
 
-        EXPRESSION &operator+(const VARIABLE &var)
+        EXPRESSION& operator+(const VARIABLE& var)
         {
-            ++this->_variable_map.at(var);
+            ++this->variable_map_.at(var);
             return *this;
         }
 
-        EXPRESSION &operator-(const VARIABLE &var)
+        EXPRESSION& operator-(const VARIABLE& var)
         {
-            --this->_variable_map.at(var);
+            --this->variable_map_.at(var);
             return *this;
         }
 
-        friend EXPRESSION operator+(const VARIABLE &var1, const VARIABLE &var2);
-        friend EXPRESSION operator-(const VARIABLE &var1, const VARIABLE &var2);
-        friend EXPRESSION operator*(const VARIABLE &var, const double coeff);
+        friend EXPRESSION operator+(const VARIABLE& var1, const VARIABLE& var2);
+        friend EXPRESSION operator-(const VARIABLE& var1, const VARIABLE& var2);
+        friend EXPRESSION operator*(const VARIABLE& var, const double coeff);
+
+        double GetConstant() const { return scalar_coefficient_; }
+        double GetCoefficient(const VARIABLE& var) const { return variable_map_.at(var); }
+        void SetCoefficient(const VARIABLE& var, const double coeff) { variable_map_.at(var) = coeff; }
+        bool ContainsVariable(const VARIABLE& var) const { return variable_map_.contains(var); }
 
     private:
-        std::unordered_map<VARIABLE, double> _variable_map = {};
-        double _scalar_coefficient = 0.00;
+        std::unordered_map<VARIABLE, double> variable_map_ = {};
+        double scalar_coefficient_ = 0.00;
     };
 
-    EXPRESSION operator+(const VARIABLE &var1, const VARIABLE &var2)
+    EXPRESSION operator+(const VARIABLE& var1, const VARIABLE& var2)
     {
         EXPRESSION expr;
         expr += var1;
@@ -116,7 +121,7 @@ namespace OR2L
         return expr;
     }
 
-    EXPRESSION operator-(const VARIABLE &var1, const VARIABLE &var2)
+    EXPRESSION operator-(const VARIABLE& var1, const VARIABLE& var2)
     {
         EXPRESSION expr;
         expr += var1;
@@ -124,11 +129,11 @@ namespace OR2L
         return expr;
     }
 
-    EXPRESSION operator*(const VARIABLE &var, const double coeff)
+    EXPRESSION operator*(const VARIABLE& var, const double coeff)
     {
         EXPRESSION expr;
         expr += var;
-        expr._variable_map.at(var) *= coeff;
+        expr.variable_map_.at(var) *= coeff;
         return expr;
     }
 } // namespace OR2L

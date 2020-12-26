@@ -7,11 +7,14 @@ namespace OR2L
 {
     enum class EXCEPTION_TYPE
     {
-        ERR_INDEX_BOUNDS
+        ERR_INDEX_BOUNDS,
+        ERR_EXPRESSION_VARNOTFOUND
     };
 
     static std::map<EXCEPTION_TYPE, std::string_view> EXCEPTION_TEXT =
-        {{EXCEPTION_TYPE::ERR_INDEX_BOUNDS, "The specified lower bound is higher than the upper bound."}};
+    {
+        {EXCEPTION_TYPE::ERR_INDEX_BOUNDS, "The specified lower bound is higher than the upper bound."},
+    };
 
     class OR2LEXCEPTION : public std::exception
     {
@@ -31,10 +34,10 @@ namespace OR2L
             buffer_ << "OR2L Exception | " << message << "\n";
         }
 
-        OR2LEXCEPTION(const OR2LEXCEPTION &) = default;
-        OR2LEXCEPTION(OR2LEXCEPTION &&) = default;
-        virtual OR2LEXCEPTION &operator=(const OR2LEXCEPTION &) = default;
-        virtual OR2LEXCEPTION &operator=(OR2LEXCEPTION &&) = default;
+        OR2LEXCEPTION(const OR2LEXCEPTION&) = default;
+        OR2LEXCEPTION(OR2LEXCEPTION&&) = default;
+        virtual OR2LEXCEPTION& operator=(const OR2LEXCEPTION&) = default;
+        virtual OR2LEXCEPTION& operator=(OR2LEXCEPTION&&) = default;
         virtual ~OR2LEXCEPTION() = default;
 
     private:
