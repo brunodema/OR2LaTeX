@@ -51,7 +51,7 @@ namespace OR2L
             }
             else
             {
-                this->_variable_map.emplace(var, 1.00);
+                this->_variable_map.emplace(var, -1.00);
             }
             return *this;
         }
@@ -74,6 +74,7 @@ namespace OR2L
             {
                 this->_variable_map.at(var_coeff.first) += var_coeff.second;
             }
+            this->_scalar_coefficient += expr._scalar_coefficient;
             return *this;
         }
 
@@ -83,6 +84,7 @@ namespace OR2L
             {
                 this->_variable_map.at(var_coeff.first) -= var_coeff.second;
             }
+            this->_scalar_coefficient -= expr._scalar_coefficient;
             return *this;
         }
 
@@ -118,7 +120,7 @@ namespace OR2L
     EXPRESSION operator-(const VARIABLE &var1, const VARIABLE &var2)
     {
         EXPRESSION expr;
-        expr -= var1;
+        expr += var1;
         expr -= var2;
         return expr;
     }
@@ -127,7 +129,7 @@ namespace OR2L
     {
         EXPRESSION expr;
         expr += var;
-        expr._variable_map.at(var) *= coeff; 
+        expr._variable_map.at(var) *= coeff;
         return expr;
     }
 

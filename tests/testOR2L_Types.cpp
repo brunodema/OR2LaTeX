@@ -58,16 +58,16 @@ std::vector<std::function<void()>> ModuleTester::tests =
 			INDEX j(0, 10, "j");
 			INDEX k(5, 30, "k");
 
-			VARIABLE var1({i, j, k}, "Cost");
-			VARIABLE var2({i}, "Velocity");
+			VARIABLE C_ijk({i, j, k}, "Cost");
+			VARIABLE V_i({i}, "Velocity");
 
 			double coeff1 = 5.45;
 
-			EXPRESSION expr1 = var1 + var2;
-			EXPRESSION expr2 = var1 + var2 + coeff1;
-			EXPRESSION expr3 = expr1 + var1;
+			EXPRESSION expr1 = C_ijk + V_i;
+			EXPRESSION expr2 = C_ijk + V_i + coeff1;
+			EXPRESSION expr3 = expr1 + C_ijk;
 
-			EXPRESSION expr4 = var1 - var2;
+			EXPRESSION expr4 = C_ijk - V_i;
 			EXPRESSION expr5 = expr4 - coeff1;
 
 			//assert(variables.at(0).at(0) == VARIABLE({ i,j }, "X"));
