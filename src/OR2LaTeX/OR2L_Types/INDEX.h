@@ -7,13 +7,13 @@ namespace OR2L
 	class INDEX
 	{
 	public:
-		INDEX(size_t lb, size_t ub, const std::string &name) : _lb(lb),
-															   _ub(ub),
-															   _name(name)
+		INDEX(size_t lb, size_t ub, const std::string &name) : lb_(lb),
+															   ub_(ub),
+															   name_(name)
 		{
 			if (ub <= lb)
 			{
-				throw OR2LEXCEPTION("");
+				throw OR2LEXCEPTION(EXCEPTION_TYPE::ERR_INDEX_BOUNDS);
 			}
 		}
 
@@ -27,19 +27,19 @@ namespace OR2L
 
 		bool operator==(const INDEX &B) const
 		{
-			return this->_lb == B._lb &&
-				   this->_ub == B._ub &&
-				   this->_name == B._name;
+			return this->lb_ == B.lb_ &&
+				   this->ub_ == B.ub_ &&
+				   this->name_ == B.name_;
 		}
 
-		inline size_t GetUB() const { return _ub; }
-		inline size_t GetLB() const { return _lb; }
-		inline size_t GetSize() const { return _ub - _lb; }
-		inline std::string GetName() const { return _name; }
+		inline size_t GetUB() const { return ub_; }
+		inline size_t GetLB() const { return lb_; }
+		inline size_t GetSize() const { return ub_ - lb_; }
+		inline std::string GetName() const { return name_; }
 
 	private:
-		size_t _lb = 0;
-		size_t _ub = 0;
-		std::string _name;
+		size_t lb_ = 0;
+		size_t ub_ = 0;
+		std::string name_;
 	};
 } // namespace OR2L

@@ -12,13 +12,11 @@ namespace OR2L
 	public:
 		friend class std::hash<VARIABLE>;
 
-		VARIABLE(const std::initializer_list<INDEX> indexes = {}, const std::string &name = "") : _name(name)
-
+		VARIABLE(const std::initializer_list<INDEX> indexes = {}, const std::string &name = "") : name_(name)
 		{
 			for (auto &&index : indexes)
 			{
-				_hash = 0;
-				_indexes.insert(std::pair<std::string, INDEX>(index.GetName(), index));
+				indexes_.insert(std::pair<std::string, INDEX>(index.GetName(), index));
 			}
 		}
 
@@ -30,19 +28,18 @@ namespace OR2L
 
 		bool operator==(const VARIABLE &B) const
 		{
-			return this->_name == B._name && this->_indexes == B._indexes;
+			return this->name_ == B.name_ && this->indexes_ == B.indexes_;
 		}
 
-		inline std::size_t GetNumberOfIndexes() { return _indexes.size(); }
-		inline INDEX GetIndex(const std::string &key) const { return _indexes.at(key); }
+		inline std::size_t GetNumberOfIndexes() { return indexes_.size(); }
+		inline INDEX GetIndex(const std::string &key) const { return indexes_.at(key); }
 		std::vector<size_t> GetIndexSizes() const;
-		inline std::string GetName() const { return _name; }
-		inline void SetName(const std::string &str) { _name = str; }
+		inline std::string GetName() const { return name_; }
+		inline void SetName(const std::string &str) { name_ = str; }
 
 	private:
-		std::unordered_map<std::string, INDEX> _indexes;
-		std::string _name = "";
-		size_t _hash;
+		std::unordered_map<std::string, INDEX> indexes_;
+		std::string name_ = "";
 	};
 } // namespace OR2L
 
@@ -54,7 +51,7 @@ struct std::hash<OR2L::VARIABLE>
 		// a completelly terrible hasher - used only for scientific reasons (need to study more about this)
 		size_t ret = 0;
 		std::vector<size_t> hash_elements = {std::hash<std::string>()(k.GetName())};
-		for (auto it = k._indexes.begin(); it != k._indexes.end(); ++it)
+		for (auto it = k.indexes_.begin(); it != k.indexes_.end(); ++it)
 		{
 			hash_elements.push_back(std::hash<std::string>()(it->first));
 			hash_elements.push_back(std::hash<size_t>()(it->second.GetLB()));

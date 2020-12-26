@@ -3,14 +3,13 @@
 #include <utility>
 #include "VARIABLE.h"
 
-using namespace OR2L;
-
 namespace OR2L
 {
     class EXPRESSION
     {
     public:
-        EXPRESSION(const double coeff = 0.00) : _scalar_coefficient(coeff) {}
+        EXPRESSION(const double coeff = 0.00) : _scalar_coefficient(coeff), _variable_map() {}
+        EXPRESSION(const VARIABLE var) : _scalar_coefficient(), _variable_map({{var, _scalar_coefficient}}) {}
 
         EXPRESSION(const EXPRESSION &) = default;
         EXPRESSION(EXPRESSION &&) = default;
@@ -132,6 +131,4 @@ namespace OR2L
         expr._variable_map.at(var) *= coeff;
         return expr;
     }
-
-    // create overloads for operator*(var, double)
 } // namespace OR2L

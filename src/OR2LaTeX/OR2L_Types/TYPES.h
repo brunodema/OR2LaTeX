@@ -2,8 +2,7 @@
 
 namespace OR2L
 {
-	static enum class COMPONENT_TYPE
-	{
+	static enum class COMPONENT_TYPE {
 		INDEX,
 		VARIABLE_SET,
 		VARIABLE,
@@ -11,5 +10,3 @@ namespace OR2L
 		INEQUALITY
 	};
 }
-
-
