@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "OR2LEXCEPTION.h"
 
 namespace OR2L
 {
@@ -12,7 +13,7 @@ namespace OR2L
 		{
 			if (ub <= lb)
 			{
-				throw;
+				throw OR2LEXCEPTION("");
 			}
 		}
 
