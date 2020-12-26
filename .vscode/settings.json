@@ -48,6 +48,11 @@
         "xtr1common": "cpp",
         "xutility": "cpp",
         "set": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "array": "cpp",
+        "any": "cpp",
+        "cstdarg": "cpp",
+        "sstream": "cpp",
+        "unordered_set": "cpp"
     }
 }

@@ -1,30 +1,16 @@
 #pragma once
 #include <unordered_map>
+#include <utility>
 #include "VARIABLE.h"
-#include "COEFFICIENT.h"
-#include "OR2LEXCEPTION.h"
-#include <varargs.h>
-#include <cstdarg>
+
+using namespace OR2L;
 
 namespace OR2L
 {
     class EXPRESSION
     {
     public:
-        EXPRESSION(const COEFFICIENT &coeff)
-        {
-            InsertOrUpdate(coeff);
-        }
-
-        EXPRESSION(const std::initializer_list<COEFFICIENT> coeffs)
-        {
-            for (auto &&coeff : coeffs)
-            {
-                InsertOrUpdate(coeff);
-            }
-        }
-
-        EXPRESSION() {}
+        EXPRESSION(const double coeff = 0.00) : _scalar_coefficient(coeff) {}
 
         EXPRESSION(const EXPRESSION &) = default;
         EXPRESSION(EXPRESSION &&) = default;
@@ -32,77 +18,107 @@ namespace OR2L
         virtual EXPRESSION &operator=(EXPRESSION &&) = default;
         virtual ~EXPRESSION() = default;
 
-        EXPRESSION &operator+=(const EXPRESSION &B)
+        EXPRESSION &operator+=(const double coeff)
         {
-            for (auto &&coeff : B._coeffs)
-            {
-                this->InsertOrUpdate({coeff.first, coeff.second});
-            }
+            this->_scalar_coefficient += coeff;
             return *this;
         }
 
-        EXPRESSION &operator+=(const COEFFICIENT &coeff)
+        EXPRESSION &operator-=(const double coeff)
         {
-            this->InsertOrUpdate(coeff);
+            this->_scalar_coefficient -= coeff;
             return *this;
         }
 
-        EXPRESSION operator+(COEFFICIENT &coeff)
+        EXPRESSION &operator+=(const VARIABLE &var)
         {
-            this->InsertOrUpdate(coeff);
-            return *this;
-        }
-
-        EXPRESSION operator-(COEFFICIENT &coeff)
-        {
-            coeff.SetMultiplier(coeff.GetMultiplier() * -1);
-            this->InsertOrUpdate(coeff);
-            return *this;
-        }
-
-        COEFFICIENT GetCoefficient(const VARIABLE &var) const
-        {
-            try
+            if (this->_variable_map.contains(var))
             {
-                return {var, this->_coeffs.at(var)};
-            }
-            catch (const std::exception &e)
-            {
-                std::cerr << e.what() << '\n';
-            }
-        }
-
-    private:
-        void InsertOrUpdate(const COEFFICIENT &coeff)
-        {
-            if (_coeffs.contains(coeff.GetVariable()))
-            {
-                _coeffs.at(coeff.GetVariable()) += coeff.GetMultiplier();
+                ++this->_variable_map.at(var);
             }
             else
             {
-                _coeffs.try_emplace(coeff.GetVariable(), coeff.GetMultiplier());
+                this->_variable_map.emplace(var);
             }
+            return *this;
         }
 
-        std::unordered_map<VARIABLE, double, HASH_VARIABLE> _coeffs;
+        EXPRESSION &operator-=(const VARIABLE &var)
+        {
+            if (this->_variable_map.contains(var))
+            {
+                --this->_variable_map.at(var);
+            }
+            else
+            {
+                this->_variable_map.emplace(var);
+            }
+            return *this;
+        }
+
+        EXPRESSION &operator*=(const double coeff)
+        {
+            this->_scalar_coefficient *= coeff;
+            return *this;
+        }
+
+        EXPRESSION &operator/=(const double coeff)
+        {
+            this->_scalar_coefficient /= coeff;
+            return *this;
+        }
+
+        EXPRESSION &operator+(const EXPRESSION &expr)
+        {
+            for (auto &&var_coeff : expr._variable_map)
+            {
+                this->_variable_map.at(var_coeff.first) += var_coeff.second;
+            }
+            return *this;
+        }
+
+        EXPRESSION &operator-(const EXPRESSION &expr)
+        {
+            for (auto &&var_coeff : expr._variable_map)
+            {
+                this->_variable_map.at(var_coeff.first) -= var_coeff.second;
+            }
+            return *this;
+        }
+
+        EXPRESSION &operator+(const VARIABLE &var)
+        {
+            ++this->_variable_map.at(var);
+            return *this;
+        }
+
+        EXPRESSION &operator-(const VARIABLE &var)
+        {
+            --this->_variable_map.at(var);
+            return *this;
+        }
+
+        friend EXPRESSION operator+(const VARIABLE &var1, const VARIABLE &var2);
+        friend EXPRESSION operator-(const VARIABLE &var1, const VARIABLE &var2);
+
+    private:
+        std::unordered_map<VARIABLE, double> _variable_map = {};
+        double _scalar_coefficient = 0.00;
     };
 
-    EXPRESSION operator+(const COEFFICIENT &coeffA, const COEFFICIENT &coeffB)
+    EXPRESSION operator+(const VARIABLE &var1, const VARIABLE &var2)
     {
-        return EXPRESSION({coeffA, coeffB});
+        EXPRESSION expr;
+        expr += var1;
+        expr += var2;
+        return expr;
     }
 
-    EXPRESSION operator-(const COEFFICIENT &coeffA, COEFFICIENT &coeffB)
+    EXPRESSION operator-(const VARIABLE &var1, const VARIABLE &var2)
     {
-        coeffB.SetMultiplier(coeffB.GetMultiplier() * -1);
-        return EXPRESSION({coeffA, coeffB});
-    }
-
-    EXPRESSION operator*(const COEFFICIENT &coeffA, COEFFICIENT &coeffB)
-    {
-        // continue from here
-        
-        throw("");
+        EXPRESSION expr;
+        expr -= var1;
+        expr -= var2;
+        return expr;
     }
 } // namespace OR2L

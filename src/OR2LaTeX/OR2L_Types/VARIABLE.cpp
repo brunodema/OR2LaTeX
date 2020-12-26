@@ -3,9 +3,9 @@
 std::vector<std::size_t> OR2L::VARIABLE::GetIndexSizes() const
 {
 	std::vector<size_t> IndexSizes;
-	IndexSizes.reserve(_index_map.size());
+	IndexSizes.reserve(_indexes.size());
 	int i = 0;
-	for (auto& index : _index_map)
+	for (auto& index : _indexes)
 	{
 		IndexSizes.push_back(index.second.GetSize());
 	}
