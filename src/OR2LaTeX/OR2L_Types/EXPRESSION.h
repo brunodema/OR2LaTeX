@@ -38,7 +38,7 @@ namespace OR2L
             }
             else
             {
-                this->_variable_map.emplace(var);
+                this->_variable_map.emplace(var, 1.00);
             }
             return *this;
         }
@@ -51,7 +51,7 @@ namespace OR2L
             }
             else
             {
-                this->_variable_map.emplace(var);
+                this->_variable_map.emplace(var, 1.00);
             }
             return *this;
         }
@@ -100,6 +100,7 @@ namespace OR2L
 
         friend EXPRESSION operator+(const VARIABLE &var1, const VARIABLE &var2);
         friend EXPRESSION operator-(const VARIABLE &var1, const VARIABLE &var2);
+        friend EXPRESSION operator*(const VARIABLE &var, const double coeff);
 
     private:
         std::unordered_map<VARIABLE, double> _variable_map = {};
@@ -121,4 +122,14 @@ namespace OR2L
         expr -= var2;
         return expr;
     }
+
+    EXPRESSION operator*(const VARIABLE &var, const double coeff)
+    {
+        EXPRESSION expr;
+        expr += var;
+        expr._variable_map.at(var) *= coeff; 
+        return expr;
+    }
+
+    // create overloads for operator*(var, double)
 } // namespace OR2L
