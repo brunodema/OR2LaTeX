@@ -5,8 +5,6 @@
 #include "../src/OR2LaTeX/OR2L_Types/EXPRESSION.h"
 #include <cassert>
 
-#define EPSILON 0.0000001
-
 using namespace DEMALIB::BASE_TYPES;
 using namespace OR2L;
 
@@ -61,11 +59,24 @@ std::vector<std::function<void()>> ModuleTester::tests =
 	},
 	[]() {
 		// tests the following operators of the 'expression' class: 
-		// EXPRESSION operator+(VARIABLE,VARIABLE);
-		// EXPRESSION& operator+(EXPRESSION);
-		// EXPRESSION& operator+(VARIABLE);
-		// EXPRESSION operator-(VARIABLE,VARIABLE);	
-		// EXPRESSION& operator-(EXPRESSION);		
+		// EXPRESSION& operator+=(EXPRESSION)
+		// EXPRESSION& operator-=(EXPRESSION)
+		// EXPRESSION& operator+=(double)*
+		// EXPRESSION& operator-=(double)*
+		// EXPRESSION& operator+=(VARIABLE)
+		// EXPRESSION& operator-=(VARIABLE)
+		// EXPRESSION& operator*=(double)*
+		// EXPRESSION& operator/=(double)*
+
+		// EXPRESSION& operator+(EXPRESSION) ok
+		// EXPRESSION& operator-(EXPRESSION) ok
+		// EXPRESSION& operator+(VARIABLE) ok
+		// EXPRESSION& operator-(VARIABLE)*
+
+		// EXPRESSION operator-(VARIABLE,VARIABLE) ok
+		// EXPRESSION operator+(VARIABLE,VARIABLE) ok
+		// EXPRESSION operator*(double)*
+
 		INDEX i(0, 20, "i");
 		INDEX j(0, 10, "j");
 		INDEX k(5, 30, "k");
@@ -78,37 +89,69 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		EXPRESSION expr1 = C_ijk + V_i;
 		assert(expr1.ContainsVariable(C_ijk) == true);
 		assert(expr1.ContainsVariable(V_i) == true);
-		assert(abs(expr1.GetCoefficient(C_ijk) - 1.00) <= EPSILON);
-		assert(abs(expr1.GetCoefficient(V_i) - 1.00) <= EPSILON);
+		assert(abs(expr1.GetCoefficient(C_ijk) - 1.00) <= OR2L::EPSILON);
+		assert(abs(expr1.GetCoefficient(V_i) - 1.00) <= OR2L::EPSILON);
 		assert(expr1.GetConstant() == 0.00);
 
 		EXPRESSION expr2 = C_ijk + V_i + coeff1;
 		assert(expr2.ContainsVariable(C_ijk) == true);
 		assert(expr2.ContainsVariable(V_i) == true);
-		assert(abs(expr2.GetCoefficient(C_ijk) - 1.00) <= EPSILON);
-		assert(abs(expr2.GetCoefficient(V_i) - 1.00) <= EPSILON);
+		assert(abs(expr2.GetCoefficient(C_ijk) - 1.00) <= OR2L::EPSILON);
+		assert(abs(expr2.GetCoefficient(V_i) - 1.00) <= OR2L::EPSILON);
 		assert(expr2.GetConstant() == 5.45);
 
 		EXPRESSION expr3 = expr1 + C_ijk;
 		assert(expr3.ContainsVariable(C_ijk) == true);
 		assert(expr3.ContainsVariable(V_i) == true);
-		assert(abs(expr3.GetCoefficient(C_ijk) - 2.00) <= EPSILON);
-		assert(abs(expr3.GetCoefficient(V_i) - 1.00) <= EPSILON);
+		assert(abs(expr3.GetCoefficient(C_ijk) - 2.00) <= OR2L::EPSILON);
+		assert(abs(expr3.GetCoefficient(V_i) - 1.00) <= OR2L::EPSILON);
 		assert(expr3.GetConstant() == 0.00);
 
 		EXPRESSION expr4 = C_ijk - V_i;
 		assert(expr4.ContainsVariable(C_ijk) == true);
 		assert(expr4.ContainsVariable(V_i) == true);
-		assert(abs(expr4.GetCoefficient(C_ijk) - 1.00) <= EPSILON);
-		assert(abs(expr4.GetCoefficient(V_i) + 1.00) <= EPSILON);
+		assert(abs(expr4.GetCoefficient(C_ijk) - 1.00) <= OR2L::EPSILON);
+		assert(abs(expr4.GetCoefficient(V_i) + 1.00) <= OR2L::EPSILON);
 		assert(expr4.GetConstant() == 0.00);
 
 		EXPRESSION expr5 = expr4 - coeff1;
 		assert(expr4.ContainsVariable(C_ijk) == true);
 		assert(expr4.ContainsVariable(V_i) == true);
-		assert(abs(expr4.GetCoefficient(C_ijk) - 1.00) <= EPSILON);
-		assert(abs(expr4.GetCoefficient(V_i) + 1.00) <= EPSILON);
+		assert(abs(expr4.GetCoefficient(C_ijk) - 1.00) <= OR2L::EPSILON);
+		assert(abs(expr4.GetCoefficient(V_i) + 1.00) <= OR2L::EPSILON);
 		assert(expr4.GetConstant() == -5.45);
+
+		EXPRESSION expr6;
+		VARIABLE T({ i }, "T");
+		EXPRESSION expr6_1 = 2.00;
+		expr6 += expr6_1;
+		assert(expr6.ContainsVariable(T) == false);
+		try
+		{
+			expr6.GetCoefficient(T);
+		}
+		catch (const std::out_of_range e) {}
+		assert(expr6.GetConstant() - 2.00 <= OR2L::EPSILON);
+		expr6 += T;
+		assert(expr6.ContainsVariable(T) == true);
+		assert(expr6.GetCoefficient(T) - 1.00 <= OR2L::EPSILON);
+		assert(expr6.GetConstant() - 2.00 <= OR2L::EPSILON);
+		expr6 -= T;
+		assert(expr6.ContainsVariable(T) == false);
+		try
+		{
+			expr6.GetCoefficient(T);
+		}
+		catch (const std::out_of_range e) {}
+		assert(expr6.GetConstant() - 2.00 <= OR2L::EPSILON);
+		expr6 -= expr6;
+		assert(expr6.ContainsVariable(T) == false);
+		try
+		{
+			expr6.GetCoefficient(T);
+		}
+		catch (const std::out_of_range e) {}
+		assert(expr6.GetConstant() - 0.00 <= OR2L::EPSILON);
 	} };
 
 int main()

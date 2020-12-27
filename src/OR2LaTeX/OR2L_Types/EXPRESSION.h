@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include <utility>
 #include "VARIABLE.h"
+#include "NUMERIC_LIMITS.h"
 
 namespace OR2L
 {
@@ -16,6 +17,27 @@ namespace OR2L
         virtual EXPRESSION& operator=(const EXPRESSION&) = default;
         virtual EXPRESSION& operator=(EXPRESSION&&) = default;
         virtual ~EXPRESSION() = default;
+
+        EXPRESSION& operator+=(const EXPRESSION& expr)
+        {
+            for (auto&& var_coeff : expr.variable_map_)
+            {
+                this->variable_map_.at(var_coeff.first) += var_coeff.second;
+            }
+            this->scalar_coefficient_ += expr.scalar_coefficient_;
+            return *this;
+        }
+
+        EXPRESSION& operator-=(const EXPRESSION& expr)
+        {
+            for (auto&& var_coeff : expr.variable_map_)
+            {
+                this->variable_map_.at(var_coeff.first) -= var_coeff.second;
+                RemoveVariableIfZeroCoefficient(var_coeff.first);
+            }
+            this->scalar_coefficient_ -= expr.scalar_coefficient_;
+            return *this;
+        }
 
         EXPRESSION& operator+=(const double coeff)
         {
@@ -47,6 +69,7 @@ namespace OR2L
             if (this->variable_map_.contains(var))
             {
                 --this->variable_map_.at(var);
+                RemoveVariableIfZeroCoefficient(var);
             }
             else
             {
@@ -82,6 +105,7 @@ namespace OR2L
             for (auto&& var_coeff : expr.variable_map_)
             {
                 this->variable_map_.at(var_coeff.first) -= var_coeff.second;
+                RemoveVariableIfZeroCoefficient(var_coeff.first);
             }
             this->scalar_coefficient_ -= expr.scalar_coefficient_;
             return *this;
@@ -96,6 +120,7 @@ namespace OR2L
         EXPRESSION& operator-(const VARIABLE& var)
         {
             --this->variable_map_.at(var);
+            RemoveVariableIfZeroCoefficient(var);
             return *this;
         }
 
@@ -111,6 +136,12 @@ namespace OR2L
     private:
         std::unordered_map<VARIABLE, double> variable_map_ = {};
         double scalar_coefficient_ = 0.00;
+
+        void RemoveVariableIfZeroCoefficient(const VARIABLE& var)
+        {
+            if (this->GetCoefficient(var) <= OR2L::EPSILON)
+                this->variable_map_.erase(var);
+        }
     };
 
     EXPRESSION operator+(const VARIABLE& var1, const VARIABLE& var2)
