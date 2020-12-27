@@ -10,7 +10,7 @@ namespace OR2L
     {
     public:
         EXPRESSION(const double coeff = 0.00) : scalar_coefficient_(coeff), variable_map_() {}
-        EXPRESSION(const VARIABLE var) : scalar_coefficient_(), variable_map_({ {var, scalar_coefficient_} }) {}
+        EXPRESSION(const VARIABLE var) : scalar_coefficient_(), variable_map_({ {var, 1.00} }) {}
 
         EXPRESSION(const EXPRESSION&) = default;
         EXPRESSION(EXPRESSION&&) = default;
@@ -32,7 +32,11 @@ namespace OR2L
         {
             for (auto&& var_coeff : expr.variable_map_)
             {
-                this->variable_map_.at(var_coeff.first) -= var_coeff.second;
+                if (this->variable_map_.contains(var_coeff.first))
+                    this->variable_map_.at(var_coeff.first) -= var_coeff.second;
+                else
+                    this->variable_map_.emplace(var_coeff.first, var_coeff.second);
+
                 RemoveVariableIfZeroCoefficient(var_coeff.first);
             }
             this->scalar_coefficient_ -= expr.scalar_coefficient_;
@@ -80,12 +84,20 @@ namespace OR2L
 
         EXPRESSION& operator*=(const double coeff)
         {
+            for (auto& var_coeff : variable_map_)
+            {
+                var_coeff.second *= coeff;
+            }
             this->scalar_coefficient_ *= coeff;
             return *this;
         }
 
         EXPRESSION& operator/=(const double coeff)
         {
+            for (auto& var_coeff : variable_map_)
+            {
+                var_coeff.second /= coeff;
+            }
             this->scalar_coefficient_ /= coeff;
             return *this;
         }
@@ -104,7 +116,11 @@ namespace OR2L
         {
             for (auto&& var_coeff : expr.variable_map_)
             {
-                this->variable_map_.at(var_coeff.first) -= var_coeff.second;
+                if (this->variable_map_.contains(var_coeff.first))
+                    this->variable_map_.at(var_coeff.first) -= var_coeff.second;
+                else
+                    this->variable_map_.emplace(var_coeff.first, var_coeff.second);
+
                 RemoveVariableIfZeroCoefficient(var_coeff.first);
             }
             this->scalar_coefficient_ -= expr.scalar_coefficient_;
@@ -119,7 +135,11 @@ namespace OR2L
 
         EXPRESSION& operator-(const VARIABLE& var)
         {
-            --this->variable_map_.at(var);
+            if (this->variable_map_.contains(var))
+                --this->variable_map_.at(var);
+            else
+                this->variable_map_.emplace(var, -1.00);
+
             RemoveVariableIfZeroCoefficient(var);
             return *this;
         }
@@ -127,7 +147,8 @@ namespace OR2L
         friend EXPRESSION operator+(const VARIABLE& var1, const VARIABLE& var2);
         friend EXPRESSION operator-(const VARIABLE& var1, const VARIABLE& var2);
         friend EXPRESSION operator*(const VARIABLE& var, const double coeff);
-
+        friend EXPRESSION operator/(const VARIABLE& var, const double coeff);
+        
         double GetConstant() const { return scalar_coefficient_; }
         double GetCoefficient(const VARIABLE& var) const { return variable_map_.at(var); }
         void SetCoefficient(const VARIABLE& var, const double coeff) { variable_map_.at(var) = coeff; }
@@ -139,7 +160,7 @@ namespace OR2L
 
         void RemoveVariableIfZeroCoefficient(const VARIABLE& var)
         {
-            if (this->GetCoefficient(var) <= OR2L::EPSILON)
+            if (IsNumericallyNull(this->GetCoefficient(var)))
                 this->variable_map_.erase(var);
         }
     };
@@ -165,6 +186,14 @@ namespace OR2L
         EXPRESSION expr;
         expr += var;
         expr.variable_map_.at(var) *= coeff;
+        return expr;
+    }
+
+    EXPRESSION operator/(const VARIABLE& var, const double coeff)
+    {
+        EXPRESSION expr;
+        expr += var;
+        expr.variable_map_.at(var) /= coeff;
         return expr;
     }
 } // namespace OR2L

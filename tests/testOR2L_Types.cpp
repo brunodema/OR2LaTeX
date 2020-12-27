@@ -59,23 +59,24 @@ std::vector<std::function<void()>> ModuleTester::tests =
 	},
 	[]() {
 		// tests the following operators of the 'expression' class: 
-		// EXPRESSION& operator+=(EXPRESSION)
-		// EXPRESSION& operator-=(EXPRESSION)
-		// EXPRESSION& operator+=(double)*
-		// EXPRESSION& operator-=(double)*
-		// EXPRESSION& operator+=(VARIABLE)
-		// EXPRESSION& operator-=(VARIABLE)
-		// EXPRESSION& operator*=(double)*
-		// EXPRESSION& operator/=(double)*
+		// EXPRESSION& operator+=(EXPRESSION) ok
+		// EXPRESSION& operator-=(EXPRESSION) ok
+		// EXPRESSION& operator+=(double) ok
+		// EXPRESSION& operator-=(double) ok
+		// EXPRESSION& operator+=(VARIABLE) ok
+		// EXPRESSION& operator-=(VARIABLE) ok
+		// EXPRESSION& operator*=(double) ok
+		// EXPRESSION& operator/=(double) ok
 
 		// EXPRESSION& operator+(EXPRESSION) ok
 		// EXPRESSION& operator-(EXPRESSION) ok
 		// EXPRESSION& operator+(VARIABLE) ok
-		// EXPRESSION& operator-(VARIABLE)*
+		// EXPRESSION& operator-(VARIABLE) ok
 
 		// EXPRESSION operator-(VARIABLE,VARIABLE) ok
 		// EXPRESSION operator+(VARIABLE,VARIABLE) ok
-		// EXPRESSION operator*(double)*
+		// EXPRESSION operator*(VARIABLE, double)*
+		// EXPRESSION operator/(VARIABLE, double)*
 
 		INDEX i(0, 20, "i");
 		INDEX j(0, 10, "j");
@@ -152,7 +153,28 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		}
 		catch (const std::out_of_range e) {}
 		assert(expr6.GetConstant() - 0.00 <= OR2L::EPSILON);
-	} };
+
+		EXPRESSION expr7 = VARIABLE({ i }, "Dummy1");
+		VARIABLE var7_1 = VARIABLE({ i }, "Dummy2");
+		expr7 = expr7 - var7_1;
+		assert(expr7.ContainsVariable(var7_1) == true);
+		assert(expr7.GetCoefficient(var7_1) + 1.00 <= OR2L::EPSILON);
+		assert(expr7.GetConstant() - 0.00 <= OR2L::EPSILON);
+		//expr7 *= var7_1; fails to compile, as expected
+		expr7 *= 2.00;
+		assert(expr7.ContainsVariable(VARIABLE({ i }, "Dummy1")) == true);
+		assert(expr7.ContainsVariable(var7_1) == true);
+		assert(expr7.GetCoefficient(VARIABLE({ i }, "Dummy1")) - 2.00 <= OR2L::EPSILON);
+		assert(expr7.GetCoefficient(var7_1) + 2.00 <= OR2L::EPSILON);
+		assert(expr7.GetConstant() - 0.00 <= OR2L::EPSILON);
+		expr7 /= 2.00;
+		assert(expr7.ContainsVariable(VARIABLE({ i }, "Dummy1")) == true);
+		assert(expr7.ContainsVariable(var7_1) == true);
+		assert(expr7.GetCoefficient(VARIABLE({ i }, "Dummy1")) - 1.00 <= OR2L::EPSILON);
+		assert(expr7.GetCoefficient(var7_1) + 1.00 <= OR2L::EPSILON);
+		assert(expr7.GetConstant() - 0.00 <= OR2L::EPSILON);
+	}
+};
 
 int main()
 {
