@@ -25,7 +25,7 @@ namespace DEMALIB
 
 			std::vector<Coordinates<T>> coordinates;
 			std::function<T(Coordinates<T>, Coordinates<T>)> distanceFunction;
-		};	
+		};
 
 		template<class T>
 		class Graph : public IGraph<T>

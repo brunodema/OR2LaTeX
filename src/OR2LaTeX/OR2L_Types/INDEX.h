@@ -7,9 +7,9 @@ namespace OR2L
 	class INDEX
 	{
 	public:
-		INDEX(size_t lb, size_t ub, const std::string &name) : lb_(lb),
-															   ub_(ub),
-															   name_(name)
+		INDEX(size_t lb, size_t ub, const std::string& name) : lb_(lb),
+			ub_(ub),
+			name_(name)
 		{
 			if (ub <= lb)
 			{
@@ -19,17 +19,17 @@ namespace OR2L
 
 		INDEX() {}
 
-		INDEX(const INDEX &) = default;
-		INDEX(INDEX &&) = default;
-		virtual INDEX &operator=(const INDEX &) = default;
-		virtual INDEX &operator=(INDEX &&) = default;
+		INDEX(const INDEX&) = default;
+		INDEX(INDEX&&) = default;
+		virtual INDEX& operator=(const INDEX&) = default;
+		virtual INDEX& operator=(INDEX&&) = default;
 		virtual ~INDEX() = default;
 
-		bool operator==(const INDEX &B) const
+		bool operator==(const INDEX& B) const
 		{
 			return this->lb_ == B.lb_ &&
-				   this->ub_ == B.ub_ &&
-				   this->name_ == B.name_;
+				this->ub_ == B.ub_ &&
+				this->name_ == B.name_;
 		}
 
 		inline size_t GetUB() const { return ub_; }
