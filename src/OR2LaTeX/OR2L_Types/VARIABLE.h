@@ -10,7 +10,7 @@ namespace OR2L
 	class VARIABLE
 	{
 	public:
-		friend class std::hash<VARIABLE>;
+		friend struct std::hash<VARIABLE>;
 
 		VARIABLE(const std::initializer_list<INDEX> indexes = {}, const std::string& name = "") : name_(name)
 		{
