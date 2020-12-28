@@ -7,6 +7,8 @@
 #include <functional>
 #include <optional>
 
+using namespace DEMALIB::BASE_TYPES;
+
 namespace OR2L
 {
 	class VARIABLE_SET
@@ -21,7 +23,7 @@ namespace OR2L
 		VARIABLE_SET(const VARIABLE& variable, CUSTOM_VALIDATION_RULE custom_rule = {}) : custom_rule_(custom_rule),
 			template_variable_(variable)
 		{
-			variable_objects = DEMALIB::BASE_TYPES::Vecxd<VARIABLE_OBJECT>({ variable.GetIndexSizes() }, VARIABLE_OBJECT(variable, std::nullopt, std::nullopt));
+			variable_objects = Vecxd<VARIABLE_OBJECT>(variable.GetIndexSizes(), VARIABLE_OBJECT(variable));
 		}
 
 		VARIABLE_SET(const VARIABLE_SET&) = default;
@@ -39,7 +41,7 @@ namespace OR2L
 	private:
 		CUSTOM_VALIDATION_RULE custom_rule_;
 		VARIABLE template_variable_;
-		DEMALIB::BASE_TYPES::Vecxd<VARIABLE_OBJECT> variable_objects;
+		Vecxd<VARIABLE_OBJECT> variable_objects;
 		/**
 		* @brief Executes a custom validation rule to determine if current variable is valid or not.
 		*

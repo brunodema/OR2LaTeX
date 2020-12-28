@@ -5,19 +5,12 @@
 
 namespace OR2L
 {
-	class VARIABLE_OBJECT // rreview this class
+	class VARIABLE_OBJECT // redo the association with indexes
 	{
 	public:
-		VARIABLE_OBJECT(const VARIABLE& variable, std::optional<std::initializer_list<int>> index_values, std::optional<std::string> name) :
+		VARIABLE_OBJECT(const VARIABLE& variable) :
 			template_variable_(variable),
-			index_values_(index_values),
-			name_(name)
-		{
-			if (index_values.has_value() && name.has_value())
-			{
-				_is_fully_initiazed = true;
-			}
-		}
+			index_values_() {}
 
 		VARIABLE_OBJECT() {}
 
@@ -28,10 +21,7 @@ namespace OR2L
 		virtual ~VARIABLE_OBJECT() = default;
 
 	private:
-		bool _is_fully_initiazed = false;
-
 		VARIABLE template_variable_ = {};
-		std::optional<std::vector<int>> index_values_ = std::nullopt;
-		std::optional<std::string> name_ = std::nullopt;
+		std::vector<int> index_values_ = {};
 	};
 } // namespace OR2L
