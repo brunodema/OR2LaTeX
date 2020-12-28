@@ -3,6 +3,7 @@
 #include "INDEX.h"
 #include "VARIABLE.h"
 #include "EXPRESSION.h"
+#include "MATH_EXPRESSION.h"
 #include <cassert>
 
 using namespace DEMALIB::BASE_TYPES;
@@ -193,7 +194,9 @@ std::vector<std::function<void()>> ModuleTester::tests =
 	[]()
 	{
 		// tests related to 'MATH_EXPRESSION'
-
+		EXPRESSION expr1 = 1.00;
+		EXPRESSION expr2 = 1.00;
+		MATH_EXPRESSION mexpr(expr1, EXPRESSION_OPERATORS::EQUAL, expr2);
 	}
 };
 

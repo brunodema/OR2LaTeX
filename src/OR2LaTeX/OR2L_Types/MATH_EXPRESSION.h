@@ -22,6 +22,6 @@ namespace OR2L
         EXPRESSION lhs_ = 1.00;
         EXPRESSION rhs_ = 1.00;
         EXPRESSION_OPERATORS eq_type_ = EXPRESSION_OPERATORS::EQUAL;
-    }
+    };
 
 } // namespace OR2
