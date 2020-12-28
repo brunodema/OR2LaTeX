@@ -2,7 +2,7 @@
 
 namespace OR2L
 {
-    enum class EXPRESSION_OPERATORS
+    enum class EXPRESSION_OPERATORS_TYPE
     {
         EQUAL,
         GREATER_EQUAL,

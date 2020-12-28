@@ -1,13 +1,13 @@
 #pragma once
 #include "EXPRESSION.h"
-#include "EXPRESSION_OPERATORS.h"
+#include "EXPRESSION_OPERATORS_TYPE.h"
 
 namespace OR2L
 {
     class MATH_EXPRESSION
     {
     public:
-        MATH_EXPRESSION(EXPRESSION& lhs, EXPRESSION_OPERATORS eq_type, EXPRESSION& rhs) :
+        MATH_EXPRESSION(EXPRESSION& lhs, EXPRESSION_OPERATORS_TYPE eq_type, EXPRESSION& rhs) :
             lhs_(lhs),
             eq_type_(eq_type),
             rhs_(rhs) {}
@@ -21,7 +21,7 @@ namespace OR2L
     private:
         EXPRESSION lhs_ = 1.00;
         EXPRESSION rhs_ = 1.00;
-        EXPRESSION_OPERATORS eq_type_ = EXPRESSION_OPERATORS::EQUAL;
+        EXPRESSION_OPERATORS_TYPE eq_type_ = EXPRESSION_OPERATORS_TYPE::EQUAL;
     };
 
 } // namespace OR2

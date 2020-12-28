@@ -1,5 +1,6 @@
 #pragma once
 #include "INDEX.h"
+#include "VARIABLE_TYPE.h"
 #include <optional>
 #include <string>
 #include <unordered_map>
@@ -12,7 +13,7 @@ namespace OR2L
 	public:
 		friend struct std::hash<VARIABLE>;
 
-		VARIABLE(const std::initializer_list<INDEX> indexes = {}, const std::string& name = "") : name_(name)
+		VARIABLE(const std::initializer_list<INDEX> indexes = {}, VARIABLE_TYPE var_type = VARIABLE_TYPE::CONTINUOUS, const std::string& name = "") : name_(name)
 		{
 			for (auto&& index : indexes)
 			{
@@ -39,6 +40,7 @@ namespace OR2L
 
 	private:
 		std::unordered_map<std::string, INDEX> indexes_;
+		VARIABLE_TYPE variable_type_;
 		std::string name_ = "";
 	};
 } // namespace OR2L
