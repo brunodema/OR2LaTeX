@@ -182,7 +182,13 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		assert(expr8_1.GetCoefficient(var1) - 2.00 <= OR2L::EPSILON);
 		assert(expr8_1.GetConstant() - 0.00 <= OR2L::EPSILON);
 		EXPRESSION expr8_2 = var1 / 2;
-		//EXPRESSION expr8_3 = 2 / var2;
+		assert(expr8_2.ContainsVariable(var1) == true);
+		assert(expr8_2.GetCoefficient(var1) - 0.50 <= OR2L::EPSILON);
+		assert(expr8_2.GetConstant() - 0.00 <= OR2L::EPSILON);
+		EXPRESSION expr8_3 = 2 / var1;
+		assert(expr8_3.ContainsVariable(var1) == true);
+		assert(expr8_3.GetCoefficient(var1) - pow(2, -1) <= OR2L::EPSILON);
+		assert(expr8_3.GetConstant() - 0.00 <= OR2L::EPSILON);
 
 
 
