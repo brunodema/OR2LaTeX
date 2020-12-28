@@ -75,8 +75,8 @@ std::vector<std::function<void()>> ModuleTester::tests =
 
 		// EXPRESSION operator-(VARIABLE,VARIABLE) ok
 		// EXPRESSION operator+(VARIABLE,VARIABLE) ok
-		// EXPRESSION operator*(VARIABLE, double)*
-		// EXPRESSION operator/(VARIABLE, double)*
+		// both variants of EXPRESSION operator*(VARIABLE, double) being tested
+		// both variants of EXPRESSION operator/(VARIABLE, double) being tested
 
 		INDEX i(0, 20, "i");
 		INDEX j(0, 10, "j");
@@ -173,6 +173,19 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		assert(expr7.GetCoefficient(VARIABLE({ i }, "Dummy1")) - 1.00 <= OR2L::EPSILON);
 		assert(expr7.GetCoefficient(var7_1) + 1.00 <= OR2L::EPSILON);
 		assert(expr7.GetConstant() - 0.00 <= OR2L::EPSILON);
+
+		VARIABLE var1({ i,j }, "");
+		EXPRESSION expr8 = 2.00 * var1;
+		EXPRESSION expr8_1 = var1 * 2;
+		//assert(expr8 == expr8_1);
+		assert(expr8_1.ContainsVariable(var1) == true);
+		assert(expr8_1.GetCoefficient(var1) - 2.00 <= OR2L::EPSILON);
+		assert(expr8_1.GetConstant() - 0.00 <= OR2L::EPSILON);
+		EXPRESSION expr8_2 = var1 / 2;
+		//EXPRESSION expr8_3 = 2 / var2;
+
+
+
 	}
 };
 

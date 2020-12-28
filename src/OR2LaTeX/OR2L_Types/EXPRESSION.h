@@ -146,9 +146,11 @@ namespace OR2L
 
         friend EXPRESSION operator+(const VARIABLE& var1, const VARIABLE& var2);
         friend EXPRESSION operator-(const VARIABLE& var1, const VARIABLE& var2);
+        friend EXPRESSION operator*(const double coeff, const VARIABLE& var);
         friend EXPRESSION operator*(const VARIABLE& var, const double coeff);
         friend EXPRESSION operator/(const VARIABLE& var, const double coeff);
-        
+        //friend EXPRESSION operator/(const double coeff, const VARIABLE& var);
+
         double GetConstant() const { return scalar_coefficient_; }
         double GetCoefficient(const VARIABLE& var) const { return variable_map_.at(var); }
         void SetCoefficient(const VARIABLE& var, const double coeff) { variable_map_.at(var) = coeff; }
@@ -181,6 +183,14 @@ namespace OR2L
         return expr;
     }
 
+    EXPRESSION operator*(const double coeff, const VARIABLE& var)
+    {
+        EXPRESSION expr;
+        expr += var;
+        expr.variable_map_.at(var) *= coeff;
+        return expr;
+    }
+
     EXPRESSION operator*(const VARIABLE& var, const double coeff)
     {
         EXPRESSION expr;
@@ -196,4 +206,12 @@ namespace OR2L
         expr.variable_map_.at(var) /= coeff;
         return expr;
     }
+
+    // EXPRESSION operator/(const double coeff, const VARIABLE& var)
+    // {
+    //     EXPRESSION expr;
+    //     expr += var;
+    //     expr.variable_map_.at(var) /= coeff;
+    //     return expr;
+    // }
 } // namespace OR2L
