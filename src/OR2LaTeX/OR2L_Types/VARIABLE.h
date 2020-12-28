@@ -13,7 +13,8 @@ namespace OR2L
 	public:
 		friend struct std::hash<VARIABLE>;
 
-		VARIABLE(const std::initializer_list<INDEX> indexes = {}, VARIABLE_TYPE var_type = VARIABLE_TYPE::CONTINUOUS, const std::string& name = "") : name_(name)
+		VARIABLE(const std::string& name = "", VARIABLE_TYPE var_type = VARIABLE_TYPE::CONTINUOUS,
+			const std::initializer_list<INDEX> indexes = {}) : name_(name)
 		{
 			for (auto&& index : indexes)
 			{
@@ -39,8 +40,8 @@ namespace OR2L
 		inline void SetName(const std::string& str) { name_ = str; }
 
 	private:
-		std::unordered_map<std::string, INDEX> indexes_;
-		VARIABLE_TYPE variable_type_;
+		std::unordered_map<std::string, INDEX> indexes_ = {};
+		VARIABLE_TYPE variable_type_ = VARIABLE_TYPE::CONTINUOUS;
 		std::string name_ = "";
 	};
 } // namespace OR2L
@@ -50,20 +51,7 @@ struct std::hash<OR2L::VARIABLE>
 {
 	std::size_t operator()(const OR2L::VARIABLE& k) const
 	{
-		// a completelly terrible hasher - used only for scientific reasons (need to study more about this)
-		size_t ret = 0;
-		std::vector<size_t> hash_elements = { std::hash<std::string>()(k.GetName()) };
-		for (auto it = k.indexes_.begin(); it != k.indexes_.end(); ++it)
-		{
-			hash_elements.push_back(std::hash<std::string>()(it->first));
-			hash_elements.push_back(std::hash<size_t>()(it->second.GetLB()));
-			hash_elements.push_back(std::hash<size_t>()(it->second.GetUB()));
-			hash_elements.push_back(std::hash<std::string>()(it->second.GetName()));
-		}
-		for (auto&& hash : hash_elements)
-		{
-			ret += hash << 1;
-		}
-		return ret;
+		// changed it to be based on their names, which makes sense when thinking about the LaTeX implementation
+		return std::hash<std::string>()(k.GetName());
 	};
 };

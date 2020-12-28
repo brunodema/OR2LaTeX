@@ -39,7 +39,7 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		INDEX i(0, 20, "i");
 		INDEX j(0, 10, "j");
 		INDEX k(1110, 23210, "k");
-		VARIABLE var = VARIABLE({ i, j, k }, {}, "X");
+		VARIABLE var = VARIABLE("X", VARIABLE_TYPE::CONTINUOUS ,{ i, j, k });
 		Vecxd<VARIABLE> variables({1, 2, 3, 4, 5}, var);
 		assert(variables.at(0).at(0) == var);
 		assert(variables.at(1).at(1) == var);
@@ -51,12 +51,12 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		// tests direct initialization of the multi-vector class using the 'variable' class as template argument
 		INDEX i(0, 20, "i");
 		INDEX j(0, 10, "j");
-		Vecxd<VARIABLE> variables({ 1, 2, 3, 4, 5 }, VARIABLE({ i, j }, {}, "X"));
-		assert(variables.at(0).at(0) == VARIABLE({ i, j }, {}, "X"));
-		assert(variables.at(1).at(1) == VARIABLE({ i, j }, {}, "X"));
-		assert(variables.at(2).at(2) == VARIABLE({ i, j }, {}, "X"));
-		assert(variables.at(3).at(3) == VARIABLE({ i, j }, {}, "X"));
-		assert(variables.at(4).at(4) == VARIABLE({ i, j }, {}, "X"));
+		Vecxd<VARIABLE> variables({ 1, 2, 3, 4, 5 }, VARIABLE("X", VARIABLE_TYPE::CONTINUOUS, { i, j }));
+		assert(variables.at(0).at(0) == VARIABLE("X", VARIABLE_TYPE::CONTINUOUS, { i, j }));
+		assert(variables.at(1).at(1) == VARIABLE("X", VARIABLE_TYPE::CONTINUOUS, { i, j }));
+		assert(variables.at(2).at(2) == VARIABLE("X", VARIABLE_TYPE::CONTINUOUS, { i, j }));
+		assert(variables.at(3).at(3) == VARIABLE("X", VARIABLE_TYPE::CONTINUOUS, { i, j }));
+		assert(variables.at(4).at(4) == VARIABLE("X", VARIABLE_TYPE::CONTINUOUS, { i, j }));
 	},
 	[]() {
 		// tests the following operators of the 'expression' class: 
@@ -83,8 +83,8 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		INDEX j(0, 10, "j");
 		INDEX k(5, 30, "k");
 
-		VARIABLE C_ijk({ i, j, k }, {}, "Cost");
-		VARIABLE V_i({ i }, {}, "Velocity");
+		VARIABLE C_ijk("Cost", VARIABLE_TYPE::CONTINUOUS, { i, j, k });
+		VARIABLE V_i("Velocity", VARIABLE_TYPE::CONTINUOUS, { i });
 
 		double coeff1 = 5.45;
 
@@ -124,7 +124,7 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		assert(expr4.GetConstant() == -5.45);
 
 		EXPRESSION expr6;
-		VARIABLE T({ i }, {}, "T");
+		VARIABLE T("T", VARIABLE_TYPE::CONTINUOUS, { i });
 		EXPRESSION expr6_1 = 2.00;
 		expr6 += expr6_1;
 		assert(expr6.ContainsVariable(T) == false);
@@ -155,27 +155,27 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		catch (const std::out_of_range e) {}
 		assert(expr6.GetConstant() - 0.00 <= OR2L::EPSILON);
 
-		EXPRESSION expr7 = VARIABLE({ i }, {}, "Dummy1");
-		VARIABLE var7_1 = VARIABLE({ i }, {}, "Dummy2");
+		EXPRESSION expr7 = VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, { i });
+		VARIABLE var7_1 = VARIABLE("Dummy2", VARIABLE_TYPE::CONTINUOUS, { i });
 		expr7 = expr7 - var7_1;
 		assert(expr7.ContainsVariable(var7_1) == true);
 		assert(expr7.GetCoefficient(var7_1) + 1.00 <= OR2L::EPSILON);
 		assert(expr7.GetConstant() - 0.00 <= OR2L::EPSILON);
 		//expr7 *= var7_1; //fails to compile, as expected
 		expr7 *= 2.00;
-		assert(expr7.ContainsVariable(VARIABLE({ i }, {}, "Dummy1")) == true);
+		assert(expr7.ContainsVariable(VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, { i })) == true);
 		assert(expr7.ContainsVariable(var7_1) == true);
-		assert(expr7.GetCoefficient(VARIABLE({ i }, {}, "Dummy1")) - 2.00 <= OR2L::EPSILON);
+		assert(expr7.GetCoefficient(VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, { i })) - 2.00 <= OR2L::EPSILON);
 		assert(expr7.GetCoefficient(var7_1) + 2.00 <= OR2L::EPSILON);
 		assert(expr7.GetConstant() - 0.00 <= OR2L::EPSILON);
 		expr7 /= 2.00;
-		assert(expr7.ContainsVariable(VARIABLE({ i }, {}, "Dummy1")) == true);
+		assert(expr7.ContainsVariable(VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, { i })) == true);
 		assert(expr7.ContainsVariable(var7_1) == true);
-		assert(expr7.GetCoefficient(VARIABLE({ i }, {}, "Dummy1")) - 1.00 <= OR2L::EPSILON);
+		assert(expr7.GetCoefficient(VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, { i })) - 1.00 <= OR2L::EPSILON);
 		assert(expr7.GetCoefficient(var7_1) + 1.00 <= OR2L::EPSILON);
 		assert(expr7.GetConstant() - 0.00 <= OR2L::EPSILON);
 
-		VARIABLE var1({ i,j }, {}, "");
+		VARIABLE var1("var1", VARIABLE_TYPE::CONTINUOUS, { i,j });
 		EXPRESSION expr8 = 2.00 * var1;
 		EXPRESSION expr8_1 = var1 * 2;
 		//assert(expr8 == expr8_1);
