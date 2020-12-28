@@ -9,5 +9,5 @@ namespace OR2L
         GREATER,
         LESS_EQUAL,
         LESS
-    }
+    };
 } // namespace OR2L

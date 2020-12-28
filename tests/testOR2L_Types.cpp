@@ -1,8 +1,8 @@
-#include "../src/BaseTypesLib/ModuleTester.h"
-#include "../src/BaseTypesLib/Vecxd.h"
-#include "../src/OR2LaTeX/OR2L_Types/INDEX.h"
-#include "../src/OR2LaTeX/OR2L_Types/VARIABLE.h"
-#include "../src/OR2LaTeX/OR2L_Types/EXPRESSION.h"
+#include "ModuleTester.h"
+#include "Vecxd.h"
+#include "INDEX.h"
+#include "VARIABLE.h"
+#include "EXPRESSION.h"
 #include <cassert>
 
 using namespace DEMALIB::BASE_TYPES;
@@ -160,7 +160,7 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		assert(expr7.ContainsVariable(var7_1) == true);
 		assert(expr7.GetCoefficient(var7_1) + 1.00 <= OR2L::EPSILON);
 		assert(expr7.GetConstant() - 0.00 <= OR2L::EPSILON);
-		//expr7 *= var7_1; fails to compile, as expected
+		//expr7 *= var7_1; //fails to compile, as expected
 		expr7 *= 2.00;
 		assert(expr7.ContainsVariable(VARIABLE({ i }, "Dummy1")) == true);
 		assert(expr7.ContainsVariable(var7_1) == true);
@@ -189,8 +189,10 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		assert(expr8_3.ContainsVariable(var1) == true);
 		assert(expr8_3.GetCoefficient(var1) - pow(2, -1) <= OR2L::EPSILON);
 		assert(expr8_3.GetConstant() - 0.00 <= OR2L::EPSILON);
-
-
+	},
+	[]()
+	{
+		// tests related to 'MATH_EXPRESSION'
 
 	}
 };
