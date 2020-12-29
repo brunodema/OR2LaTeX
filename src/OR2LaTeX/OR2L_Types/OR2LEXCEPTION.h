@@ -7,13 +7,15 @@ namespace OR2L
 {
     enum class EXCEPTION_TYPE
     {
+        ERR_SYMBOLSTRING_INVALIDCHAR,
         ERR_INDEX_BOUNDS,
         ERR_EXPRESSION_VARNOTFOUND
     };
 
     static std::map<EXCEPTION_TYPE, std::string_view> EXCEPTION_TEXT =
     {
-        {EXCEPTION_TYPE::ERR_INDEX_BOUNDS, "The specified lower bound is higher than the upper bound."},
+        {EXCEPTION_TYPE::ERR_SYMBOLSTRING_INVALIDCHAR, "The specified string contains an invalid character."},
+        {EXCEPTION_TYPE::ERR_INDEX_BOUNDS, "The specified lower bound is higher than the upper bound."}
     };
 
     class OR2LEXCEPTION : public std::exception
