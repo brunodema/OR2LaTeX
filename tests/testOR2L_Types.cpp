@@ -4,6 +4,8 @@
 #include "VARIABLE.h"
 #include "EXPRESSION.h"
 #include "MATH_EXPRESSION.h"
+#include "MODEL.h"
+#include "SYMBOL_STRING.h"
 #include <cassert>
 
 using namespace DEMALIB::BASE_TYPES;
@@ -197,6 +199,11 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		EXPRESSION expr1 = 2.00;
 		EXPRESSION expr2 = 3.00;
 		MATH_EXPRESSION mexpr(expr1, EXPRESSION_OPERATORS_TYPE::EQUAL, expr2);
+	},
+	[]()
+	{
+		// tests related to the new string wrapper (used to avoid invalid chars in LaTeX)
+		SYMBOL_STRING str = "var1";
 	}
 };
 

@@ -19,5 +19,5 @@ namespace OR2L
     private:
         std::string name_ = "";
         std::map<std::string, SYMBOL_OBJECT> symbol_map_ = {};
-    }
+    };
 } // namespace OR2L

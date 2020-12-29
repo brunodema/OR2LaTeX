@@ -10,7 +10,12 @@ namespace OR2L
     public:
         SYMBOL_STRING(const std::string&)
         {
-            if (ContainsInvalidChar(*this))
+            if (ContainsInvalidChar())
+                throw OR2LEXCEPTION(EXCEPTION_TYPE::ERR_SYMBOLSTRING_INVALIDCHAR);
+        }
+        SYMBOL_STRING(const char* charp)
+        {
+            if (ContainsInvalidChar())
                 throw OR2LEXCEPTION(EXCEPTION_TYPE::ERR_SYMBOLSTRING_INVALIDCHAR);
         }
 
@@ -23,9 +28,9 @@ namespace OR2L
     private:
         std::regex filter_ = std::regex("[-!#@ºª\\=-¨$%^&*()_+|~=`{}[]:\";'<>?,.\\/]");
 
-        constexpr bool ContainsInvalidChar(const std::string& str)
+        bool ContainsInvalidChar() const
         {
-            return std::regex_match(str, filter_);
+            return std::regex_match(*this, filter_);
         }
-    }
+    };
 } // namespace OR2L
