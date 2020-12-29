@@ -1,7 +1,6 @@
 #pragma once
 #include "VARIABLE.h"
-
-#include <string>
+#include <unordered_map>
 
 namespace OR2L
 {
@@ -22,6 +21,6 @@ namespace OR2L
 
 	private:
 		VARIABLE template_variable_ = {};
-		std::vector<int> index_values_ = {};
+		std::unordered_map<INDEX, size_t> index_values_ = {};
 	};
 } // namespace OR2L

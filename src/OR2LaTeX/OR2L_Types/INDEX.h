@@ -43,3 +43,13 @@ namespace OR2L
 		std::string name_;
 	};
 } // namespace OR2L
+
+template <>
+struct std::hash<OR2L::INDEX>
+{
+	std::size_t operator()(const OR2L::INDEX& k) const
+	{
+		// changed it to be based on their names, which makes sense when thinking about the LaTeX implementation
+		return std::hash<std::string>()(k.GetName());
+	};
+};

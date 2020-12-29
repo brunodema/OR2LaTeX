@@ -20,11 +20,9 @@ namespace OR2L
 		 * @param variable Variable template to be used.
 		 * @param custom_rule Optional rule to be applied when creating the variable objects. It must be a 'bool(const VARIABLE&)' style lambda.
 		 */
-		VARIABLE_SET(const VARIABLE& variable, CUSTOM_VALIDATION_RULE custom_rule = {}) : custom_rule_(custom_rule),
-			template_variable_(variable)
-		{
-			variable_objects = Vecxd<VARIABLE_OBJECT>(variable.GetIndexSizes(), VARIABLE_OBJECT(variable));
-		}
+		VARIABLE_SET(const VARIABLE& variable, CUSTOM_VALIDATION_RULE custom_rule = {}) :
+			template_variable_(variable),
+			custom_rule_(custom_rule_) {}
 
 		VARIABLE_SET(const VARIABLE_SET&) = default;
 		VARIABLE_SET(VARIABLE_SET&&) = default;
