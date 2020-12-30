@@ -26,11 +26,11 @@ namespace OR2L
         virtual ~SYMBOL_STRING() = default;
 
     private:
-        std::regex filter_ = std::regex("[^\\w]"); // not owrking
+        std::regex filter_ = std::regex("[^a-zA-Z0-9]"); // not owrking
 
         bool ContainsInvalidChar() const
         {
-            return std::regex_match(*this, filter_);
+            return std::regex_search(*this, filter_);
         }
     };
 } // namespace OR2L

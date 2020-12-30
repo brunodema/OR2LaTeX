@@ -40,6 +40,7 @@ namespace OR2L
 		CUSTOM_VALIDATION_RULE custom_rule_;
 		VARIABLE template_variable_;
 		Vecxd<VARIABLE_OBJECT> variable_objects;
+
 		/**
 		* @brief Executes a custom validation rule to determine if current variable is valid or not.
 		*

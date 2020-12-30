@@ -205,7 +205,6 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		// tests related to the new string wrapper (used to avoid invalid chars in LaTeX)
 		SYMBOL_STRING str1 = "var1";
 		SYMBOL_STRING str2 = "I";
-		SYMBOL_STRING str3 = "C_ij";
 		SYMBOL_STRING str4 = "Test";
 		SYMBOL_STRING str5 = "aVariable";
 
