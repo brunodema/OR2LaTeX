@@ -78,8 +78,8 @@ std::vector<std::function<void()>> ModuleTester::tests =
 
 		// EXPRESSION operator-(VARIABLE,VARIABLE) ok
 		// EXPRESSION operator+(VARIABLE,VARIABLE) ok
-		// both variants of EXPRESSION operator*(VARIABLE, double) being tested
-		// both variants of EXPRESSION operator/(VARIABLE, double) being tested
+		// both variants of EXPRESSION operator*(VARIABLE, double) ok
+		// both variants of EXPRESSION operator/(VARIABLE, double) ok
 
 		INDEX i(0, 20, "i");
 		INDEX j(0, 10, "j");
@@ -134,7 +134,7 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		{
 			expr6.GetCoefficient(T);
 		}
-		catch (const std::out_of_range e) {}
+		catch (const std::out_of_range& e) {}
 		assert(expr6.GetConstant() - 2.00 <= OR2L::EPSILON);
 		expr6 += T;
 		assert(expr6.ContainsVariable(T) == true);
@@ -146,7 +146,7 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		{
 			expr6.GetCoefficient(T);
 		}
-		catch (const std::out_of_range e) {}
+		catch (const std::out_of_range& e) {}
 		assert(expr6.GetConstant() - 2.00 <= OR2L::EPSILON);
 		expr6 -= expr6;
 		assert(expr6.ContainsVariable(T) == false);
@@ -154,7 +154,7 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		{
 			expr6.GetCoefficient(T);
 		}
-		catch (const std::out_of_range e) {}
+		catch (const std::out_of_range& e) {}
 		assert(expr6.GetConstant() - 0.00 <= OR2L::EPSILON);
 
 		EXPRESSION expr7 = VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, { i });
@@ -203,7 +203,27 @@ std::vector<std::function<void()>> ModuleTester::tests =
 	[]()
 	{
 		// tests related to the new string wrapper (used to avoid invalid chars in LaTeX)
-		SYMBOL_STRING str = "var1";
+		SYMBOL_STRING str1 = "var1";
+		SYMBOL_STRING str2 = "I";
+		SYMBOL_STRING str3 = "C_ij";
+		SYMBOL_STRING str4 = "Test";
+		SYMBOL_STRING str5 = "aVariable";
+
+		try
+		{
+			SYMBOL_STRING str6 = "A_Variable";
+		}
+		catch (const OR2LEXCEPTION& e) {}
+		try
+		{
+			SYMBOL_STRING str7 = "215%!56&8*9331!";
+		}
+		catch (const OR2LEXCEPTION& e) {}
+		try
+		{
+			SYMBOL_STRING str8 = "$Var1";
+		}
+		catch (const OR2LEXCEPTION& e) {}
 	}
 };
 
