@@ -5,7 +5,7 @@
 
 namespace OR2L
 {
-    class SYMBOL_STRING : public std::string
+    class SYMBOL_STRING : public std::string // deriviing from a base class seems to be a bad practice. Trnasform this into a 'trait' class
     {
     public:
         SYMBOL_STRING(const std::string& str) : std::string(str)
