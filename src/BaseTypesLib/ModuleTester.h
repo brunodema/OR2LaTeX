@@ -3,6 +3,9 @@
 #include <vector>
 #include <iostream>
 #include <cassert>
+#include <exception>
+
+#define ASSERT_THROW(STATEMENT, EXCEPTION_TYPE) try { STATEMENT; } catch(const std::exception& EXCEPTION_TYPE) {}
 
 namespace DEMALIB
 {

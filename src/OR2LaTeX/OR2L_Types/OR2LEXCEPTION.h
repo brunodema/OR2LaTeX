@@ -3,7 +3,7 @@
 #include <sstream>
 #include <map>
 
-namespace OR2L
+namespace OR2L // remake this to make each exception its own class, just like the STL exceptions are coded 
 {
     enum class EXCEPTION_TYPE
     {

@@ -16,11 +16,11 @@ std::vector<std::function<void()>> ModuleTester::tests =
 	[]() {
 		// tests the multi-vector class with the 'index' class
 		Vecxd<INDEX> indexes;
+
 		std::initializer_list<size_t> sizes = {1, 2, 3, 4, 5};
 		INDEX dflt_init = INDEX(0, 20, "i");
 
-		indexes.ResizeContents(sizes);
-		indexes.FillWith(dflt_init);
+		indexes.ResizeContents(sizes, dflt_init);
 		assert(indexes.at(0).at(0) == dflt_init);
 		assert(indexes.at(1).at(1) == dflt_init);
 		assert(indexes.at(2).at(2) == dflt_init);
@@ -223,6 +223,15 @@ std::vector<std::function<void()>> ModuleTester::tests =
 			SYMBOL_STRING str8 = "$Var1";
 		}
 		catch (const OR2LEXCEPTION& e) {}
+	},
+	[]()
+	{
+		// test if function that use 'SYMBOL_STRING' have the regex on the constructors working
+		VARIABLE var1("var1", VARIABLE_TYPE::CONTINUOUS);
+		SYMBOL_OBJECT(var1.GetName(), SYMBOL_TYPE::VARIABLE, var1);
+
+		VARIABLE var2("$var2", VARIABLE_TYPE::CONTINUOUS);
+		ASSERT_THROW(SYMBOL_OBJECT(var2.GetName(), SYMBOL_TYPE::VARIABLE, var1), OR2LEXCEPTION);
 	}
 };
 

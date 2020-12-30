@@ -1,11 +1,12 @@
 #pragma once
 #include <string>
 #include <regex>
+#include <cassert>
 #include "OR2LEXCEPTION.h"
 
 namespace OR2L
 {
-    class SYMBOL_STRING : public std::string // deriviing from a base class seems to be a bad practice. Trnasform this into a 'trait' class
+    class SYMBOL_STRING : public std::string // considering that I only want to implement a minor check on the constructor of the base class, this does not seem so wrong
     {
     public:
         SYMBOL_STRING(const std::string& str) : std::string(str)
@@ -26,7 +27,7 @@ namespace OR2L
         virtual ~SYMBOL_STRING() = default;
 
     private:
-        std::regex filter_ = std::regex("[^a-zA-Z0-9]"); // not owrking
+        std::regex filter_ = std::regex("[^a-zA-Z0-9]");
 
         bool ContainsInvalidChar() const
         {
