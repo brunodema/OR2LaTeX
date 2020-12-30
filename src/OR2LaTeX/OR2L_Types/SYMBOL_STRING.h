@@ -26,7 +26,7 @@ namespace OR2L
         virtual ~SYMBOL_STRING() = default;
 
     private:
-        std::regex filter_ = std::regex("/[^a-z\\d]/"); // not owrking
+        std::regex filter_ = std::regex("[^\\w]"); // not owrking
 
         bool ContainsInvalidChar() const
         {
