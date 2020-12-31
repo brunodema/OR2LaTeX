@@ -10,12 +10,7 @@ namespace OR2L
 	{
 	public:
 		CUSTOM_VALIDATION_RULE() {}
-
-		CUSTOM_VALIDATION_RULE(const CUSTOM_VALIDATION_RULE&) = default;
-		CUSTOM_VALIDATION_RULE(CUSTOM_VALIDATION_RULE&&) = default;
-		virtual CUSTOM_VALIDATION_RULE& operator=(const CUSTOM_VALIDATION_RULE&) = default;
-		virtual CUSTOM_VALIDATION_RULE& operator=(CUSTOM_VALIDATION_RULE&&) = default;
-		virtual ~CUSTOM_VALIDATION_RULE() = default;
+		virtual ~CUSTOM_VALIDATION_RULE() {}
 
 		bool IsVariableValid(const VARIABLE& var) const
 		{

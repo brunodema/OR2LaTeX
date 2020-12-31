@@ -16,12 +16,8 @@ namespace OR2L
             : name_(name),
             type_(type),
             object_(object) {}
-
-        SYMBOL_OBJECT(const SYMBOL_OBJECT&) = default;
-        SYMBOL_OBJECT(SYMBOL_OBJECT&&) = default;
-        virtual SYMBOL_OBJECT& operator=(const SYMBOL_OBJECT&) = default;
-        virtual SYMBOL_OBJECT& operator=(SYMBOL_OBJECT&&) = default;
-        virtual ~SYMBOL_OBJECT() = default;
+        virtual ~SYMBOL_OBJECT() {}
+        
     private:
         std::string name_;
         SYMBOL_TYPE type_;

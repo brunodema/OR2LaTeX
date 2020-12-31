@@ -11,12 +11,7 @@ namespace OR2L
             lhs_(lhs),
             eq_type_(eq_type),
             rhs_(rhs) {}
-
-        MATH_EXPRESSION(const MATH_EXPRESSION&) = default;
-        MATH_EXPRESSION(MATH_EXPRESSION&&) = default;
-        virtual MATH_EXPRESSION& operator=(const MATH_EXPRESSION&) = default;
-        virtual MATH_EXPRESSION& operator=(MATH_EXPRESSION&&) = default;
-        virtual ~MATH_EXPRESSION() = default;
+        virtual ~MATH_EXPRESSION() {}
 
     private:
         EXPRESSION lhs_ = 1.00;

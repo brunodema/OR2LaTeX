@@ -2,20 +2,15 @@
 #include <string>
 #include <map>
 #include "SYMBOL_OBJECT.h"
+#include "SYMBOL_STRING.h"
 
 namespace OR2L
 {
     class MODEL
     {
     public:
-        MODEL(const std::string& name) : name_(name) {}
-
-        MODEL(const MODEL&) = default;
-        MODEL(MODEL&&) = default;
-        virtual MODEL& operator=(const MODEL&) = default;
-        virtual MODEL& operator=(MODEL&&) = default;
-        virtual ~MODEL() = default;
-
+        MODEL(SYMBOL_STRING& name) : name_(name) {}
+        virtual ~MODEL() {}
     private:
         std::string name_ = "";
         std::map<std::string, SYMBOL_OBJECT> symbol_map_ = {};

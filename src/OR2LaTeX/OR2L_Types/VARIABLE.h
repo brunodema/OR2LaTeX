@@ -21,6 +21,7 @@ namespace OR2L
 				indexes_.insert(std::pair<std::string, INDEX>(index.GetName(), index));
 			}
 		}
+		virtual ~VARIABLE() {}
 
 		bool operator==(const VARIABLE& B) const
 		{

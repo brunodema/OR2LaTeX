@@ -35,12 +35,7 @@ namespace OR2L // remake this to make each exception its own class, just like th
         {
             buffer_ << "OR2L Exception | " << message << "\n";
         }
-
-        OR2LEXCEPTION(const OR2LEXCEPTION&) = default;
-        OR2LEXCEPTION(OR2LEXCEPTION&&) = default;
-        virtual OR2LEXCEPTION& operator=(const OR2LEXCEPTION&) = default;
-        virtual OR2LEXCEPTION& operator=(OR2LEXCEPTION&&) = default;
-        virtual ~OR2LEXCEPTION() = default;
+        virtual ~OR2LEXCEPTION() {}
 
     private:
         inline static std::stringstream buffer_;

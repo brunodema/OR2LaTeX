@@ -11,12 +11,7 @@ namespace OR2L
     public:
         EXPRESSION(const double coeff = 0.00) : scalar_coefficient_(coeff), variable_map_() {}
         EXPRESSION(const VARIABLE var) : scalar_coefficient_(), variable_map_({ {var, 1.00} }) {}
-
-        EXPRESSION(const EXPRESSION&) = default;
-        EXPRESSION(EXPRESSION&&) = default;
-        virtual EXPRESSION& operator=(const EXPRESSION&) = default;
-        virtual EXPRESSION& operator=(EXPRESSION&&) = default;
-        virtual ~EXPRESSION() = default;
+        virtual ~EXPRESSION() {}
 
         EXPRESSION& operator+=(const EXPRESSION& expr)
         {

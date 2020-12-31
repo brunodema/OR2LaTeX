@@ -18,8 +18,7 @@ namespace OR2L
 				throw OR2LEXCEPTION(EXCEPTION_TYPE::ERR_INDEX_BOUNDS);
 			}
 		}
-
-		//INDEX() {}
+		virtual ~INDEX() {}
 
 		bool operator==(const INDEX& B) const
 		{

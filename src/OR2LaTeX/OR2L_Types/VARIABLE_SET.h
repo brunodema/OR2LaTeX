@@ -26,7 +26,7 @@ namespace OR2L
 			SYMBOL_COMPONENT(name),
 			template_variable_(variable),
 			custom_rule_(custom_rule_) {}
-
+		virtual ~VARIABLE_SET() {}
 		/**
 		 * @brief Creates all variables within the set, following the specified variable template and custom rules.
 		 *

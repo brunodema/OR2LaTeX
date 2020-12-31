@@ -19,12 +19,7 @@ namespace OR2L
             if (ContainsInvalidChar())
                 throw OR2LEXCEPTION(EXCEPTION_TYPE::ERR_SYMBOLSTRING_INVALIDCHAR);
         }
-
-        SYMBOL_STRING(const SYMBOL_STRING&) = default;
-        SYMBOL_STRING(SYMBOL_STRING&&) = default;
-        virtual SYMBOL_STRING& operator=(const SYMBOL_STRING&) = default;
-        virtual SYMBOL_STRING& operator=(SYMBOL_STRING&&) = default;
-        virtual ~SYMBOL_STRING() = default;
+        virtual ~SYMBOL_STRING() {}
 
     private:
         std::regex filter_ = std::regex("[^a-zA-Z0-9]");
