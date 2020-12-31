@@ -13,14 +13,30 @@ namespace OR2L
     class MODEL
     {
     public:
-        MODEL(REGEX_STRING& name) : name_(name) {}
+        MODEL(const REGEX_STRING& name, std::initializer_list<INDEX> indexes, std::initializer_list<VARIABLE> variables, std::initializer_list<CONSTRAINT> constraints) :
+            name_(name)
+        {
+            for (auto&& index : indexes)
+            {
+                symbol_map_.insert_or_assign(index.GetName(), index);
+            }
+            for (auto&& variable : variables)
+            {
+                symbol_map_.insert_or_assign(variable.GetName(), variable);
+            }
+            for (auto&& constraint : constraints)
+            {
+                symbol_map_.insert_or_assign(constraint.GetName(), constraint);
+            }
+        }
+        MODEL(const REGEX_STRING& name) : name_(name) {}
         virtual ~MODEL() {}
 
         void AddVariable(const VARIABLE& var)
         {
             symbol_map_.insert_or_assign(var.GetName(), var);
         }
-        
+
         void RemoveVariable(const VARIABLE& var)
         {
             symbol_map_.erase(var.GetName());
@@ -33,7 +49,7 @@ namespace OR2L
                 symbol_map_.insert_or_assign(index.GetName(), index);
             }
         }
-        
+
         void AddIndex(const INDEX& index)
         {
             symbol_map_.insert_or_assign(index.GetName(), index);
@@ -43,7 +59,7 @@ namespace OR2L
         {
             symbol_map_.erase(index.GetName());
         }
-        
+
         void AddVariableSet(const VARIABLE_SET& var_set)
         {
             symbol_map_.insert_or_assign(var_set.GetName(), var_set);
@@ -53,7 +69,7 @@ namespace OR2L
         {
             symbol_map_.erase(var_set.GetName());
         }
-        
+
         void AddConstraint(const CONSTRAINT& constraint)
         {
             symbol_map_.insert_or_assign(constraint.GetName(), constraint);
@@ -62,8 +78,8 @@ namespace OR2L
         void RemoveConstraint(const CONSTRAINT& constraint)
         {
             symbol_map_.erase(constraint.GetName());
-        }      
-        
+        }
+
 
     private:
         REGEX_STRING name_ = "";

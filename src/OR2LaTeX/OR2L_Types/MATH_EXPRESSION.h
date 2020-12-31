@@ -7,7 +7,7 @@ namespace OR2L
     class MATH_EXPRESSION
     {
     public:
-        MATH_EXPRESSION(EXPRESSION& lhs, EXPRESSION_OPERATORS_TYPE eq_type, EXPRESSION& rhs) :
+        MATH_EXPRESSION(const EXPRESSION& lhs, const EXPRESSION_OPERATORS_TYPE eq_type, const EXPRESSION& rhs) :
             lhs_(lhs),
             eq_type_(eq_type),
             rhs_(rhs) {}
