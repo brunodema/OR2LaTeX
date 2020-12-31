@@ -5,7 +5,8 @@
 #include <cassert>
 #include <exception>
 
-#define ASSERT_THROW(STATEMENT, EXCEPTION_TYPE) try { STATEMENT; } catch(const std::exception& EXCEPTION_TYPE) {}
+#define ASSERT_THROW(STATEMENT, EXCEPTION_TYPE) try { STATEMENT; } catch(const EXCEPTION_TYPE& e) {}
+#define ASSERT_THROW_ALL(STATEMENT) try { STATEMENT; } catch(...) {}
 
 namespace DEMALIB
 {

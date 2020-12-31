@@ -242,18 +242,25 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		// 						x2 ≤ 3
 		// 						x3 ≤ 5
 		// 						Clearly the only way that all of these constraints can be satisfied is if x1 = 7, x2 = 3, and x3 =5
-		ASSERT_THROW(MODEL model("_invalid_name"), OR2LEXCEPTION);
 		MODEL model("ValidName");
 		VARIABLE x1("x1"), x2("x2"), x3("x3");
 		MATH_EXPRESSION expr1(x1, EXPRESSION_OPERATORS_TYPE::LESS_EQUAL, 7);
 		CONSTRAINT R1("R1", expr1);
 		CONSTRAINT R2("R2", MATH_EXPRESSION(x2, EXPRESSION_OPERATORS_TYPE::LESS_EQUAL, 3));
 		CONSTRAINT R3("R3", MATH_EXPRESSION(x3, EXPRESSION_OPERATORS_TYPE::LESS_EQUAL, 5));
-
+		
 		model.AddVariable(x1);
 		model.AddVariable(x2);
 		model.AddVariable(x3);
 		model.AddConstraint(R1);
+		
+		auto cstr1 = model.Get("R1");
+		
+		ASSERT_THROW(MODEL model("_invalid_name"), OR2L::OR2LEXCEPTION);
+		ASSERT_THROW(VARIABLE x4("$%!GSE#"), OR2L::OR2LEXCEPTION);
+		ASSERT_THROW(CONSTRAINT R3("_$_#_#", MATH_EXPRESSION(x3, EXPRESSION_OPERATORS_TYPE::LESS_EQUAL, 5)), OR2L::OR2LEXCEPTION);
+		ASSERT_THROW(auto cstr2 = model.Get("N/A"), OR2L::OR2LEXCEPTION);
+		ASSERT_THROW(auto cstr3 = model.Get("x4"), std::out_of_range);
 	}
 };
 

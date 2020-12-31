@@ -14,6 +14,7 @@ namespace OR2L
 		//virtual std::unique_ptr<SYMBOL_COMPONENT> operator()();
 		virtual inline REGEX_STRING GetName() const { return name_; }
 		virtual inline void SetName(const std::string& str) { name_ = str; }
+		virtual inline SYMBOL_TYPE GetType() const { return type_; }
 
 	protected:
 		REGEX_STRING name_;

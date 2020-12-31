@@ -37,6 +37,32 @@ namespace OR2L
             symbol_map_.insert_or_assign(var.GetName(), std::make_unique<VARIABLE>(var));
         }
 
+        _NODISCARD SYMBOL_COMPONENT* Get(const REGEX_STRING& str) const
+        {
+            //SYMBOL_TYPE type = symbol_map_.at(str).get()->GetType();
+            switch (const SYMBOL_TYPE type = symbol_map_.at(str).get()->GetType())
+            {
+            case SYMBOL_TYPE::INDEX:
+                return static_cast<INDEX*>(symbol_map_.at(str).get());
+                break;
+
+            case SYMBOL_TYPE::VARIABLE:
+                return static_cast<VARIABLE*>(symbol_map_.at(str).get());
+                break;
+
+            case SYMBOL_TYPE::VARIABLE_SET:
+                return static_cast<VARIABLE_SET*>(symbol_map_.at(str).get());
+                break;
+
+            case SYMBOL_TYPE::CONSTRAINT:
+                return static_cast<CONSTRAINT*>(symbol_map_.at(str).get());
+                break;
+
+            default:
+                throw OR2LEXCEPTION();
+            }
+        }
+
         void RemoveVariable(const VARIABLE& var)
         {
             symbol_map_.erase(var.GetName());
