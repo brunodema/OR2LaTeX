@@ -4,6 +4,8 @@
 #include "REGEX_STRING.h"
 #include "SYMBOL_COMPONENT.h"
 #include "VARIABLE.h"
+#include "VARIABLE_SET.h"
+#include "INDEX.h"
 
 namespace OR2L
 {
@@ -17,6 +19,11 @@ namespace OR2L
         {
             symbol_map_.insert_or_assign(var.GetName(), var);
         }
+        
+        void RemoveVariable(const VARIABLE& var)
+        {
+            symbol_map_.erase(var.GetName());
+        }
 
         void ExtractIndexes(const VARIABLE& var)
         {
@@ -24,6 +31,26 @@ namespace OR2L
             {
                 symbol_map_.insert_or_assign(index.GetName(), index);
             }
+        }
+        
+        void AddIndex(const INDEX& index)
+        {
+            symbol_map_.insert_or_assign(index.GetName(), index);
+        }
+
+        void RemoveIndex(const INDEX& index)
+        {
+            symbol_map_.erase(index.GetName());
+        }
+        
+        void AddVariableSet(const VARIABLE_SET& var_set)
+        {
+            symbol_map_.insert_or_assign(var_set.GetName(), var_set);
+        }
+
+        void RemoveVariableSet(const VARIABLE_SET& var_set)
+        {
+            symbol_map_.erase(var_set.GetName());
         }
 
     private:

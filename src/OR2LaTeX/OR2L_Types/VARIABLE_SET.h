@@ -13,7 +13,7 @@ using namespace DEMALIB::BASE_TYPES;
 
 namespace OR2L
 {
-	class VARIABLE_SET : SYMBOL_COMPONENT
+	class VARIABLE_SET : public SYMBOL_COMPONENT
 	{
 	public:
 		/**
