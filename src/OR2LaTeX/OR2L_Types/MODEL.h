@@ -6,6 +6,7 @@
 #include "VARIABLE.h"
 #include "VARIABLE_SET.h"
 #include "INDEX.h"
+#include "CONSTRAINT.h"
 
 namespace OR2L
 {
@@ -52,6 +53,17 @@ namespace OR2L
         {
             symbol_map_.erase(var_set.GetName());
         }
+        
+        void AddConstraint(const CONSTRAINT& constraint)
+        {
+            symbol_map_.insert_or_assign(constraint.GetName(), constraint);
+        }
+
+        void RemoveConstraint(const CONSTRAINT& constraint)
+        {
+            symbol_map_.erase(constraint.GetName());
+        }      
+        
 
     private:
         REGEX_STRING name_ = "";
