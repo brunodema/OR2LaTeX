@@ -9,7 +9,7 @@ namespace OR2L
 	{
 	public:
 		INDEX(size_t lb, size_t ub, const std::string& name) :
-			SYMBOL_COMPONENT(name),
+			SYMBOL_COMPONENT(name, SYMBOL_TYPE::INDEX),
 			lb_(lb),
 			ub_(ub)
 		{

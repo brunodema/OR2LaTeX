@@ -14,7 +14,7 @@ namespace OR2L
 		friend struct std::hash<VARIABLE>;
 
 		VARIABLE(const std::string& name = "", VARIABLE_TYPE var_type = VARIABLE_TYPE::CONTINUOUS, const std::initializer_list<INDEX> indexes = {})
-			: SYMBOL_COMPONENT(name)
+			: SYMBOL_COMPONENT(name, SYMBOL_TYPE::VARIABLE)
 		{
 			for (auto&& index : indexes)
 			{

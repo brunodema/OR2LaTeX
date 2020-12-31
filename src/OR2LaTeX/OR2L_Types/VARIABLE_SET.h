@@ -23,7 +23,7 @@ namespace OR2L
 		 * @param custom_rule Optional rule to be applied when creating the variable objects. It must be a 'bool(const VARIABLE&)' style lambda.
 		 */
 		VARIABLE_SET(const SYMBOL_STRING& name, const VARIABLE& variable, CUSTOM_VALIDATION_RULE custom_rule = {}) :
-			SYMBOL_COMPONENT(name),
+			SYMBOL_COMPONENT(name, SYMBOL_TYPE::VARIABLE_SET),
 			template_variable_(variable),
 			custom_rule_(custom_rule_) {}
 		virtual ~VARIABLE_SET() {}
