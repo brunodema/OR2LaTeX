@@ -1,6 +1,7 @@
 #pragma once
 #include "REGEX_STRING.h"
 #include "SYMBOL_TYPE.h"
+#include <memory>
 
 namespace OR2L
 {
@@ -10,6 +11,7 @@ namespace OR2L
 		SYMBOL_COMPONENT(const std::string& str, const SYMBOL_TYPE& type) : name_(str), type_(type) {}
 		virtual ~SYMBOL_COMPONENT() {}
 
+		//virtual std::unique_ptr<SYMBOL_COMPONENT> operator()();
 		virtual inline REGEX_STRING GetName() const { return name_; }
 		virtual inline void SetName(const std::string& str) { name_ = str; }
 

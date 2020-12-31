@@ -13,20 +13,20 @@ namespace OR2L
     class MODEL
     {
     public:
-        MODEL(const REGEX_STRING& name, std::initializer_list<INDEX> indexes, std::initializer_list<VARIABLE> variables, std::initializer_list<CONSTRAINT> constraints) :
+        MODEL(const REGEX_STRING& name, const std::initializer_list<INDEX> indexes, const std::initializer_list<VARIABLE> variables, const std::initializer_list<CONSTRAINT> constraints) :
             name_(name)
         {
             for (auto&& index : indexes)
             {
-                symbol_map_.insert_or_assign(index.GetName(), index);
+                symbol_map_.insert_or_assign(index.GetName(), std::make_unique<INDEX>(index));
             }
             for (auto&& variable : variables)
             {
-                symbol_map_.insert_or_assign(variable.GetName(), variable);
+                symbol_map_.insert_or_assign(variable.GetName(), std::make_unique<VARIABLE>(variable));
             }
             for (auto&& constraint : constraints)
             {
-                symbol_map_.insert_or_assign(constraint.GetName(), constraint);
+                symbol_map_.insert_or_assign(constraint.GetName(), std::make_unique<CONSTRAINT>(constraint));
             }
         }
         MODEL(const REGEX_STRING& name) : name_(name) {}
@@ -34,7 +34,7 @@ namespace OR2L
 
         void AddVariable(const VARIABLE& var)
         {
-            symbol_map_.insert_or_assign(var.GetName(), var);
+            symbol_map_.insert_or_assign(var.GetName(), std::make_unique<VARIABLE>(var));
         }
 
         void RemoveVariable(const VARIABLE& var)
@@ -46,13 +46,13 @@ namespace OR2L
         {
             for (auto&& index : var.GetIndexes())
             {
-                symbol_map_.insert_or_assign(index.GetName(), index);
+                symbol_map_.insert_or_assign(index.GetName(), std::make_unique<INDEX>(index));
             }
         }
 
         void AddIndex(const INDEX& index)
         {
-            symbol_map_.insert_or_assign(index.GetName(), index);
+            symbol_map_.insert_or_assign(index.GetName(), std::make_unique<INDEX>(index));
         }
 
         void RemoveIndex(const INDEX& index)
@@ -62,7 +62,7 @@ namespace OR2L
 
         void AddVariableSet(const VARIABLE_SET& var_set)
         {
-            symbol_map_.insert_or_assign(var_set.GetName(), var_set);
+            symbol_map_.insert_or_assign(var_set.GetName(), std::make_unique<VARIABLE_SET>(var_set));
         }
 
         void RemoveVariableSet(const VARIABLE_SET& var_set)
@@ -72,7 +72,7 @@ namespace OR2L
 
         void AddConstraint(const CONSTRAINT& constraint)
         {
-            symbol_map_.insert_or_assign(constraint.GetName(), constraint);
+            symbol_map_.insert_or_assign(constraint.GetName(), std::make_unique<CONSTRAINT>(constraint));
         }
 
         void RemoveConstraint(const CONSTRAINT& constraint)
@@ -83,6 +83,6 @@ namespace OR2L
 
     private:
         REGEX_STRING name_ = "";
-        std::map<REGEX_STRING, SYMBOL_COMPONENT> symbol_map_ = {};
+        std::map<REGEX_STRING, std::unique_ptr<SYMBOL_COMPONENT>> symbol_map_ = {};
     };
 } // namespace OR2L
