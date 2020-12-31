@@ -8,25 +8,19 @@
 
 namespace OR2L
 {
-	class VARIABLE
+	class VARIABLE : public SYMBOL_COMPONENT
 	{
 	public:
 		friend struct std::hash<VARIABLE>;
 
-		VARIABLE(const std::string& name = "", VARIABLE_TYPE var_type = VARIABLE_TYPE::CONTINUOUS,
-			const std::initializer_list<INDEX> indexes = {}) : name_(name)
+		VARIABLE(const std::string& name = "", VARIABLE_TYPE var_type = VARIABLE_TYPE::CONTINUOUS, const std::initializer_list<INDEX> indexes = {})
+			: SYMBOL_COMPONENT(name)
 		{
 			for (auto&& index : indexes)
 			{
 				indexes_.insert(std::pair<std::string, INDEX>(index.GetName(), index));
 			}
 		}
-
-		VARIABLE(const VARIABLE&) = default;
-		VARIABLE(VARIABLE&&) = default;
-		virtual VARIABLE& operator=(const VARIABLE&) = default;
-		virtual VARIABLE& operator=(VARIABLE&&) = default;
-		virtual ~VARIABLE() = default;
 
 		bool operator==(const VARIABLE& B) const
 		{
@@ -36,13 +30,10 @@ namespace OR2L
 		inline std::size_t GetNumberOfIndexes() { return indexes_.size(); }
 		inline INDEX GetIndex(const std::string& key) const { return indexes_.at(key); }
 		std::vector<size_t> GetIndexSizes() const;
-		inline std::string GetName() const { return name_; }
-		inline void SetName(const std::string& str) { name_ = str; }
 
 	private:
 		std::unordered_map<std::string, INDEX> indexes_ = {};
 		VARIABLE_TYPE variable_type_ = VARIABLE_TYPE::CONTINUOUS;
-		std::string name_ = "";
 	};
 } // namespace OR2L
 

@@ -15,6 +15,7 @@ namespace OR2L
 		virtual ~SYMBOL_COMPONENT() = default;
 
 		virtual inline SYMBOL_STRING GetName() const { return name_; }
+		virtual inline void SetName(const std::string& str) { name_ = str; }
 
 	protected:
 		SYMBOL_STRING name_;
