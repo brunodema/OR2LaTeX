@@ -8,7 +8,7 @@ namespace OR2L
 	class INDEX : public SYMBOL_COMPONENT
 	{
 	public:
-		INDEX(size_t lb, size_t ub, const std::string& name) :
+		INDEX(const REGEX_STRING& name, const size_t lb, const size_t ub) :
 			SYMBOL_COMPONENT(name, SYMBOL_TYPE::INDEX),
 			lb_(lb),
 			ub_(ub)

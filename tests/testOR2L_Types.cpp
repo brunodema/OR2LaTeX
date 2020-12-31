@@ -19,7 +19,7 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		Vecxd<INDEX> indexes;
 
 		std::initializer_list<size_t> sizes = {1, 2, 3, 4, 5};
-		INDEX dflt_init = INDEX(0, 20, "i");
+		INDEX dflt_init = INDEX("i", 0, 20);
 
 		indexes.ResizeContents(sizes, dflt_init);
 		assert(indexes.at(0).at(0) == dflt_init);
@@ -30,18 +30,18 @@ std::vector<std::function<void()>> ModuleTester::tests =
 	},
 	[]() {
 		// tests the default initializer for the multi-vector class, using the 'index' class
-		Vecxd<INDEX> indexes({1, 2, 3, 4, 5}, INDEX(0, 20, "i"));
-		assert(indexes.at(0).at(0) == INDEX(0, 20, "i"));
-		assert(indexes.at(1).at(1) == INDEX(0, 20, "i"));
-		assert(indexes.at(2).at(2) == INDEX(0, 20, "i"));
-		assert(indexes.at(3).at(3) == INDEX(0, 20, "i"));
-		assert(indexes.at(4).at(4) == INDEX(0, 20, "i"));
+		Vecxd<INDEX> indexes({1, 2, 3, 4, 5}, INDEX("i", 0, 20));
+		assert(indexes.at(0).at(0) == INDEX("i", 0, 20));
+		assert(indexes.at(1).at(1) == INDEX("i", 0, 20));
+		assert(indexes.at(2).at(2) == INDEX("i", 0, 20));
+		assert(indexes.at(3).at(3) == INDEX("i", 0, 20));
+		assert(indexes.at(4).at(4) == INDEX("i", 0, 20));
 	},
 	[]() {
 		// tests the constructor for the 'variable' class. Also tests the multi-vector class default initialization using a 'variable' object
-		INDEX i(0, 20, "i");
-		INDEX j(0, 10, "j");
-		INDEX k(1110, 23210, "k");
+		INDEX i("i" ,0, 20);
+		INDEX j("j", 0, 10);
+		INDEX k("k", 1110, 23210);
 		VARIABLE var = VARIABLE("X", VARIABLE_TYPE::CONTINUOUS ,{ i, j, k });
 		Vecxd<VARIABLE> variables({1, 2, 3, 4, 5}, var);
 		assert(variables.at(0).at(0) == var);
@@ -52,8 +52,8 @@ std::vector<std::function<void()>> ModuleTester::tests =
 	},
 	[]() {
 		// tests direct initialization of the multi-vector class using the 'variable' class as template argument
-		INDEX i(0, 20, "i");
-		INDEX j(0, 10, "j");
+		INDEX i("i", 0, 20);
+		INDEX j("j", 0, 10);
 		Vecxd<VARIABLE> variables({ 1, 2, 3, 4, 5 }, VARIABLE("X", VARIABLE_TYPE::CONTINUOUS, { i, j }));
 		assert(variables.at(0).at(0) == VARIABLE("X", VARIABLE_TYPE::CONTINUOUS, { i, j }));
 		assert(variables.at(1).at(1) == VARIABLE("X", VARIABLE_TYPE::CONTINUOUS, { i, j }));
@@ -82,9 +82,9 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		// both variants of EXPRESSION operator*(VARIABLE, double) ok
 		// both variants of EXPRESSION operator/(VARIABLE, double) ok
 
-		INDEX i(0, 20, "i");
-		INDEX j(0, 10, "j");
-		INDEX k(5, 30, "k");
+		INDEX i("i", 0, 20);
+		INDEX j("j", 0, 10);
+		INDEX k("k", 5, 30);
 
 		VARIABLE C_ijk("Cost", VARIABLE_TYPE::CONTINUOUS, { i, j, k });
 		VARIABLE V_i("Velocity", VARIABLE_TYPE::CONTINUOUS, { i });
@@ -243,24 +243,31 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		// 						x3 ≤ 5
 		// 						Clearly the only way that all of these constraints can be satisfied is if x1 = 7, x2 = 3, and x3 =5
 		MODEL model("ValidName");
+		INDEX dummy1("i", 0, 100), dummy2("j", 15, 300);
 		VARIABLE x1("x1"), x2("x2"), x3("x3");
 		MATH_EXPRESSION expr1(x1, EXPRESSION_OPERATORS_TYPE::LESS_EQUAL, 7);
 		CONSTRAINT R1("R1", expr1);
 		CONSTRAINT R2("R2", MATH_EXPRESSION(x2, EXPRESSION_OPERATORS_TYPE::LESS_EQUAL, 3));
 		CONSTRAINT R3("R3", MATH_EXPRESSION(x3, EXPRESSION_OPERATORS_TYPE::LESS_EQUAL, 5));
-		
+
+		model.AddIndex(dummy1);
+		model.AddIndex(dummy2);
 		model.AddVariable(x1);
 		model.AddVariable(x2);
 		model.AddVariable(x3);
 		model.AddConstraint(R1);
-		
-		auto cstr1 = model.Get("R1");
-		
+
+		auto cstr1 = model.Get("x1");
+		auto cstr2 = model.Get("j");
+		auto cstr3 = model.Get("R1");
+		model.RemoveIndex(dummy2);
+
 		ASSERT_THROW(MODEL model("_invalid_name"), OR2L::OR2LEXCEPTION);
 		ASSERT_THROW(VARIABLE x4("$%!GSE#"), OR2L::OR2LEXCEPTION);
 		ASSERT_THROW(CONSTRAINT R3("_$_#_#", MATH_EXPRESSION(x3, EXPRESSION_OPERATORS_TYPE::LESS_EQUAL, 5)), OR2L::OR2LEXCEPTION);
-		ASSERT_THROW(auto cstr2 = model.Get("N/A"), OR2L::OR2LEXCEPTION);
-		ASSERT_THROW(auto cstr3 = model.Get("x4"), std::out_of_range);
+		ASSERT_THROW(auto cstr4 = model.Get("N/A"), OR2L::OR2LEXCEPTION);
+		ASSERT_THROW(auto cstr5 = model.Get("x4"), std::out_of_range);
+		ASSERT_THROW(auto cstr6 = model.Get("dummy2"), std::out_of_range);
 	}
 };
 
