@@ -29,13 +29,9 @@ namespace OR2L
                 symbol_map_.insert_or_assign(constraint.GetName(), std::make_unique<CONSTRAINT>(constraint));
             }
         }
+
         MODEL(const REGEX_STRING& name) : name_(name) {}
         virtual ~MODEL() {}
-
-        void AddVariable(const VARIABLE& var)
-        {
-            symbol_map_.insert_or_assign(var.GetName(), std::make_unique<VARIABLE>(var));
-        }
 
         _NODISCARD SYMBOL_COMPONENT* Get(const REGEX_STRING& str) const
         {
@@ -61,6 +57,16 @@ namespace OR2L
             default:
                 throw OR2LEXCEPTION();
             }
+        }
+
+        void Remove(const REGEX_STRING& str)
+        {
+            symbol_map_.erase(str);
+        }
+
+        void AddVariable(const VARIABLE& var)
+        {
+            symbol_map_.insert_or_assign(var.GetName(), std::make_unique<VARIABLE>(var));
         }
 
         void RemoveVariable(const VARIABLE& var)

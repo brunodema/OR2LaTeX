@@ -261,6 +261,9 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		auto cstr2 = model.Get("j");
 		auto cstr3 = model.Get("R1");
 		model.RemoveIndex(dummy2);
+		model.Remove("x1");
+		model.RemoveVariable(x2);
+		model.RemoveConstraint(R1);
 
 		ASSERT_THROW(MODEL model("_invalid_name"), OR2L::OR2LEXCEPTION);
 		ASSERT_THROW(VARIABLE x4("$%!GSE#"), OR2L::OR2LEXCEPTION);
@@ -268,6 +271,10 @@ std::vector<std::function<void()>> ModuleTester::tests =
 		ASSERT_THROW(auto cstr4 = model.Get("N/A"), OR2L::OR2LEXCEPTION);
 		ASSERT_THROW(auto cstr5 = model.Get("x4"), std::out_of_range);
 		ASSERT_THROW(auto cstr6 = model.Get("dummy2"), std::out_of_range);
+		ASSERT_THROW(auto cstr7 = model.Get("dummy2"), std::out_of_range);
+		ASSERT_THROW(auto cstr8 = model.Get("x2"), std::out_of_range);
+		ASSERT_THROW(auto cstr9 = model.Get("R1"), std::out_of_range);
+		ASSERT_THROW(auto cstr9 = model.Get("x3"), std::out_of_range);
 	}
 };
 
