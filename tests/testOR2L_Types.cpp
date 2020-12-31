@@ -5,7 +5,7 @@
 #include "EXPRESSION.h"
 #include "MATH_EXPRESSION.h"
 #include "MODEL.h"
-#include "SYMBOL_STRING.h"
+#include "REGEX_STRING.h"
 #include "SYMBOL_COMPONENT.h"
 #include <cassert>
 
@@ -204,30 +204,30 @@ std::vector<std::function<void()>> ModuleTester::tests =
 	[]()
 	{
 		// tests related to the new string wrapper (used to avoid invalid chars in LaTeX)
-		SYMBOL_STRING str1 = "var1";
-		SYMBOL_STRING str2 = "I";
-		SYMBOL_STRING str4 = "Test";
-		SYMBOL_STRING str5 = "aVariable";
+		REGEX_STRING str1 = "var1";
+		REGEX_STRING str2 = "I";
+		REGEX_STRING str4 = "Test";
+		REGEX_STRING str5 = "aVariable";
 
 		try
 		{
-			SYMBOL_STRING str6 = "A_Variable";
+			REGEX_STRING str6 = "A_Variable";
 		}
 		catch (const OR2LEXCEPTION& e) {}
 		try
 		{
-			SYMBOL_STRING str7 = "215%!56&8*9331!";
+			REGEX_STRING str7 = "215%!56&8*9331!";
 		}
 		catch (const OR2LEXCEPTION& e) {}
 		try
 		{
-			SYMBOL_STRING str8 = "$Var1";
+			REGEX_STRING str8 = "$Var1";
 		}
 		catch (const OR2LEXCEPTION& e) {}
 	},
 	[]()
 	{
-		// test if function that use 'SYMBOL_STRING' have the regex on the constructors working
+		// test if function that use 'REGEX_STRING' have the regex on the constructors working
 		VARIABLE var1("var1", VARIABLE_TYPE::CONTINUOUS);
 		SYMBOL_COMPONENT symb1(var1);
 

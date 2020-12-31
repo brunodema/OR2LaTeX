@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <map>
-#include "SYMBOL_STRING.h"
+#include "REGEX_STRING.h"
 #include "SYMBOL_COMPONENT.h"
 #include "VARIABLE.h"
 
@@ -10,7 +10,7 @@ namespace OR2L
     class MODEL
     {
     public:
-        MODEL(SYMBOL_STRING& name) : name_(name) {}
+        MODEL(REGEX_STRING& name) : name_(name) {}
         virtual ~MODEL() {}
 
         void AddVariable(const VARIABLE& var)
@@ -27,7 +27,7 @@ namespace OR2L
         }
 
     private:
-        SYMBOL_STRING name_ = "";
-        std::map<SYMBOL_STRING, SYMBOL_COMPONENT> symbol_map_ = {};
+        REGEX_STRING name_ = "";
+        std::map<REGEX_STRING, SYMBOL_COMPONENT> symbol_map_ = {};
     };
 } // namespace OR2L
