@@ -30,3 +30,13 @@ namespace OR2L
         }
     };
 } // namespace OR2L
+
+template <>
+struct std::hash<OR2L::SYMBOL_STRING>
+{
+    std::size_t operator()(const OR2L::SYMBOL_STRING& k) const
+    {
+        // changed it to be based on their names, which makes sense when thinking about the LaTeX implementation
+        return std::hash<std::string>()(k);
+    };
+};

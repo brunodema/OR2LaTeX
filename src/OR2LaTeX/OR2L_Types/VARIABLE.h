@@ -31,6 +31,15 @@ namespace OR2L
 		inline std::size_t GetNumberOfIndexes() { return indexes_.size(); }
 		inline INDEX GetIndex(const std::string& key) const { return indexes_.at(key); }
 		std::vector<size_t> GetIndexSizes() const;
+		std::vector<INDEX> GetIndexes() const
+		{
+			std::vector<INDEX> ret;
+			for (auto&& index : indexes_)
+			{
+				ret.push_back(index.second);
+			}
+			return ret;
+		}
 
 	private:
 		std::unordered_map<std::string, INDEX> indexes_ = {};
