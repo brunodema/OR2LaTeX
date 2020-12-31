@@ -6,6 +6,7 @@
 #include "MATH_EXPRESSION.h"
 #include "MODEL.h"
 #include "SYMBOL_STRING.h"
+#include "SYMBOL_COMPONENT.h"
 #include <cassert>
 
 using namespace DEMALIB::BASE_TYPES;
@@ -228,10 +229,9 @@ std::vector<std::function<void()>> ModuleTester::tests =
 	{
 		// test if function that use 'SYMBOL_STRING' have the regex on the constructors working
 		VARIABLE var1("var1", VARIABLE_TYPE::CONTINUOUS);
-		SYMBOL_OBJECT(var1.GetName(), SYMBOL_TYPE::VARIABLE, var1);
+		SYMBOL_COMPONENT symb1(var1);
 
-		VARIABLE var2("$var2", VARIABLE_TYPE::CONTINUOUS);
-		ASSERT_THROW(SYMBOL_OBJECT(var2.GetName(), SYMBOL_TYPE::VARIABLE, var1), OR2LEXCEPTION);
+		ASSERT_THROW(SYMBOL_COMPONENT symb2("$var1", SYMBOL_TYPE::VARIABLE), OR2LEXCEPTION);
 	}
 };
 

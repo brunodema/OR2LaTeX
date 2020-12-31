@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 #include <map>
-#include "SYMBOL_OBJECT.h"
 #include "SYMBOL_STRING.h"
+#include "SYMBOL_COMPONENT.h"
 
 namespace OR2L
 {
@@ -14,6 +14,6 @@ namespace OR2L
 
     private:
         SYMBOL_STRING name_ = "";
-        std::map<std::string, SYMBOL_OBJECT> symbol_map_ = {};
+        std::map<std::string, SYMBOL_COMPONENT> symbol_map_ = {};
     };
 } // namespace OR2L
