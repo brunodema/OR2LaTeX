@@ -6,13 +6,13 @@
 
 namespace OR2L
 {
-    class MODEL
+    class MODEL : SYMBOL_COMPONENT
     {
     public:
-        MODEL(SYMBOL_STRING& name) : name_(name) {}
+        MODEL(SYMBOL_STRING& name) :
+            SYMBOL_COMPONENT(name) {}
         virtual ~MODEL() {}
     private:
-        std::string name_ = "";
         std::map<std::string, SYMBOL_OBJECT> symbol_map_ = {};
     };
 } // namespace OR2L
