@@ -5,7 +5,6 @@ project(DEMALIB)
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
-include(VarLogging.cmake)
 
 add_subdirectory(src)
 add_subdirectory(tests)
