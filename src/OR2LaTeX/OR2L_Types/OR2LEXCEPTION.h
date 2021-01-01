@@ -2,8 +2,9 @@
 #include <exception>
 #include <sstream>
 #include <map>
+#include <cmath>
 
-namespace OR2L // remake this to make each exception its own class, just like the STL exceptions are coded 
+namespace OR2L // remake this to make each exception its own class, just like the STL exceptions are coded
 {
     enum class EXCEPTION_TYPE
     {
@@ -13,10 +14,9 @@ namespace OR2L // remake this to make each exception its own class, just like th
     };
 
     static std::map<EXCEPTION_TYPE, std::string_view> EXCEPTION_TEXT =
-    {
-        {EXCEPTION_TYPE::ERR_SYMBOLSTRING_INVALIDCHAR, "The specified string contains an invalid character."},
-        {EXCEPTION_TYPE::ERR_INDEX_BOUNDS, "The specified lower bound is higher than the upper bound."}
-    };
+        {
+            {EXCEPTION_TYPE::ERR_SYMBOLSTRING_INVALIDCHAR, "The specified string contains an invalid character."},
+            {EXCEPTION_TYPE::ERR_INDEX_BOUNDS, "The specified lower bound is higher than the upper bound."}};
 
     class OR2LEXCEPTION : public std::exception
     {
