@@ -25,6 +25,8 @@
 		"llvm-vs-code-extensions.vscode-clangd"
 	],
 
+	"postCreateCommand": "sudo apt update && sudo apt upgrade && sudo apt install -y clang-tidy clang-format",
+
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
