@@ -2,21 +2,21 @@
 #include "ModuleTester.h"
 #include "Vecxd.h"
 #include <cassert>
+#include <utility>
 
+using or2l::base_types::ModuleTester;
 
-using namespace or2l::base_types;
+struct RandomStruct {
+  RandomStruct(int a, double b, std::string str = "")
+      : _a(a), _b(b), _str(std::move(str)) {}
 
-struct random_struct {
-  random_struct(int a, double b, std::string str = "")
-      : _a(a), _b(b), _str(str) {}
-
-  random_struct() {}
+  RandomStruct() = default;
 
   int _a;
   double _b;
   std::string _str;
 
-  constexpr bool operator==(const random_struct& B) const {
+  constexpr bool operator==(const RandomStruct& B) const {
     return (this->_a == B._a && this->_b == B._b && this->_str == B._str);
   }
 };
@@ -43,10 +43,10 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
     []() {
       // tests the same functions above, but now using a custom class as
       // argument for the multi-vector class
-      Vecxd<random_struct> test;
+      Vecxd<RandomStruct> test;
       test.ResizeContents({1, 2, 3, 4}, {});
 
-      random_struct sample = {1, 5.66, "this_is_a_test"};
+      RandomStruct sample = {1, 5.66, "this_is_a_test"};
       test.FillWith(sample);
 
       assert(test.at(0).at(0) == sample);

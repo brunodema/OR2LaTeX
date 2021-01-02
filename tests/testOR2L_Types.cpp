@@ -1,16 +1,21 @@
+#include "CONSTRAINT.h"
 #include "EXPRESSION.h"
 #include "INDEX.h"
 #include "MATH_EXPRESSION.h"
 #include "MODEL.h"
 #include "ModuleTester.h"
+#include "OR2LEXCEPTION.h"
 #include "REGEX_STRING.h"
 #include "SYMBOL_COMPONENT.h"
 #include "VARIABLE.h"
 #include "Vecxd.h"
 #include <cassert>
 
-using namespace or2l::base_types;
-using namespace or2l;
+using or2l::CONSTRAINT;
+using or2l::INDEX;
+using or2l::OR2LEXCEPTION;
+using or2l::VARIABLE;
+using or2l::base_types::Vecxd;
 
 std::vector<std::function<void()>> ModuleTester::tests_ = {
     []() {
@@ -238,7 +243,7 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       // test if function that use 'REGEX_STRING' have the regex on the
       // constructors working
       VARIABLE var1("var1", VARIABLE_TYPE::CONTINUOUS);
-      SYMBOL_COMPONENT symb1(var1);
+      const SYMBOL_COMPONENT& symb1(var1);
 
       ASSERT_THROW(SYMBOL_COMPONENT symb2("$var1", SYMBOL_TYPE::VARIABLE),
                    OR2LEXCEPTION);
@@ -254,8 +259,11 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       // that all of these constraints can be satisfied is if x1 = 7, x2 = 3,
       // and x3 =5
       MODEL model("ValidName");
-      INDEX dummy1("i", 0, 100), dummy2("j", 15, 300);
-      VARIABLE x1("x1"), x2("x2"), x3("x3");
+      INDEX dummy1("i", 0, 100);
+      INDEX dummy2("j", 15, 300);
+      VARIABLE x1("x1");
+      VARIABLE x2("x2");
+      VARIABLE x3("x3");
       MATH_EXPRESSION expr1(x1, EXPRESSION_OPERATORS_TYPE::LESS_EQUAL, 7);
       CONSTRAINT R1("R1", expr1);
       CONSTRAINT R2(
