@@ -23,7 +23,7 @@ class VARIABLE_SET : public SYMBOL_COMPONENT {
    * objects. It must be a 'bool(const VARIABLE&)' style lambda.
    */
   VARIABLE_SET(const REGEX_STRING& name, const VARIABLE& variable,
-               CUSTOM_VALIDATION_RULE custom_rule = {})
+               const CustomValidationRule& custom_rule = {})
       : SYMBOL_COMPONENT(name, SYMBOL_TYPE::VARIABLE_SET),
         template_variable_(variable),
         custom_rule_(custom_rule_) {}
@@ -36,7 +36,7 @@ class VARIABLE_SET : public SYMBOL_COMPONENT {
   void PopulateSet();
 
  private:
-  CUSTOM_VALIDATION_RULE custom_rule_;
+  CustomValidationRule custom_rule_;
   VARIABLE template_variable_;
   Vecxd<VARIABLE_OBJECT> variable_objects_;
 

@@ -18,9 +18,9 @@ class INDEX : public SYMBOL_COMPONENT {
     return this->lb_ == B.lb_ && this->ub_ == B.ub_ && this->name_ == B.name_;
   }
 
-  inline size_t GetUB() const { return ub_; }
-  inline size_t GetLB() const { return lb_; }
-  inline size_t GetSize() const { return ub_ - lb_; }
+  [[nodiscard]] inline size_t GetUB() const { return ub_; }
+  [[nodiscard]] inline size_t GetLB() const { return lb_; }
+  [[nodiscard]] inline size_t GetSize() const { return ub_ - lb_; }
 
  private:
   size_t lb_ = 0;

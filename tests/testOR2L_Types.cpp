@@ -99,44 +99,44 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
 
       double coeff1 = 5.45;
 
-      EXPRESSION expr1 = C_ijk + V_i;
+      Expression expr1 = C_ijk + V_i;
       assert(expr1.ContainsVariable(C_ijk) == true);
       assert(expr1.ContainsVariable(V_i) == true);
       assert(fabs(expr1.GetCoefficient(C_ijk) - 1.00) <= or2l::EPSILON);
       assert(fabs(expr1.GetCoefficient(V_i) - 1.00) <= or2l::EPSILON);
       assert(expr1.GetConstant() == 0.00);
 
-      EXPRESSION expr2 = C_ijk + V_i + coeff1;
+      Expression expr2 = C_ijk + V_i + coeff1;
       assert(expr2.ContainsVariable(C_ijk) == true);
       assert(expr2.ContainsVariable(V_i) == true);
       assert(fabs(expr2.GetCoefficient(C_ijk) - 1.00) <= or2l::EPSILON);
       assert(fabs(expr2.GetCoefficient(V_i) - 1.00) <= or2l::EPSILON);
       assert(expr2.GetConstant() == 5.45);
 
-      EXPRESSION expr3 = expr1 + C_ijk;
+      Expression expr3 = expr1 + C_ijk;
       assert(expr3.ContainsVariable(C_ijk) == true);
       assert(expr3.ContainsVariable(V_i) == true);
       assert(fabs(expr3.GetCoefficient(C_ijk) - 2.00) <= or2l::EPSILON);
       assert(fabs(expr3.GetCoefficient(V_i) - 1.00) <= or2l::EPSILON);
       assert(expr3.GetConstant() == 0.00);
 
-      EXPRESSION expr4 = C_ijk - V_i;
+      Expression expr4 = C_ijk - V_i;
       assert(expr4.ContainsVariable(C_ijk) == true);
       assert(expr4.ContainsVariable(V_i) == true);
       assert(fabs(expr4.GetCoefficient(C_ijk) - 1.00) <= or2l::EPSILON);
       assert(fabs(expr4.GetCoefficient(V_i) + 1.00) <= or2l::EPSILON);
       assert(expr4.GetConstant() == 0.00);
 
-      EXPRESSION expr5 = expr4 - coeff1;
+      Expression expr5 = expr4 - coeff1;
       assert(expr4.ContainsVariable(C_ijk) == true);
       assert(expr4.ContainsVariable(V_i) == true);
       assert(fabs(expr4.GetCoefficient(C_ijk) - 1.00) <= or2l::EPSILON);
       assert(fabs(expr4.GetCoefficient(V_i) + 1.00) <= or2l::EPSILON);
       assert(expr4.GetConstant() == -5.45);
 
-      EXPRESSION expr6;
+      Expression expr6;
       VARIABLE T("T", VARIABLE_TYPE::CONTINUOUS, {i});
-      EXPRESSION expr6_1 = 2.00;
+      Expression expr6_1 = 2.00;
       expr6 += expr6_1;
       assert(expr6.ContainsVariable(T) == false);
       try {
@@ -163,7 +163,7 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       }
       assert(expr6.GetConstant() - 0.00 <= or2l::EPSILON);
 
-      EXPRESSION expr7 = VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, {i});
+      Expression expr7 = VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, {i});
       VARIABLE var7_1 = VARIABLE("Dummy2", VARIABLE_TYPE::CONTINUOUS, {i});
       expr7 = expr7 - var7_1;
       assert(expr7.ContainsVariable(var7_1) == true);
@@ -192,25 +192,25 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       assert(expr7.GetConstant() - 0.00 <= or2l::EPSILON);
 
       VARIABLE var1("var1", VARIABLE_TYPE::CONTINUOUS, {i, j});
-      EXPRESSION expr8 = 2.00 * var1;
-      EXPRESSION expr8_1 = var1 * 2;
+      Expression expr8 = 2.00 * var1;
+      Expression expr8_1 = var1 * 2;
       // assert(expr8 == expr8_1);
       assert(expr8_1.ContainsVariable(var1) == true);
       assert(expr8_1.GetCoefficient(var1) - 2.00 <= or2l::EPSILON);
       assert(expr8_1.GetConstant() - 0.00 <= or2l::EPSILON);
-      EXPRESSION expr8_2 = var1 / 2;
+      Expression expr8_2 = var1 / 2;
       assert(expr8_2.ContainsVariable(var1) == true);
       assert(expr8_2.GetCoefficient(var1) - 0.50 <= or2l::EPSILON);
       assert(expr8_2.GetConstant() - 0.00 <= or2l::EPSILON);
-      EXPRESSION expr8_3 = 2 / var1;
+      Expression expr8_3 = 2 / var1;
       assert(expr8_3.ContainsVariable(var1) == true);
       assert(expr8_3.GetCoefficient(var1) - pow(2, -1) <= or2l::EPSILON);
       assert(expr8_3.GetConstant() - 0.00 <= or2l::EPSILON);
     },
     []() {
       // tests related to 'MATH_EXPRESSION'
-      EXPRESSION expr1 = 2.00;
-      EXPRESSION expr2 = 3.00;
+      Expression expr1 = 2.00;
+      Expression expr2 = 3.00;
       MATH_EXPRESSION mexpr(expr1, EXPRESSION_OPERATORS_TYPE::EQUAL, expr2);
     },
     []() {

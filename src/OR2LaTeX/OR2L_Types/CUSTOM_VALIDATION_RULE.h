@@ -5,13 +5,13 @@
 
 
 namespace or2l {
-class CUSTOM_VALIDATION_RULE
+class CustomValidationRule
     : public std::optional<std::function<bool(const VARIABLE&)>> {
  public:
-  CUSTOM_VALIDATION_RULE() {}
-  virtual ~CUSTOM_VALIDATION_RULE() {}
+  CustomValidationRule() = default;
+  virtual ~CustomValidationRule() = default;
 
-  bool IsVariableValid(const VARIABLE& var) const {
+  [[nodiscard]] bool IsVariableValid(const VARIABLE& var) const {
     if (!this->has_value()) {
       return true;
     }

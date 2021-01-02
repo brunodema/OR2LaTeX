@@ -4,11 +4,11 @@
 namespace or2l {
 class CONSTRAINT : public SYMBOL_COMPONENT {
  public:
-  CONSTRAINT(const REGEX_STRING name, const MATH_EXPRESSION& math_expression)
+  CONSTRAINT(const REGEX_STRING& name, const MATH_EXPRESSION& math_expression)
       : SYMBOL_COMPONENT(name, SYMBOL_TYPE::CONSTRAINT),
         math_expression_(math_expression) {}
 
-  virtual ~CONSTRAINT() {}
+  virtual ~CONSTRAINT() = default;
 
  private:
   MATH_EXPRESSION math_expression_;
