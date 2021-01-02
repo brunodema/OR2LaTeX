@@ -1,0 +1,9 @@
+project(BaseTypesLib)
+set(CMAKE_CXX_STANDARD 20)
+
+file(GLOB files
+*.cpp
+*.h
+)
+
+add_library(BaseTypesLib STATIC ${files})

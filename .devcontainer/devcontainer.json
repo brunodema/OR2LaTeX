@@ -20,7 +20,9 @@
 		"esbenp.prettier-vscode",
 		"cschlosser.doxdocgen",
 		"ms-vscode.cmake-tools",
-		"twxs.cmake"
+		"twxs.cmake",
+		"xaver.clang-format",
+		"llvm-vs-code-extensions.vscode-clangd"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
