@@ -65,5 +65,5 @@
         "xloctime": "cpp"
     },
     "cmake.sourceDirectory": "${workspaceFolder}/.",
-    "cmake.copyCompileCommands": "build"
+    "cmake.copyCompileCommands": "${workspaceFolder}/compile_commands.json"
 }
