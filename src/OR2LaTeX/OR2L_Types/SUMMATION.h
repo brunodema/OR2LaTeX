@@ -1,7 +1,4 @@
 #pragma once
-namespace OR2L
-{
-	class SUMMATION
-	{
-	};
-} // namespace OR2L
+namespace or2l {
+class SUMMATION {};
+}  // namespace or2l

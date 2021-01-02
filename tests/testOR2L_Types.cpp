@@ -9,10 +9,10 @@
 #include "Vecxd.h"
 #include <cassert>
 
-using namespace DEMALIB::BASE_TYPES;
-using namespace OR2L;
+using namespace or2l::base_types;
+using namespace or2l;
 
-std::vector<std::function<void()>> ModuleTester::tests = {
+std::vector<std::function<void()>> ModuleTester::tests_ = {
     []() {
       // tests the multi-vector class with the 'index' class
       Vecxd<INDEX> indexes;
@@ -102,36 +102,36 @@ std::vector<std::function<void()>> ModuleTester::tests = {
       EXPRESSION expr1 = C_ijk + V_i;
       assert(expr1.ContainsVariable(C_ijk) == true);
       assert(expr1.ContainsVariable(V_i) == true);
-      assert(fabs(expr1.GetCoefficient(C_ijk) - 1.00) <= OR2L::EPSILON);
-      assert(fabs(expr1.GetCoefficient(V_i) - 1.00) <= OR2L::EPSILON);
+      assert(fabs(expr1.GetCoefficient(C_ijk) - 1.00) <= or2l::EPSILON);
+      assert(fabs(expr1.GetCoefficient(V_i) - 1.00) <= or2l::EPSILON);
       assert(expr1.GetConstant() == 0.00);
 
       EXPRESSION expr2 = C_ijk + V_i + coeff1;
       assert(expr2.ContainsVariable(C_ijk) == true);
       assert(expr2.ContainsVariable(V_i) == true);
-      assert(fabs(expr2.GetCoefficient(C_ijk) - 1.00) <= OR2L::EPSILON);
-      assert(fabs(expr2.GetCoefficient(V_i) - 1.00) <= OR2L::EPSILON);
+      assert(fabs(expr2.GetCoefficient(C_ijk) - 1.00) <= or2l::EPSILON);
+      assert(fabs(expr2.GetCoefficient(V_i) - 1.00) <= or2l::EPSILON);
       assert(expr2.GetConstant() == 5.45);
 
       EXPRESSION expr3 = expr1 + C_ijk;
       assert(expr3.ContainsVariable(C_ijk) == true);
       assert(expr3.ContainsVariable(V_i) == true);
-      assert(fabs(expr3.GetCoefficient(C_ijk) - 2.00) <= OR2L::EPSILON);
-      assert(fabs(expr3.GetCoefficient(V_i) - 1.00) <= OR2L::EPSILON);
+      assert(fabs(expr3.GetCoefficient(C_ijk) - 2.00) <= or2l::EPSILON);
+      assert(fabs(expr3.GetCoefficient(V_i) - 1.00) <= or2l::EPSILON);
       assert(expr3.GetConstant() == 0.00);
 
       EXPRESSION expr4 = C_ijk - V_i;
       assert(expr4.ContainsVariable(C_ijk) == true);
       assert(expr4.ContainsVariable(V_i) == true);
-      assert(fabs(expr4.GetCoefficient(C_ijk) - 1.00) <= OR2L::EPSILON);
-      assert(fabs(expr4.GetCoefficient(V_i) + 1.00) <= OR2L::EPSILON);
+      assert(fabs(expr4.GetCoefficient(C_ijk) - 1.00) <= or2l::EPSILON);
+      assert(fabs(expr4.GetCoefficient(V_i) + 1.00) <= or2l::EPSILON);
       assert(expr4.GetConstant() == 0.00);
 
       EXPRESSION expr5 = expr4 - coeff1;
       assert(expr4.ContainsVariable(C_ijk) == true);
       assert(expr4.ContainsVariable(V_i) == true);
-      assert(fabs(expr4.GetCoefficient(C_ijk) - 1.00) <= OR2L::EPSILON);
-      assert(fabs(expr4.GetCoefficient(V_i) + 1.00) <= OR2L::EPSILON);
+      assert(fabs(expr4.GetCoefficient(C_ijk) - 1.00) <= or2l::EPSILON);
+      assert(fabs(expr4.GetCoefficient(V_i) + 1.00) <= or2l::EPSILON);
       assert(expr4.GetConstant() == -5.45);
 
       EXPRESSION expr6;
@@ -143,32 +143,32 @@ std::vector<std::function<void()>> ModuleTester::tests = {
         expr6.GetCoefficient(T);
       } catch (const std::out_of_range& e) {
       }
-      assert(expr6.GetConstant() - 2.00 <= OR2L::EPSILON);
+      assert(expr6.GetConstant() - 2.00 <= or2l::EPSILON);
       expr6 += T;
       assert(expr6.ContainsVariable(T) == true);
-      assert(expr6.GetCoefficient(T) - 1.00 <= OR2L::EPSILON);
-      assert(expr6.GetConstant() - 2.00 <= OR2L::EPSILON);
+      assert(expr6.GetCoefficient(T) - 1.00 <= or2l::EPSILON);
+      assert(expr6.GetConstant() - 2.00 <= or2l::EPSILON);
       expr6 -= T;
       assert(expr6.ContainsVariable(T) == false);
       try {
         expr6.GetCoefficient(T);
       } catch (const std::out_of_range& e) {
       }
-      assert(expr6.GetConstant() - 2.00 <= OR2L::EPSILON);
+      assert(expr6.GetConstant() - 2.00 <= or2l::EPSILON);
       expr6 -= expr6;
       assert(expr6.ContainsVariable(T) == false);
       try {
         expr6.GetCoefficient(T);
       } catch (const std::out_of_range& e) {
       }
-      assert(expr6.GetConstant() - 0.00 <= OR2L::EPSILON);
+      assert(expr6.GetConstant() - 0.00 <= or2l::EPSILON);
 
       EXPRESSION expr7 = VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, {i});
       VARIABLE var7_1 = VARIABLE("Dummy2", VARIABLE_TYPE::CONTINUOUS, {i});
       expr7 = expr7 - var7_1;
       assert(expr7.ContainsVariable(var7_1) == true);
-      assert(expr7.GetCoefficient(var7_1) + 1.00 <= OR2L::EPSILON);
-      assert(expr7.GetConstant() - 0.00 <= OR2L::EPSILON);
+      assert(expr7.GetCoefficient(var7_1) + 1.00 <= or2l::EPSILON);
+      assert(expr7.GetConstant() - 0.00 <= or2l::EPSILON);
       // expr7 *= var7_1; //fails to compile, as expected
       expr7 *= 2.00;
       assert(expr7.ContainsVariable(
@@ -177,9 +177,9 @@ std::vector<std::function<void()>> ModuleTester::tests = {
       assert(expr7.GetCoefficient(
                  VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, {i})) -
                  2.00 <=
-             OR2L::EPSILON);
-      assert(expr7.GetCoefficient(var7_1) + 2.00 <= OR2L::EPSILON);
-      assert(expr7.GetConstant() - 0.00 <= OR2L::EPSILON);
+             or2l::EPSILON);
+      assert(expr7.GetCoefficient(var7_1) + 2.00 <= or2l::EPSILON);
+      assert(expr7.GetConstant() - 0.00 <= or2l::EPSILON);
       expr7 /= 2.00;
       assert(expr7.ContainsVariable(
                  VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, {i})) == true);
@@ -187,25 +187,25 @@ std::vector<std::function<void()>> ModuleTester::tests = {
       assert(expr7.GetCoefficient(
                  VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, {i})) -
                  1.00 <=
-             OR2L::EPSILON);
-      assert(expr7.GetCoefficient(var7_1) + 1.00 <= OR2L::EPSILON);
-      assert(expr7.GetConstant() - 0.00 <= OR2L::EPSILON);
+             or2l::EPSILON);
+      assert(expr7.GetCoefficient(var7_1) + 1.00 <= or2l::EPSILON);
+      assert(expr7.GetConstant() - 0.00 <= or2l::EPSILON);
 
       VARIABLE var1("var1", VARIABLE_TYPE::CONTINUOUS, {i, j});
       EXPRESSION expr8 = 2.00 * var1;
       EXPRESSION expr8_1 = var1 * 2;
       // assert(expr8 == expr8_1);
       assert(expr8_1.ContainsVariable(var1) == true);
-      assert(expr8_1.GetCoefficient(var1) - 2.00 <= OR2L::EPSILON);
-      assert(expr8_1.GetConstant() - 0.00 <= OR2L::EPSILON);
+      assert(expr8_1.GetCoefficient(var1) - 2.00 <= or2l::EPSILON);
+      assert(expr8_1.GetConstant() - 0.00 <= or2l::EPSILON);
       EXPRESSION expr8_2 = var1 / 2;
       assert(expr8_2.ContainsVariable(var1) == true);
-      assert(expr8_2.GetCoefficient(var1) - 0.50 <= OR2L::EPSILON);
-      assert(expr8_2.GetConstant() - 0.00 <= OR2L::EPSILON);
+      assert(expr8_2.GetCoefficient(var1) - 0.50 <= or2l::EPSILON);
+      assert(expr8_2.GetConstant() - 0.00 <= or2l::EPSILON);
       EXPRESSION expr8_3 = 2 / var1;
       assert(expr8_3.ContainsVariable(var1) == true);
-      assert(expr8_3.GetCoefficient(var1) - pow(2, -1) <= OR2L::EPSILON);
-      assert(expr8_3.GetConstant() - 0.00 <= OR2L::EPSILON);
+      assert(expr8_3.GetCoefficient(var1) - pow(2, -1) <= or2l::EPSILON);
+      assert(expr8_3.GetConstant() - 0.00 <= or2l::EPSILON);
     },
     []() {
       // tests related to 'MATH_EXPRESSION'
@@ -278,14 +278,14 @@ std::vector<std::function<void()>> ModuleTester::tests = {
       model.RemoveVariable(x2);
       model.RemoveConstraint(R1);
 
-      ASSERT_THROW(MODEL model("_invalid_name"), OR2L::OR2LEXCEPTION);
-      ASSERT_THROW(VARIABLE x4("$%!GSE#"), OR2L::OR2LEXCEPTION);
+      ASSERT_THROW(MODEL model("_invalid_name"), or2l::OR2LEXCEPTION);
+      ASSERT_THROW(VARIABLE x4("$%!GSE#"), or2l::OR2LEXCEPTION);
       ASSERT_THROW(
           CONSTRAINT R3(
               "_$_#_#",
               MATH_EXPRESSION(x3, EXPRESSION_OPERATORS_TYPE::LESS_EQUAL, 5)),
-          OR2L::OR2LEXCEPTION);
-      ASSERT_THROW(auto* cstr4 = model.Get("N/A"), OR2L::OR2LEXCEPTION);
+          or2l::OR2LEXCEPTION);
+      ASSERT_THROW(auto* cstr4 = model.Get("N/A"), or2l::OR2LEXCEPTION);
       ASSERT_THROW(auto* cstr5 = model.Get("x4"), std::out_of_range);
       ASSERT_THROW(auto* cstr6 = model.Get("dummy2"), std::out_of_range);
       ASSERT_THROW(auto* cstr7 = model.Get("dummy2"), std::out_of_range);

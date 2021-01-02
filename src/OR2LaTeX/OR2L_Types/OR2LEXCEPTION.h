@@ -1,44 +1,41 @@
 #pragma once
-#include <exception>
-#include <sstream>
-#include <map>
 #include <cmath>
+#include <exception>
+#include <map>
+#include <sstream>
 
-namespace OR2L // remake this to make each exception its own class, just like the STL exceptions are coded
+namespace or2l  // remake this to make each exception its own class, just like
+                // the STL exceptions are coded
 {
-    enum class EXCEPTION_TYPE
-    {
-        ERR_SYMBOLSTRING_INVALIDCHAR,
-        ERR_INDEX_BOUNDS,
-        ERR_EXPRESSION_VARNOTFOUND
-    };
+enum class EXCEPTION_TYPE {
+  ERR_SYMBOLSTRING_INVALIDCHAR,
+  ERR_INDEX_BOUNDS,
+  ERR_EXPRESSION_VARNOTFOUND
+};
 
-    static std::map<EXCEPTION_TYPE, std::string_view> EXCEPTION_TEXT =
-        {
-            {EXCEPTION_TYPE::ERR_SYMBOLSTRING_INVALIDCHAR, "The specified string contains an invalid character."},
-            {EXCEPTION_TYPE::ERR_INDEX_BOUNDS, "The specified lower bound is higher than the upper bound."}};
+static std::map<EXCEPTION_TYPE, std::string_view> EXCEPTION_TEXT = {
+    {EXCEPTION_TYPE::ERR_SYMBOLSTRING_INVALIDCHAR,
+     "The specified string contains an invalid character."},
+    {EXCEPTION_TYPE::ERR_INDEX_BOUNDS,
+     "The specified lower bound is higher than the upper bound."}};
 
-    class OR2LEXCEPTION : public std::exception
-    {
-    public:
-        OR2LEXCEPTION(const std::exception e, std::string message = "")
-        {
-            buffer_ << e.what() << " | " << message << "\n";
-        }
+class OR2LEXCEPTION : public std::exception {
+ public:
+  OR2LEXCEPTION(const std::exception e, std::string message = "") {
+    buffer_ << e.what() << " | " << message << "\n";
+  }
 
-        OR2LEXCEPTION(EXCEPTION_TYPE type, std::string message = "")
-        {
-            buffer_ << "OR2L Exception | " << OR2L::EXCEPTION_TEXT.at(type) << "\n";
-        }
+  OR2LEXCEPTION(EXCEPTION_TYPE type, std::string message = "") {
+    buffer_ << "OR2L Exception | " << or2l::EXCEPTION_TEXT.at(type) << "\n";
+  }
 
-        OR2LEXCEPTION(std::string message = "")
-        {
-            buffer_ << "OR2L Exception | " << message << "\n";
-        }
-        virtual ~OR2LEXCEPTION() {}
+  OR2LEXCEPTION(std::string message = "") {
+    buffer_ << "OR2L Exception | " << message << "\n";
+  }
+  virtual ~OR2LEXCEPTION() {}
 
-    private:
-        inline static std::stringstream buffer_;
-    };
+ private:
+  inline static std::stringstream buffer_;
+};
 
-} // namespace OR2L
+}  // namespace or2l
