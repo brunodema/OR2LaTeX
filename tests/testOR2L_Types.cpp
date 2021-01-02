@@ -102,36 +102,36 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       Expression expr1 = C_ijk + V_i;
       assert(expr1.ContainsVariable(C_ijk) == true);
       assert(expr1.ContainsVariable(V_i) == true);
-      assert(fabs(expr1.GetCoefficient(C_ijk) - 1.00) <= or2l::EPSILON);
-      assert(fabs(expr1.GetCoefficient(V_i) - 1.00) <= or2l::EPSILON);
+      assert(fabs(expr1.GetCoefficient(C_ijk) - 1.00) <= or2l::kEpsilon);
+      assert(fabs(expr1.GetCoefficient(V_i) - 1.00) <= or2l::kEpsilon);
       assert(expr1.GetConstant() == 0.00);
 
       Expression expr2 = C_ijk + V_i + coeff1;
       assert(expr2.ContainsVariable(C_ijk) == true);
       assert(expr2.ContainsVariable(V_i) == true);
-      assert(fabs(expr2.GetCoefficient(C_ijk) - 1.00) <= or2l::EPSILON);
-      assert(fabs(expr2.GetCoefficient(V_i) - 1.00) <= or2l::EPSILON);
+      assert(fabs(expr2.GetCoefficient(C_ijk) - 1.00) <= or2l::kEpsilon);
+      assert(fabs(expr2.GetCoefficient(V_i) - 1.00) <= or2l::kEpsilon);
       assert(expr2.GetConstant() == 5.45);
 
       Expression expr3 = expr1 + C_ijk;
       assert(expr3.ContainsVariable(C_ijk) == true);
       assert(expr3.ContainsVariable(V_i) == true);
-      assert(fabs(expr3.GetCoefficient(C_ijk) - 2.00) <= or2l::EPSILON);
-      assert(fabs(expr3.GetCoefficient(V_i) - 1.00) <= or2l::EPSILON);
+      assert(fabs(expr3.GetCoefficient(C_ijk) - 2.00) <= or2l::kEpsilon);
+      assert(fabs(expr3.GetCoefficient(V_i) - 1.00) <= or2l::kEpsilon);
       assert(expr3.GetConstant() == 0.00);
 
       Expression expr4 = C_ijk - V_i;
       assert(expr4.ContainsVariable(C_ijk) == true);
       assert(expr4.ContainsVariable(V_i) == true);
-      assert(fabs(expr4.GetCoefficient(C_ijk) - 1.00) <= or2l::EPSILON);
-      assert(fabs(expr4.GetCoefficient(V_i) + 1.00) <= or2l::EPSILON);
+      assert(fabs(expr4.GetCoefficient(C_ijk) - 1.00) <= or2l::kEpsilon);
+      assert(fabs(expr4.GetCoefficient(V_i) + 1.00) <= or2l::kEpsilon);
       assert(expr4.GetConstant() == 0.00);
 
       Expression expr5 = expr4 - coeff1;
       assert(expr4.ContainsVariable(C_ijk) == true);
       assert(expr4.ContainsVariable(V_i) == true);
-      assert(fabs(expr4.GetCoefficient(C_ijk) - 1.00) <= or2l::EPSILON);
-      assert(fabs(expr4.GetCoefficient(V_i) + 1.00) <= or2l::EPSILON);
+      assert(fabs(expr4.GetCoefficient(C_ijk) - 1.00) <= or2l::kEpsilon);
+      assert(fabs(expr4.GetCoefficient(V_i) + 1.00) <= or2l::kEpsilon);
       assert(expr4.GetConstant() == -5.45);
 
       Expression expr6;
@@ -143,32 +143,32 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
         expr6.GetCoefficient(T);
       } catch (const std::out_of_range& e) {
       }
-      assert(expr6.GetConstant() - 2.00 <= or2l::EPSILON);
+      assert(expr6.GetConstant() - 2.00 <= or2l::kEpsilon);
       expr6 += T;
       assert(expr6.ContainsVariable(T) == true);
-      assert(expr6.GetCoefficient(T) - 1.00 <= or2l::EPSILON);
-      assert(expr6.GetConstant() - 2.00 <= or2l::EPSILON);
+      assert(expr6.GetCoefficient(T) - 1.00 <= or2l::kEpsilon);
+      assert(expr6.GetConstant() - 2.00 <= or2l::kEpsilon);
       expr6 -= T;
       assert(expr6.ContainsVariable(T) == false);
       try {
         expr6.GetCoefficient(T);
       } catch (const std::out_of_range& e) {
       }
-      assert(expr6.GetConstant() - 2.00 <= or2l::EPSILON);
+      assert(expr6.GetConstant() - 2.00 <= or2l::kEpsilon);
       expr6 -= expr6;
       assert(expr6.ContainsVariable(T) == false);
       try {
         expr6.GetCoefficient(T);
       } catch (const std::out_of_range& e) {
       }
-      assert(expr6.GetConstant() - 0.00 <= or2l::EPSILON);
+      assert(expr6.GetConstant() - 0.00 <= or2l::kEpsilon);
 
       Expression expr7 = VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, {i});
       VARIABLE var7_1 = VARIABLE("Dummy2", VARIABLE_TYPE::CONTINUOUS, {i});
       expr7 = expr7 - var7_1;
       assert(expr7.ContainsVariable(var7_1) == true);
-      assert(expr7.GetCoefficient(var7_1) + 1.00 <= or2l::EPSILON);
-      assert(expr7.GetConstant() - 0.00 <= or2l::EPSILON);
+      assert(expr7.GetCoefficient(var7_1) + 1.00 <= or2l::kEpsilon);
+      assert(expr7.GetConstant() - 0.00 <= or2l::kEpsilon);
       // expr7 *= var7_1; //fails to compile, as expected
       expr7 *= 2.00;
       assert(expr7.ContainsVariable(
@@ -177,9 +177,9 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       assert(expr7.GetCoefficient(
                  VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, {i})) -
                  2.00 <=
-             or2l::EPSILON);
-      assert(expr7.GetCoefficient(var7_1) + 2.00 <= or2l::EPSILON);
-      assert(expr7.GetConstant() - 0.00 <= or2l::EPSILON);
+             or2l::kEpsilon);
+      assert(expr7.GetCoefficient(var7_1) + 2.00 <= or2l::kEpsilon);
+      assert(expr7.GetConstant() - 0.00 <= or2l::kEpsilon);
       expr7 /= 2.00;
       assert(expr7.ContainsVariable(
                  VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, {i})) == true);
@@ -187,25 +187,25 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       assert(expr7.GetCoefficient(
                  VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, {i})) -
                  1.00 <=
-             or2l::EPSILON);
-      assert(expr7.GetCoefficient(var7_1) + 1.00 <= or2l::EPSILON);
-      assert(expr7.GetConstant() - 0.00 <= or2l::EPSILON);
+             or2l::kEpsilon);
+      assert(expr7.GetCoefficient(var7_1) + 1.00 <= or2l::kEpsilon);
+      assert(expr7.GetConstant() - 0.00 <= or2l::kEpsilon);
 
       VARIABLE var1("var1", VARIABLE_TYPE::CONTINUOUS, {i, j});
       Expression expr8 = 2.00 * var1;
       Expression expr8_1 = var1 * 2;
       // assert(expr8 == expr8_1);
       assert(expr8_1.ContainsVariable(var1) == true);
-      assert(expr8_1.GetCoefficient(var1) - 2.00 <= or2l::EPSILON);
-      assert(expr8_1.GetConstant() - 0.00 <= or2l::EPSILON);
+      assert(expr8_1.GetCoefficient(var1) - 2.00 <= or2l::kEpsilon);
+      assert(expr8_1.GetConstant() - 0.00 <= or2l::kEpsilon);
       Expression expr8_2 = var1 / 2;
       assert(expr8_2.ContainsVariable(var1) == true);
-      assert(expr8_2.GetCoefficient(var1) - 0.50 <= or2l::EPSILON);
-      assert(expr8_2.GetConstant() - 0.00 <= or2l::EPSILON);
+      assert(expr8_2.GetCoefficient(var1) - 0.50 <= or2l::kEpsilon);
+      assert(expr8_2.GetConstant() - 0.00 <= or2l::kEpsilon);
       Expression expr8_3 = 2 / var1;
       assert(expr8_3.ContainsVariable(var1) == true);
-      assert(expr8_3.GetCoefficient(var1) - pow(2, -1) <= or2l::EPSILON);
-      assert(expr8_3.GetConstant() - 0.00 <= or2l::EPSILON);
+      assert(expr8_3.GetCoefficient(var1) - pow(2, -1) <= or2l::kEpsilon);
+      assert(expr8_3.GetConstant() - 0.00 <= or2l::kEpsilon);
     },
     []() {
       // tests related to 'MATH_EXPRESSION'

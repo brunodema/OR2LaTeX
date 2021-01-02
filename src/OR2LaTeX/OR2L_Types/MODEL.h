@@ -8,7 +8,6 @@
 #include <map>
 #include <string>
 
-
 namespace or2l {
 class MODEL {
  public:
@@ -30,8 +29,8 @@ class MODEL {
     }
   }
 
-  MODEL(const REGEX_STRING& name) : name_(name) {}
-  virtual ~MODEL() {}
+  explicit MODEL(const REGEX_STRING& name) : name_(name) {}
+  virtual ~MODEL() = default;
 
   [[nodiscard]] SYMBOL_COMPONENT* Get(const REGEX_STRING& str) const {
     // SYMBOL_TYPE type = symbol_map_.at(str).get()->GetType();

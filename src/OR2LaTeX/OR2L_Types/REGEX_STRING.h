@@ -19,12 +19,14 @@ class REGEX_STRING
     if (ContainsInvalidChar())
       throw OR2LEXCEPTION(EXCEPTION_TYPE::ERR_SYMBOLSTRING_INVALIDCHAR);
   }
-  virtual ~REGEX_STRING() {}
+  virtual ~REGEX_STRING() = default;
 
  private:
   std::regex filter_ = std::regex("[^a-zA-Z0-9]");
 
-  bool ContainsInvalidChar() const { return std::regex_search(*this, filter_); }
+  [[nodiscard]] bool ContainsInvalidChar() const {
+    return std::regex_search(*this, filter_);
+  }
 };
 }  // namespace or2l
 

@@ -6,15 +6,11 @@ namespace or2l {
 class VARIABLE_OBJECT  // redo the association with indexes
 {
  public:
-  VARIABLE_OBJECT(const VARIABLE& variable)
+  explicit VARIABLE_OBJECT(const VARIABLE& variable)
       : template_variable_(variable), index_values_() {}
 
-  VARIABLE_OBJECT() {}
+  VARIABLE_OBJECT() = default;
 
-  VARIABLE_OBJECT(const VARIABLE_OBJECT&) = default;
-  VARIABLE_OBJECT(VARIABLE_OBJECT&&) = default;
-  virtual VARIABLE_OBJECT& operator=(const VARIABLE_OBJECT&) = default;
-  virtual VARIABLE_OBJECT& operator=(VARIABLE_OBJECT&&) = default;
   virtual ~VARIABLE_OBJECT() = default;
 
  private:

@@ -14,12 +14,13 @@ class VARIABLE : public SYMBOL_COMPONENT {
   VARIABLE(const std::string& name = "",
            VARIABLE_TYPE var_type = VARIABLE_TYPE::CONTINUOUS,
            const std::initializer_list<INDEX> indexes = {})
-      : SYMBOL_COMPONENT(name, SYMBOL_TYPE::VARIABLE) {
+      : SYMBOL_COMPONENT(name, SYMBOL_TYPE::VARIABLE),
+        variable_type_(var_type) {
     for (auto&& index : indexes) {
       indexes_.insert(std::pair<std::string, INDEX>(index.GetName(), index));
     }
   }
-  virtual ~VARIABLE() {}
+  virtual ~VARIABLE() = default;
 
   bool operator==(const VARIABLE& B) const {
     return this->name_ == B.name_ && this->indexes_ == B.indexes_;

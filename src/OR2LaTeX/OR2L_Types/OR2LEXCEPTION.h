@@ -21,18 +21,18 @@ static std::map<EXCEPTION_TYPE, std::string_view> EXCEPTION_TEXT = {
 
 class OR2LEXCEPTION : public std::exception {
  public:
-  OR2LEXCEPTION(const std::exception e, std::string message = "") {
+  explicit OR2LEXCEPTION(const std::exception e, std::string message = "") {
     buffer_ << e.what() << " | " << message << "\n";
   }
 
-  OR2LEXCEPTION(EXCEPTION_TYPE type, std::string message = "") {
+  explicit OR2LEXCEPTION(EXCEPTION_TYPE type, std::string message = "") {
     buffer_ << "OR2L Exception | " << or2l::EXCEPTION_TEXT.at(type) << "\n";
   }
 
-  OR2LEXCEPTION(std::string message = "") {
+  explicit OR2LEXCEPTION(std::string message = "") {
     buffer_ << "OR2L Exception | " << message << "\n";
   }
-  virtual ~OR2LEXCEPTION() {}
+  virtual ~OR2LEXCEPTION() = default;
 
  private:
   inline static std::stringstream buffer_;

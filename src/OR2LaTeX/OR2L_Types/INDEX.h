@@ -12,7 +12,7 @@ class INDEX : public SYMBOL_COMPONENT {
       throw OR2LEXCEPTION(EXCEPTION_TYPE::ERR_INDEX_BOUNDS);
     }
   }
-  virtual ~INDEX() {}
+  virtual ~INDEX() = default;
 
   bool operator==(const INDEX& B) const {
     return this->lb_ == B.lb_ && this->ub_ == B.ub_ && this->name_ == B.name_;

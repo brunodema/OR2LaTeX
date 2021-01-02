@@ -11,9 +11,9 @@ class SYMBOL_COMPONENT {
   virtual ~SYMBOL_COMPONENT() {}
 
   // virtual std::unique_ptr<SYMBOL_COMPONENT> operator()();
-  virtual inline REGEX_STRING GetName() const { return name_; }
-  virtual inline void SetName(const std::string& str) { name_ = str; }
-  virtual inline SYMBOL_TYPE GetType() const { return type_; }
+  [[nodiscard]] virtual inline REGEX_STRING GetName() const { return name_; }
+  virtual inline void SetName(const REGEX_STRING& str) { name_ = str; }
+  [[nodiscard]] virtual inline SYMBOL_TYPE GetType() const { return type_; }
 
  protected:
   REGEX_STRING name_;
