@@ -35,11 +35,27 @@
             ]
         },
         {
-            "label": "cmake-build",
+            "label": "cmake-full-build",
             "type": "shell",
             "dependsOn": [
                 "cmake-precompile"
             ],
+            "command": "cmake",
+            "args": [
+                "--build",
+                "build"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ]
+        },
+        {
+            "label": "cmake-build",
+            "type": "shell",
             "command": "cmake",
             "args": [
                 "--build",
