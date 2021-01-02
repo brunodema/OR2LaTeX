@@ -1,7 +1,7 @@
 #pragma once
 
 namespace or2l {
-enum class EXPRESSION_OPERATORS_TYPE {
+enum class ExpressionOperatorTypes {
   EQUAL,
   GREATER_EQUAL,
   GREATER,

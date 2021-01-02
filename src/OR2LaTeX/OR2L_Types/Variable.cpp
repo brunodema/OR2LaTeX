@@ -1,6 +1,6 @@
-#include "VARIABLE.h"
+#include "Variable.h"
 
-std::vector<std::size_t> or2l::VARIABLE::GetIndexSizes() const {
+std::vector<std::size_t> or2l::Variable::GetIndexSizes() const {
   std::vector<size_t> index_sizes;
   index_sizes.reserve(indexes_.size());
   int i = 0;

@@ -1,6 +1,6 @@
-#include "VARIABLE_SET.h"
+#include "VariableSet.h"
 
-void or2l::VARIABLE_SET::PopulateSet()  // rework to 'actually' make V.O.
+void or2l::VariableSet::PopulateSet()  // rework to 'actually' make V.O.
 {
   std::vector<size_t> index_lengths = this->template_variable_.GetIndexSizes();
   int i = 0;

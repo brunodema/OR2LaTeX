@@ -1,17 +1,16 @@
 #pragma once
-#include "VARIABLE.h"
+#include "Variable.h"
 #include <functional>
 #include <optional>
 
-
 namespace or2l {
 class CustomValidationRule
-    : public std::optional<std::function<bool(const VARIABLE&)>> {
+    : public std::optional<std::function<bool(const Variable&)>> {
  public:
   CustomValidationRule() = default;
   virtual ~CustomValidationRule() = default;
 
-  [[nodiscard]] bool IsVariableValid(const VARIABLE& var) const {
+  [[nodiscard]] bool IsVariableValid(const Variable& var) const {
     if (!this->has_value()) {
       return true;
     }

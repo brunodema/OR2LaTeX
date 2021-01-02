@@ -1,29 +1,30 @@
-#include "CONSTRAINT.h"
-#include "EXPRESSION.h"
-#include "INDEX.h"
-#include "MATH_EXPRESSION.h"
-#include "MODEL.h"
+#include "Constraint.h"
+#include "Exception.h"
+#include "Expression.h"
+#include "Index.h"
+#include "MathExpression.h"
+#include "Model.h"
 #include "ModuleTester.h"
-#include "OR2LEXCEPTION.h"
-#include "REGEX_STRING.h"
-#include "SYMBOL_COMPONENT.h"
-#include "VARIABLE.h"
+#include "RegexString.h"
+#include "SymbolComponent.h"
+#include "Variable.h"
 #include "Vecxd.h"
 #include <cassert>
 
-using or2l::CONSTRAINT;
-using or2l::INDEX;
-using or2l::OR2LEXCEPTION;
-using or2l::VARIABLE;
+using or2l::Constraint;
+using or2l::Exception;
+using or2l::Index;
+using or2l::Variable;
+using or2l::base_types::ModuleTester;
 using or2l::base_types::Vecxd;
 
 std::vector<std::function<void()>> ModuleTester::tests_ = {
     []() {
       // tests the multi-vector class with the 'index' class
-      Vecxd<INDEX> indexes;
+      Vecxd<Index> indexes;
 
       std::initializer_list<size_t> sizes = {1, 2, 3, 4, 5};
-      INDEX dflt_init = INDEX("i", 0, 20);
+      Index dflt_init = Index("i", 0, 20);
 
       indexes.ResizeContents(sizes, dflt_init);
       assert(indexes.at(0).at(0) == dflt_init);
@@ -35,21 +36,21 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
     []() {
       // tests the default initializer for the multi-vector class, using the
       // 'index' class
-      Vecxd<INDEX> indexes({1, 2, 3, 4, 5}, INDEX("i", 0, 20));
-      assert(indexes.at(0).at(0) == INDEX("i", 0, 20));
-      assert(indexes.at(1).at(1) == INDEX("i", 0, 20));
-      assert(indexes.at(2).at(2) == INDEX("i", 0, 20));
-      assert(indexes.at(3).at(3) == INDEX("i", 0, 20));
-      assert(indexes.at(4).at(4) == INDEX("i", 0, 20));
+      Vecxd<Index> indexes({1, 2, 3, 4, 5}, Index("i", 0, 20));
+      assert(indexes.at(0).at(0) == Index("i", 0, 20));
+      assert(indexes.at(1).at(1) == Index("i", 0, 20));
+      assert(indexes.at(2).at(2) == Index("i", 0, 20));
+      assert(indexes.at(3).at(3) == Index("i", 0, 20));
+      assert(indexes.at(4).at(4) == Index("i", 0, 20));
     },
     []() {
       // tests the constructor for the 'variable' class. Also tests the
       // multi-vector class default initialization using a 'variable' object
-      INDEX i("i", 0, 20);
-      INDEX j("j", 0, 10);
-      INDEX k("k", 1110, 23210);
-      VARIABLE var = VARIABLE("X", VARIABLE_TYPE::CONTINUOUS, {i, j, k});
-      Vecxd<VARIABLE> variables({1, 2, 3, 4, 5}, var);
+      Index i("i", 0, 20);
+      Index j("j", 0, 10);
+      Index k("k", 1110, 23210);
+      Variable var = Variable("X", VariableType::CONTINUOUS, {i, j, k});
+      Vecxd<Variable> variables({1, 2, 3, 4, 5}, var);
       assert(variables.at(0).at(0) == var);
       assert(variables.at(1).at(1) == var);
       assert(variables.at(2).at(2) == var);
@@ -59,48 +60,48 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
     []() {
       // tests direct initialization of the multi-vector class using the
       // 'variable' class as template argument
-      INDEX i("i", 0, 20);
-      INDEX j("j", 0, 10);
-      Vecxd<VARIABLE> variables(
-          {1, 2, 3, 4, 5}, VARIABLE("X", VARIABLE_TYPE::CONTINUOUS, {i, j}));
+      Index i("i", 0, 20);
+      Index j("j", 0, 10);
+      Vecxd<Variable> variables(
+          {1, 2, 3, 4, 5}, Variable("X", VariableType::CONTINUOUS, {i, j}));
       assert(variables.at(0).at(0) ==
-             VARIABLE("X", VARIABLE_TYPE::CONTINUOUS, {i, j}));
+             Variable("X", VariableType::CONTINUOUS, {i, j}));
       assert(variables.at(1).at(1) ==
-             VARIABLE("X", VARIABLE_TYPE::CONTINUOUS, {i, j}));
+             Variable("X", VariableType::CONTINUOUS, {i, j}));
       assert(variables.at(2).at(2) ==
-             VARIABLE("X", VARIABLE_TYPE::CONTINUOUS, {i, j}));
+             Variable("X", VariableType::CONTINUOUS, {i, j}));
       assert(variables.at(3).at(3) ==
-             VARIABLE("X", VARIABLE_TYPE::CONTINUOUS, {i, j}));
+             Variable("X", VariableType::CONTINUOUS, {i, j}));
       assert(variables.at(4).at(4) ==
-             VARIABLE("X", VARIABLE_TYPE::CONTINUOUS, {i, j}));
+             Variable("X", VariableType::CONTINUOUS, {i, j}));
     },
     []() {
       // tests the following operators of the 'expression' class:
-      // EXPRESSION& operator+=(EXPRESSION) ok
-      // EXPRESSION& operator-=(EXPRESSION) ok
-      // EXPRESSION& operator+=(double) ok
-      // EXPRESSION& operator-=(double) ok
-      // EXPRESSION& operator+=(VARIABLE) ok
-      // EXPRESSION& operator-=(VARIABLE) ok
-      // EXPRESSION& operator*=(double) ok
-      // EXPRESSION& operator/=(double) ok
+      // Expression& operator+=(Expression) ok
+      // Expression& operator-=(Expression) ok
+      // Expression& operator+=(double) ok
+      // Expression& operator-=(double) ok
+      // Expression& operator+=(Variable) ok
+      // Expression& operator-=(Variable) ok
+      // Expression& operator*=(double) ok
+      // Expression& operator/=(double) ok
 
-      // EXPRESSION& operator+(EXPRESSION) ok
-      // EXPRESSION& operator-(EXPRESSION) ok
-      // EXPRESSION& operator+(VARIABLE) ok
-      // EXPRESSION& operator-(VARIABLE) ok
+      // Expression& operator+(Expression) ok
+      // Expression& operator-(Expression) ok
+      // Expression& operator+(Variable) ok
+      // Expression& operator-(Variable) ok
 
-      // EXPRESSION operator-(VARIABLE,VARIABLE) ok
-      // EXPRESSION operator+(VARIABLE,VARIABLE) ok
-      // both variants of EXPRESSION operator*(VARIABLE, double) ok
-      // both variants of EXPRESSION operator/(VARIABLE, double) ok
+      // Expression operator-(Variable,Variable) ok
+      // Expression operator+(Variable,Variable) ok
+      // both variants of Expression operator*(Variable, double) ok
+      // both variants of Expression operator/(Variable, double) ok
 
-      INDEX i("i", 0, 20);
-      INDEX j("j", 0, 10);
-      INDEX k("k", 5, 30);
+      Index i("i", 0, 20);
+      Index j("j", 0, 10);
+      Index k("k", 5, 30);
 
-      VARIABLE C_ijk("Cost", VARIABLE_TYPE::CONTINUOUS, {i, j, k});
-      VARIABLE V_i("Velocity", VARIABLE_TYPE::CONTINUOUS, {i});
+      Variable C_ijk("Cost", VariableType::CONTINUOUS, {i, j, k});
+      Variable V_i("Velocity", VariableType::CONTINUOUS, {i});
 
       double coeff1 = 5.45;
 
@@ -140,7 +141,7 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       assert(expr4.GetConstant() == -5.45);
 
       Expression expr6;
-      VARIABLE T("T", VARIABLE_TYPE::CONTINUOUS, {i});
+      Variable T("T", VariableType::CONTINUOUS, {i});
       Expression expr6_1 = 2.00;
       expr6 += expr6_1;
       assert(expr6.ContainsVariable(T) == false);
@@ -168,8 +169,8 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       }
       assert(expr6.GetConstant() - 0.00 <= or2l::kEpsilon);
 
-      Expression expr7 = VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, {i});
-      VARIABLE var7_1 = VARIABLE("Dummy2", VARIABLE_TYPE::CONTINUOUS, {i});
+      Expression expr7 = Variable("Dummy1", VariableType::CONTINUOUS, {i});
+      Variable var7_1 = Variable("Dummy2", VariableType::CONTINUOUS, {i});
       expr7 = expr7 - var7_1;
       assert(expr7.ContainsVariable(var7_1) == true);
       assert(expr7.GetCoefficient(var7_1) + 1.00 <= or2l::kEpsilon);
@@ -177,26 +178,26 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       // expr7 *= var7_1; //fails to compile, as expected
       expr7 *= 2.00;
       assert(expr7.ContainsVariable(
-                 VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, {i})) == true);
+                 Variable("Dummy1", VariableType::CONTINUOUS, {i})) == true);
       assert(expr7.ContainsVariable(var7_1) == true);
       assert(expr7.GetCoefficient(
-                 VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, {i})) -
+                 Variable("Dummy1", VariableType::CONTINUOUS, {i})) -
                  2.00 <=
              or2l::kEpsilon);
       assert(expr7.GetCoefficient(var7_1) + 2.00 <= or2l::kEpsilon);
       assert(expr7.GetConstant() - 0.00 <= or2l::kEpsilon);
       expr7 /= 2.00;
       assert(expr7.ContainsVariable(
-                 VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, {i})) == true);
+                 Variable("Dummy1", VariableType::CONTINUOUS, {i})) == true);
       assert(expr7.ContainsVariable(var7_1) == true);
       assert(expr7.GetCoefficient(
-                 VARIABLE("Dummy1", VARIABLE_TYPE::CONTINUOUS, {i})) -
+                 Variable("Dummy1", VariableType::CONTINUOUS, {i})) -
                  1.00 <=
              or2l::kEpsilon);
       assert(expr7.GetCoefficient(var7_1) + 1.00 <= or2l::kEpsilon);
       assert(expr7.GetConstant() - 0.00 <= or2l::kEpsilon);
 
-      VARIABLE var1("var1", VARIABLE_TYPE::CONTINUOUS, {i, j});
+      Variable var1("var1", VariableType::CONTINUOUS, {i, j});
       Expression expr8 = 2.00 * var1;
       Expression expr8_1 = var1 * 2;
       // assert(expr8 == expr8_1);
@@ -213,43 +214,43 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       assert(expr8_3.GetConstant() - 0.00 <= or2l::kEpsilon);
     },
     []() {
-      // tests related to 'MATH_EXPRESSION'
+      // tests related to 'MathExpression'
       Expression expr1 = 2.00;
       Expression expr2 = 3.00;
-      MATH_EXPRESSION mexpr(expr1, EXPRESSION_OPERATORS_TYPE::EQUAL, expr2);
+      MathExpression mexpr(expr1, ExpressionOperatorTypes::EQUAL, expr2);
     },
     []() {
       // tests related to the new string wrapper (used to avoid invalid chars in
       // LaTeX)
-      REGEX_STRING str1 = "var1";
-      REGEX_STRING str2 = "I";
-      REGEX_STRING str4 = "Test";
-      REGEX_STRING str5 = "aVariable";
+      RegexString str1 = "var1";
+      RegexString str2 = "I";
+      RegexString str4 = "Test";
+      RegexString str5 = "aVariable";
 
       try {
-        REGEX_STRING str6 = "A_Variable";
-      } catch (const OR2LEXCEPTION& e) {
+        RegexString str6 = "A_Variable";
+      } catch (const Exception& e) {
       }
       try {
-        REGEX_STRING str7 = "215%!56&8*9331!";
-      } catch (const OR2LEXCEPTION& e) {
+        RegexString str7 = "215%!56&8*9331!";
+      } catch (const Exception& e) {
       }
       try {
-        REGEX_STRING str8 = "$Var1";
-      } catch (const OR2LEXCEPTION& e) {
+        RegexString str8 = "$Var1";
+      } catch (const Exception& e) {
       }
     },
     []() {
-      // test if function that use 'REGEX_STRING' have the regex on the
+      // test if function that use 'RegexString' have the regex on the
       // constructors working
-      VARIABLE var1("var1", VARIABLE_TYPE::CONTINUOUS);
-      const SYMBOL_COMPONENT& symb1(var1);
+      Variable var1("var1", VariableType::CONTINUOUS);
+      const SymbolComponent& symb1(var1);
 
-      ASSERT_THROW(SYMBOL_COMPONENT symb2("$var1", SYMBOL_TYPE::VARIABLE),
-                   OR2LEXCEPTION);
+      ASSERT_THROW(SymbolComponent symb2("$var1", SymbolType::VARIABLE),
+                   Exception);
     },
     []() {
-      // some tests related to the 'MODEL' class
+      // some tests related to the 'Model' class
       // Template problem:
       // 						x1 + x2 + x3 ≥ 15
       // 						x1 ≤ 7
@@ -258,18 +259,18 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       // 						Clearly the only way
       // that all of these constraints can be satisfied is if x1 = 7, x2 = 3,
       // and x3 =5
-      MODEL model("ValidName");
-      INDEX dummy1("i", 0, 100);
-      INDEX dummy2("j", 15, 300);
-      VARIABLE x1("x1");
-      VARIABLE x2("x2");
-      VARIABLE x3("x3");
-      MATH_EXPRESSION expr1(x1, EXPRESSION_OPERATORS_TYPE::LESS_EQUAL, 7);
-      CONSTRAINT R1("R1", expr1);
-      CONSTRAINT R2(
-          "R2", MATH_EXPRESSION(x2, EXPRESSION_OPERATORS_TYPE::LESS_EQUAL, 3));
-      CONSTRAINT R3(
-          "R3", MATH_EXPRESSION(x3, EXPRESSION_OPERATORS_TYPE::LESS_EQUAL, 5));
+      Model model("ValidName");
+      Index dummy1("i", 0, 100);
+      Index dummy2("j", 15, 300);
+      Variable x1("x1");
+      Variable x2("x2");
+      Variable x3("x3");
+      MathExpression expr1(x1, ExpressionOperatorTypes::LESS_EQUAL, 7);
+      Constraint R1("R1", expr1);
+      Constraint R2("R2",
+                    MathExpression(x2, ExpressionOperatorTypes::LESS_EQUAL, 3));
+      Constraint R3("R3",
+                    MathExpression(x3, ExpressionOperatorTypes::LESS_EQUAL, 5));
 
       model.AddIndex(dummy1);
       model.AddIndex(dummy2);
@@ -286,14 +287,14 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       model.RemoveVariable(x2);
       model.RemoveConstraint(R1);
 
-      ASSERT_THROW(MODEL model("_invalid_name"), or2l::OR2LEXCEPTION);
-      ASSERT_THROW(VARIABLE x4("$%!GSE#"), or2l::OR2LEXCEPTION);
+      ASSERT_THROW(Model model("_invalid_name"), or2l::Exception);
+      ASSERT_THROW(Variable x4("$%!GSE#"), or2l::Exception);
       ASSERT_THROW(
-          CONSTRAINT R3(
+          Constraint R3(
               "_$_#_#",
-              MATH_EXPRESSION(x3, EXPRESSION_OPERATORS_TYPE::LESS_EQUAL, 5)),
-          or2l::OR2LEXCEPTION);
-      ASSERT_THROW(auto* cstr4 = model.Get("N/A"), or2l::OR2LEXCEPTION);
+              MathExpression(x3, ExpressionOperatorTypes::LESS_EQUAL, 5)),
+          or2l::Exception);
+      ASSERT_THROW(auto* cstr4 = model.Get("N/A"), or2l::Exception);
       ASSERT_THROW(auto* cstr5 = model.Get("x4"), std::out_of_range);
       ASSERT_THROW(auto* cstr6 = model.Get("dummy2"), std::out_of_range);
       ASSERT_THROW(auto* cstr7 = model.Get("dummy2"), std::out_of_range);

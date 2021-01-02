@@ -5,11 +5,11 @@
 #include <iostream>
 #include <vector>
 
-#define ASSERT_THROW(STATEMENT, EXCEPTION_TYPE) \
-  try {                                         \
-    STATEMENT;                                  \
-    throw;                                      \
-  } catch (const EXCEPTION_TYPE& e) {           \
+#define ASSERT_THROW(STATEMENT, ExceptionType) \
+  try {                                        \
+    STATEMENT;                                 \
+    throw;                                     \
+  } catch (const ExceptionType& e) {           \
   }
 #define ASSERT_THROW_ALL(STATEMENT) \
   try {                             \

@@ -6,13 +6,13 @@
 },
 {
   "directory": "/workspaces/OR2LaTeX/build/src/OR2LaTeX/OR2L_Types",
-  "command": "/bin/g++-9   -I/workspaces/OR2LaTeX/src/OR2LaTeX/OR2L_Types/../../BaseTypesLib  -g   -std=gnu++2a -o CMakeFiles/OR2L_TYPES.dir/VARIABLE.cpp.o -c /workspaces/OR2LaTeX/src/OR2LaTeX/OR2L_Types/VARIABLE.cpp",
-  "file": "/workspaces/OR2LaTeX/src/OR2LaTeX/OR2L_Types/VARIABLE.cpp"
+  "command": "/bin/g++-9   -I/workspaces/OR2LaTeX/src/OR2LaTeX/OR2L_Types/../../BaseTypesLib  -g   -std=gnu++2a -o CMakeFiles/OR2L_TYPES.dir/Variable.cpp.o -c /workspaces/OR2LaTeX/src/OR2LaTeX/OR2L_Types/Variable.cpp",
+  "file": "/workspaces/OR2LaTeX/src/OR2LaTeX/OR2L_Types/Variable.cpp"
 },
 {
   "directory": "/workspaces/OR2LaTeX/build/src/OR2LaTeX/OR2L_Types",
-  "command": "/bin/g++-9   -I/workspaces/OR2LaTeX/src/OR2LaTeX/OR2L_Types/../../BaseTypesLib  -g   -std=gnu++2a -o CMakeFiles/OR2L_TYPES.dir/VARIABLE_SET.cpp.o -c /workspaces/OR2LaTeX/src/OR2LaTeX/OR2L_Types/VARIABLE_SET.cpp",
-  "file": "/workspaces/OR2LaTeX/src/OR2LaTeX/OR2L_Types/VARIABLE_SET.cpp"
+  "command": "/bin/g++-9   -I/workspaces/OR2LaTeX/src/OR2LaTeX/OR2L_Types/../../BaseTypesLib  -g   -std=gnu++2a -o CMakeFiles/OR2L_TYPES.dir/VariableSet.cpp.o -c /workspaces/OR2LaTeX/src/OR2LaTeX/OR2L_Types/VariableSet.cpp",
+  "file": "/workspaces/OR2LaTeX/src/OR2LaTeX/OR2L_Types/VariableSet.cpp"
 },
 {
   "directory": "/workspaces/OR2LaTeX/build/tests",
