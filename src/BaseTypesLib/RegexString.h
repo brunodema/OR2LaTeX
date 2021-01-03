@@ -1,7 +1,8 @@
 #pragma once
-#include "Exception.h"
 #include <cassert>
+#include <exception>
 #include <regex>
+#include <stdexcept>
 #include <string>
 
 namespace or2l {
@@ -13,11 +14,13 @@ class RegexString
  public:
   RegexString(const std::string& str) : std::string(str) {
     if (ContainsInvalidChar())
-      throw Exception(ExceptionType::ERR_SYMBOLSTRING_INVALIDCHAR);
+      throw std::exception(std::invalid_argument(
+          "The provided string does not respect the regex rule provided."));
   }
   RegexString(const char* charp) : std::string(charp) {
     if (ContainsInvalidChar())
-      throw Exception(ExceptionType::ERR_SYMBOLSTRING_INVALIDCHAR);
+      throw std::exception(std::invalid_argument(
+          "The provided string does not respect the regex rule provided."));
   }
   virtual ~RegexString() = default;
 

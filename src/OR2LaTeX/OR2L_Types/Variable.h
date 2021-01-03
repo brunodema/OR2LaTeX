@@ -1,8 +1,8 @@
 #pragma once
 #include "Index.h"
+#include "SymbolComponent.h"
 #include "VariableType.h"
 #include <optional>
-#include <stdarg.h>
 #include <string>
 #include <unordered_map>
 
@@ -11,12 +11,12 @@ class Variable : public SymbolComponent {
  public:
   friend struct std::hash<Variable>;
 
-  Variable(const std::string& name = "",
+  Variable(const RegexString& name = "",
            VariableType var_type = VariableType::CONTINUOUS,
            const std::initializer_list<Index> indexes = {})
       : SymbolComponent(name, SymbolType::VARIABLE), variable_type_(var_type) {
     for (auto&& index : indexes) {
-      indexes_.insert(std::pair<std::string, Index>(index.GetName(), index));
+      indexes_.insert(std::pair<RegexString, Index>(index.GetName(), index));
     }
   }
   virtual ~Variable() = default;
@@ -26,7 +26,7 @@ class Variable : public SymbolComponent {
   }
 
   inline std::size_t GetNumberOfIndexes() { return indexes_.size(); }
-  inline Index GetIndex(const std::string& key) const {
+  inline Index GetIndex(const RegexString& key) const {
     return indexes_.at(key);
   }
   std::vector<size_t> GetIndexSizes() const;
@@ -39,7 +39,7 @@ class Variable : public SymbolComponent {
   }
 
  private:
-  std::unordered_map<std::string, Index> indexes_ = {};
+  std::unordered_map<RegexString, Index> indexes_ = {};
   VariableType variable_type_ = VariableType::CONTINUOUS;
 };
 }  // namespace or2l
