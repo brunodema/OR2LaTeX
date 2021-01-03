@@ -212,6 +212,16 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       assert(expr8_3.ContainsVariable(var1) == true);
       assert(expr8_3.GetCoefficient(var1) - pow(2, -1) <= or2l::kEpsilon);
       assert(expr8_3.GetConstant() - 0.00 <= or2l::kEpsilon);
+
+      // the tests for the following operators are missing:
+      //
+      // Expression operator+(double, variable);
+      // Expression operator+(variable, double);
+      // Expression operator-(double, variable);
+      // Expression operator-(variable, double);
+      //
+      // even though they are not here, they were tested in a previous commit,
+      // which was lost during development. Implement them back in the future
     },
     []() {
       // tests related to 'MathExpression'

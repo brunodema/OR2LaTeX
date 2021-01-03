@@ -68,6 +68,14 @@
             "problemMatcher": [
                 "$msCompile"
             ]
-        }
+        },
+            {
+                "label": "run-tests",
+                "type": "shell",
+                "command": "${workspaceFolder}/build/bin/testBaseTypesLib && ${workspaceFolder}/build/bin/testOR2L_Types",
+                "problemMatcher": [
+                    "$msCompile"
+                ]
+            }
     ]
 }
