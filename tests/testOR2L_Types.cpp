@@ -10,9 +10,9 @@
 #include "Variable.h"
 #include "Vecxd.h"
 #include <cassert>
+#include <stdexcept>
 
 using or2l::Constraint;
-using or2l::Exception;
 using or2l::Index;
 using or2l::Variable;
 using or2l::base_types::ModuleTester;
@@ -229,15 +229,15 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
 
       try {
         RegexString str6 = "A_Variable";
-      } catch (const Exception& e) {
+      } catch (const std::invalid_argument& e) {
       }
       try {
         RegexString str7 = "215%!56&8*9331!";
-      } catch (const Exception& e) {
+      } catch (const std::invalid_argument& e) {
       }
       try {
         RegexString str8 = "$Var1";
-      } catch (const Exception& e) {
+      } catch (const std::invalid_argument& e) {
       }
     },
     []() {
@@ -247,7 +247,7 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       const SymbolComponent& symb1(var1);
 
       ASSERT_THROW(SymbolComponent symb2("$var1", SymbolType::VARIABLE),
-                   Exception);
+                   std::invalid_argument);
     },
     []() {
       // some tests related to the 'Model' class
@@ -287,14 +287,14 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       model.RemoveVariable(x2);
       model.RemoveConstraint(R1);
 
-      ASSERT_THROW(Model model("_invalid_name"), or2l::Exception);
-      ASSERT_THROW(Variable x4("$%!GSE#"), or2l::Exception);
+      ASSERT_THROW(Model model("_invalid_name"), std::invalid_argument);
+      ASSERT_THROW(Variable x4("$%!GSE#"), std::invalid_argument);
       ASSERT_THROW(
           Constraint R3(
               "_$_#_#",
               MathExpression(x3, ExpressionOperatorTypes::LESS_EQUAL, 5)),
-          or2l::Exception);
-      ASSERT_THROW(auto* cstr4 = model.Get("N/A"), or2l::Exception);
+          std::invalid_argument);
+      ASSERT_THROW(auto* cstr4 = model.Get("N/A"), std::invalid_argument);
       ASSERT_THROW(auto* cstr5 = model.Get("x4"), std::out_of_range);
       ASSERT_THROW(auto* cstr6 = model.Get("dummy2"), std::out_of_range);
       ASSERT_THROW(auto* cstr7 = model.Get("dummy2"), std::out_of_range);

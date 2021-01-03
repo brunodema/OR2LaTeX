@@ -14,13 +14,15 @@ class RegexString
  public:
   RegexString(const std::string& str) : std::string(str) {
     if (ContainsInvalidChar())
-      throw std::exception(std::invalid_argument(
-          "The provided string does not respect the regex rule provided."));
+      throw std::invalid_argument(
+          "The provided string does not respect the regex rule provided.(" +
+          *this + ")");
   }
   RegexString(const char* charp) : std::string(charp) {
     if (ContainsInvalidChar())
-      throw std::exception(std::invalid_argument(
-          "The provided string does not respect the regex rule provided."));
+      throw std::invalid_argument(
+          "The provided string does not respect the regex rule provided.(" +
+          *this + ")");
   }
   virtual ~RegexString() = default;
 
