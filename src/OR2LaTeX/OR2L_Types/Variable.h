@@ -11,7 +11,7 @@ class Variable : public SymbolComponent {
  public:
   friend struct std::hash<Variable>;
 
-  Variable(const RegexString& name = "",
+  Variable(const RegexString& name,
            VariableType var_type = VariableType::CONTINUOUS,
            const std::initializer_list<Index> indexes = {})
       : SymbolComponent(name, SymbolType::VARIABLE), variable_type_(var_type) {
@@ -19,7 +19,7 @@ class Variable : public SymbolComponent {
       indexes_.insert(std::pair<RegexString, Index>(index.GetName(), index));
     }
   }
-  virtual ~Variable() = default;
+  ~Variable() override = default;
 
   bool operator==(const Variable& B) const {
     return this->name_ == B.name_ && this->indexes_ == B.indexes_;
