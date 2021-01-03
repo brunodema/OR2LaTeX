@@ -16,7 +16,6 @@
 
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
-		"ms-vscode.cpptools",
 		"esbenp.prettier-vscode",
 		"cschlosser.doxdocgen",
 		"ms-vscode.cmake-tools",
