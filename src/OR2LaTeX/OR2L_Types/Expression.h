@@ -115,7 +115,11 @@ class Expression {
   }
 
   friend Expression operator+(const Variable& var1, const Variable& var2);
+  friend Expression operator+(const Variable& var1, double coeff);
+  friend Expression operator+(double coeff, const Variable& var);
   friend Expression operator-(const Variable& var1, const Variable& var2);
+  friend Expression operator-(const Variable& var, double coeff);
+  friend Expression operator-(double coeff, const Variable& var);
   friend Expression operator*(double coeff, const Variable& var);
   friend Expression operator*(const Variable& var, double coeff);
   friend Expression operator/(const Variable& var, double coeff);
@@ -142,42 +146,69 @@ class Expression {
   }
 };
 
-Expression operator+(const Variable& var1, const Variable& var2) {
+inline Expression operator+(const Variable& var1, const Variable& var2) {
   Expression expr;
   expr += var1;
   expr += var2;
   return expr;
 }
 
-Expression operator-(const Variable& var1, const Variable& var2) {
+inline Expression operator+(const Variable& var, const double coeff) {
+  Expression expr;
+  expr += var;
+  expr += coeff;
+  return expr;
+};
+
+inline Expression operator+(const double coeff, const Variable& var) {
+  Expression expr;
+  expr += coeff;
+  expr += var;
+  return expr;
+};
+
+inline Expression operator-(const Variable& var1, const Variable& var2) {
   Expression expr;
   expr += var1;
   expr -= var2;
   return expr;
 }
 
-Expression operator*(const double coeff, const Variable& var) {
+inline Expression operator-(const Variable& var, const double coeff) {
+  Expression expr;
+  expr += var;
+  expr -= coeff;
+  return expr;
+}
+inline Expression operator-(const double coeff, const Variable& var) {
+  Expression expr;
+  expr += coeff;
+  expr -= var;
+  return expr;
+}
+
+inline Expression operator*(const double coeff, const Variable& var) {
   Expression expr;
   expr += var;
   expr.variable_map_.at(var) *= coeff;
   return expr;
 }
 
-Expression operator*(const Variable& var, const double coeff) {
+inline Expression operator*(const Variable& var, const double coeff) {
   Expression expr;
   expr += var;
   expr.variable_map_.at(var) *= coeff;
   return expr;
 }
 
-Expression operator/(const Variable& var, const double coeff) {
+inline Expression operator/(const Variable& var, const double coeff) {
   Expression expr;
   expr += var;
   expr.variable_map_.at(var) /= coeff;
   return expr;
 }
 
-Expression operator/(const double coeff, const Variable& var) {
+inline Expression operator/(const double coeff, const Variable& var) {
   Expression expr;
   expr += var;
   expr.variable_map_.at(var) *= pow(coeff, -1);
