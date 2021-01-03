@@ -1,11 +1,12 @@
 #pragma once
 #include "Expression.h"
-#include "ExpressionOperatorTypes.h"
+#include "OperatorTypes.h"
 
 namespace or2l {
 class MathExpression {
  public:
-  MathExpression(const Expression& lhs, const ExpressionOperatorTypes eq_type,
+  MathExpression(const Expression& lhs,
+                 const MathExpressionOperatorTypes eq_type,
                  const Expression& rhs)
       : lhs_(lhs), eq_type_(eq_type), rhs_(rhs) {}
   virtual ~MathExpression() = default;
@@ -13,7 +14,7 @@ class MathExpression {
  private:
   Expression lhs_ = Expression(1.00);
   Expression rhs_ = Expression(1.00);
-  ExpressionOperatorTypes eq_type_ = ExpressionOperatorTypes::EQUAL;
+  MathExpressionOperatorTypes eq_type_ = MathExpressionOperatorTypes::EQUAL;
 };
 
 }  // namespace or2l

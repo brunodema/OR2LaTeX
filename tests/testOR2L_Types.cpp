@@ -227,7 +227,7 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       // tests related to 'MathExpression'
       Expression expr1 = 2.00;
       Expression expr2 = 3.00;
-      MathExpression mexpr(expr1, ExpressionOperatorTypes::EQUAL, expr2);
+      MathExpression mexpr(expr1, MathExpressionOperatorTypes::EQUAL, expr2);
     },
     []() {
       // tests related to the new string wrapper (used to avoid invalid chars in
@@ -275,12 +275,12 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       Variable x1("x1");
       Variable x2("x2");
       Variable x3("x3");
-      MathExpression expr1(x1, ExpressionOperatorTypes::LESS_EQUAL, 7);
+      MathExpression expr1(x1, MathExpressionOperatorTypes::LESS_EQUAL, 7);
       Constraint R1("R1", expr1);
-      Constraint R2("R2",
-                    MathExpression(x2, ExpressionOperatorTypes::LESS_EQUAL, 3));
-      Constraint R3("R3",
-                    MathExpression(x3, ExpressionOperatorTypes::LESS_EQUAL, 5));
+      Constraint R2(
+          "R2", MathExpression(x2, MathExpressionOperatorTypes::LESS_EQUAL, 3));
+      Constraint R3(
+          "R3", MathExpression(x3, MathExpressionOperatorTypes::LESS_EQUAL, 5));
 
       model.AddIndex(dummy1);
       model.AddIndex(dummy2);
@@ -302,7 +302,7 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       ASSERT_THROW(
           Constraint R3(
               "_$_#_#",
-              MathExpression(x3, ExpressionOperatorTypes::LESS_EQUAL, 5)),
+              MathExpression(x3, MathExpressionOperatorTypes::LESS_EQUAL, 5)),
           std::invalid_argument);
       ASSERT_THROW(auto* cstr4 = model.Get("N/A"), std::invalid_argument);
       ASSERT_THROW(auto* cstr5 = model.Get("x4"), std::out_of_range);
