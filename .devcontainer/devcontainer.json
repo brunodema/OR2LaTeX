@@ -25,7 +25,13 @@
 		"ms-vscode.cpptools"
 	],
 
-	"postCreateCommand": "sudo apt update && sudo apt upgrade && sudo apt install -y clang-tidy clang-format clangd && sudo apt update && sudo apt upgrade",
+	"postCreateCommand": [
+		"bash -c",
+		"sudo apt update && sudo apt upgrade",
+		"&& sudo apt install -y clang-tidy clang-format clangd",
+		"&& sudo wget -qO- https://github.com/google/or-tools/releases/download/v8.1/or-tools_flatzinc_ubuntu-20.04_v8.1.8487.tar.gz | sudo tar -xvz",
+		"sudo apt update && sudo apt upgrade"
+	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
