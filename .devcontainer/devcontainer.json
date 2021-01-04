@@ -21,7 +21,8 @@
 		"ms-vscode.cmake-tools",
 		"twxs.cmake",
 		"xaver.clang-format",
-		"llvm-vs-code-extensions.vscode-clangd"
+		"llvm-vs-code-extensions.vscode-clangd",
+		"ms-vscode.cpptools"
 	],
 
 	"postCreateCommand": "sudo apt update && sudo apt upgrade && sudo apt install -y clang-tidy clang-format clangd && sudo apt update && sudo apt upgrade",
