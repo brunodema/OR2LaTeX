@@ -13,7 +13,6 @@
 	"settings": { 
 		"terminal.integrated.shell.linux": "/bin/bash"
 	},
-""
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		"esbenp.prettier-vscode",
@@ -26,11 +25,7 @@
 	],
 
 	"postCreateCommand": [
-		"bash -c",
-		"sudo apt update && sudo apt upgrade",
-		"&& sudo apt install -y clang-tidy clang-format clangd",
-		"&& mkdir dep && sudo wget -qO- https://github.com/google/or-tools/releases/download/v8.1/or-tools_flatzinc_ubuntu-20.04_v8.1.8487.tar.gz | sudo tar -xvz -C dep/ortools --strip-components 1",
-		"&& sudo apt update && sudo apt upgrade"
+		"./.devcontainer/setup_container.sh"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
