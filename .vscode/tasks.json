@@ -72,7 +72,7 @@
             {
                 "label": "run-tests",
                 "type": "shell",
-                "command": "${workspaceFolder}/build/bin/testBaseTypesLib && ${workspaceFolder}/build/bin/testOR2L_Types",
+                "command": "${workspaceFolder}/build/bin/test-BaseTypesLib && ${workspaceFolder}/build/bin/test-OR2L_Types",
                 "problemMatcher": [
                     "$msCompile"
                 ]
