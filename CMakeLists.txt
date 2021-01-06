@@ -9,16 +9,17 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 
 include(FetchContent)
+Set(FETCHCONTENT_QUIET FALSE)
+set(ortools_BUILD_DEPS ON)
 FetchContent_Declare(
-  or-tools
+  ortools
   GIT_REPOSITORY https://github.com/google/or-tools.git
-  GIT_TAG        master
+  GIT_TAG        v8.1
+  GIT_PROGRESS   TRUE
 )
-
 # After the following call, the CMake targets defined by or-tools
 # will be defined and available to the rest of the build
-set(or-tools_BUILD_DEPS ON)
-FetchContent_MakeAvailable(or-tools)
+FetchContent_MakeAvailable(ortools)
 
 add_subdirectory(src)
 add_subdirectory(tests)
