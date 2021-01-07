@@ -40,8 +40,9 @@
             "dependsOn": [
                 "cmake-precompile"
             ],
-            "command": "sudo cmake",
+            "command": "sudo",
             "args": [
+                "cmake",
                 "--build",
                 "build"
             ],
@@ -56,8 +57,9 @@
         {
             "label": "cmake-build",
             "type": "shell",
-            "command": "sudo cmake",
+            "command": "sudo",
             "args": [
+                "cmake",
                 "--build",
                 "build"
             ],
