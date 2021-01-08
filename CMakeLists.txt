@@ -9,7 +9,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 
 include(FetchContent)
 Set(FETCHCONTENT_QUIET FALSE)
-set(BUILD_DEPS ON)
+set(BUILD_DEPS ON) # this is a 'ortools' option definition
 FetchContent_Declare(
   ortools
   GIT_REPOSITORY https://github.com/google/or-tools.git
