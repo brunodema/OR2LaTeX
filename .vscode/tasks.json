@@ -12,14 +12,11 @@
             "group": "build",
             "presentation": {
                 "reveal": "always"
-            },
+            }
         },
         {
             "label": "cmake-precompile",
             "type": "shell",
-            "dependsOn":[
-                "delete-build-folder"
-            ],
             "command": "cmake",
             "args": [
                 "${workspaceFolder}",
@@ -55,6 +52,22 @@
             ]
         },
         {
+            "label": "cmake-clean-build",
+            "type": "shell",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "delete-build-folder",
+                "cmake-full-build"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": [
+                "$eslint-compact"
+            ]
+        },
+        {
             "label": "cmake-build",
             "type": "shell",
             "command": "sudo",
@@ -71,13 +84,13 @@
                 "$msCompile"
             ]
         },
-            {
-                "label": "run-tests",
-                "type": "shell",
-                "command": "${workspaceFolder}/build/bin/test-BaseTypesLib && ${workspaceFolder}/build/bin/test-OR2L_Types",
-                "problemMatcher": [
-                    "$msCompile"
-                ]
-            }
+        {
+            "label": "cmake-run-tests",
+            "type": "shell",
+            "command": "${workspaceFolder}/build/bin/test-BaseTypesLib && ${workspaceFolder}/build/bin/test-OR2L_Types",
+            "problemMatcher": [
+                "$msCompile"
+            ]
+        }
     ]
 }
