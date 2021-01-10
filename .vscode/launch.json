@@ -36,7 +36,6 @@
                 }
                 
             ],
-            "preLaunchTask": "cmake-build"
         }
     ]
 }
