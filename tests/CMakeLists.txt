@@ -5,8 +5,12 @@ include_directories(../src/BaseTypesLib)
 include_directories(../src/OR2LaTeX/OR2L_Types)
 
 add_executable(test-BaseTypesLib test-BaseTypesLib.cpp)
-add_executable(test-OR2L_Types test-OR2L_Types.cpp)
+target_include_directories(test-BaseTypesLib PUBLIC BaseTypesLib)
 
+add_executable(test-OR2L_Types test-OR2L_Types.cpp)
+target_include_directories(test-OR2L_Types PUBLIC ../src/BaseTypesLib)
+target_include_directories(test-OR2L_Types PUBLIC ../src/OR2LaTeX/OR2L_Types)
+target_link_libraries(test-OR2L_Types BaseTypesLib)
 
 add_executable(test-ortools test-ortools.cpp)
 target_include_directories(test-ortools PUBLIC ${ortools_SOURCE_DIR})
