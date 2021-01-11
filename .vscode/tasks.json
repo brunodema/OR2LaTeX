@@ -4,8 +4,9 @@
         {
             "label": "delete-build-folder",
             "type": "shell",
-            "command": "rm",
+            "command": "sudo",
             "args": [
+                "rm",
                 "-rf",
                 "build"
             ],
