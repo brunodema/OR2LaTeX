@@ -17,7 +17,8 @@
 		"twxs.cmake",
 		"xaver.clang-format",
 		"llvm-vs-code-extensions.vscode-clangd",
-		"ms-vscode.cpptools"
+		"ms-vscode.cpptools",
+		"vadimcn.vscode-lldb"
 	],
 
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
