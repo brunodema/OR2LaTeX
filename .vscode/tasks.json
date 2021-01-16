@@ -4,9 +4,8 @@
         {
             "label": "delete-build-folder",
             "type": "shell",
-            "command": "sudo",
+            "command": "rm",
             "args": [
-                "rm",
                 "-rf",
                 "build"
             ],
@@ -38,9 +37,8 @@
             "dependsOn": [
                 "cmake-precompile"
             ],
-            "command": "sudo",
+            "command": "cmake",
             "args": [
-                "cmake",
                 "--build",
                 "build"
             ],
@@ -71,9 +69,8 @@
         {
             "label": "cmake-build",
             "type": "shell",
-            "command": "sudo",
+            "command": "cmake",
             "args": [
-                "cmake",
                 "--build",
                 "build"
             ],
