@@ -7,13 +7,14 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 
+
+
 include(FetchContent)
 Set(FETCHCONTENT_QUIET FALSE)
 set(BUILD_DEPS ON) # this is a 'ortools' option definition
 FetchContent_Declare(
   ortools
-  GIT_REPOSITORY https://github.com/google/or-tools.git
-  GIT_TAG        v8.1
+  URL  https://github.com/google/or-tools/releases/download/v8.1/or-tools_ubuntu-20.04_v8.1.8487.tar.gz
   GIT_PROGRESS   TRUE
 )
 # After the following call, the CMake targets defined by or-tools
