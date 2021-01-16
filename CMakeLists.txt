@@ -15,11 +15,15 @@ set(BUILD_DEPS ON) # this is a 'ortools' option definition
 FetchContent_Declare(
   ortools
   URL  https://github.com/google/or-tools/releases/download/v8.1/or-tools_ubuntu-20.04_v8.1.8487.tar.gz
-  GIT_PROGRESS   TRUE
 )
 # After the following call, the CMake targets defined by or-tools
 # will be defined and available to the rest of the build
 FetchContent_MakeAvailable(ortools)
+
+find_library(ortools_LIBRARY_DIR NAMES libortools.so HINTS ${ortools_SOURCE_DIR}/lib)
+set(ortools_INCLUDE_DIR ${ortools_SOURCE_DIR}/include)
+message(STATUS "'ortools' library directory set to: ${ortools_LIBRARY_DIR}")
+message(STATUS "'ortools' include directory set to: ${ortools_INCLUDE_DIR}")
 
 set(CMAKE_CXX_CLANG_TIDY "clang-tidy")
 
