@@ -12,8 +12,8 @@ class MathExpression {
   virtual ~MathExpression() = default;
 
  private:
-  Expression lhs_ = Expression(1.00);
-  Expression rhs_ = Expression(1.00);
+  Expression lhs_ = Expression(0.00);
+  Expression rhs_ = Expression(0.00);
   MathExpressionOperatorTypes eq_type_ = MathExpressionOperatorTypes::EQUAL;
 };
 

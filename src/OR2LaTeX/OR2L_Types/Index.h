@@ -14,7 +14,7 @@ class Index : public SymbolComponent {
   }
   ~Index() override = default;
 
-  bool operator==(const Index& B) const {
+  inline bool operator==(const Index& B) const {
     return this->lb_ == B.lb_ && this->ub_ == B.ub_ && this->name_ == B.name_;
   }
 

@@ -10,7 +10,7 @@ class CustomValidationRule
   CustomValidationRule() = default;
   virtual ~CustomValidationRule() = default;
 
-  [[nodiscard]] bool IsVariableValid(const Variable& var) const {
+  [[nodiscard]] inline bool IsVariableValid(const Variable& var) const {
     if (!this->has_value()) {
       return true;
     }
