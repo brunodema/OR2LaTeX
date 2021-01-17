@@ -1,23 +1,21 @@
 #include "Variable.h"
 
-or2l::Variable::Variable(const or2l::RegexString& name,
-                         const or2l::VariableType var_type,
-                         const std::initializer_list<or2l::Index> indexes)
-    : SymbolComponent(name, or2l::SymbolType::VARIABLE),
-      variable_type_(var_type) {
+namespace or2l {
+Variable::Variable(const RegexString& name, const VariableType var_type,
+                   const std::initializer_list<Index> indexes)
+    : SymbolComponent(name, SymbolType::VARIABLE), variable_type_(var_type) {
   for (auto&& index : indexes) {
-    indexes_.insert(
-        std::pair<or2l::RegexString, or2l::Index>(index.GetName(), index));
+    indexes_.insert(std::pair<RegexString, Index>(index.GetName(), index));
   }
 }
 
-std::size_t or2l::Variable::GetNumberOfIndexes() { return indexes_.size(); }
+std::size_t Variable::GetNumberOfIndexes() { return indexes_.size(); }
 
-or2l::Index or2l::Variable::GetIndex(const or2l::RegexString& key) const {
+Index Variable::GetIndex(const RegexString& key) const {
   return indexes_.at(key);
 }
 
-std::vector<std::size_t> or2l::Variable::GetIndexSizes() const {
+std::vector<std::size_t> Variable::GetIndexSizes() const {
   std::vector<size_t> index_sizes;
   index_sizes.reserve(indexes_.size());
   int i = 0;
@@ -27,10 +25,11 @@ std::vector<std::size_t> or2l::Variable::GetIndexSizes() const {
   return index_sizes;
 }
 
-std::vector<or2l::Index> or2l::Variable::GetIndexes() const {
-  std::vector<or2l::Index> ret;
+std::vector<Index> Variable::GetIndexes() const {
+  std::vector<Index> ret;
   for (auto&& index : indexes_) {
     ret.push_back(index.second);
   }
   return ret;
 }
+}  // namespace or2l
