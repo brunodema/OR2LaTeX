@@ -13,30 +13,17 @@ class Variable : public SymbolComponent {
 
   Variable(const RegexString& name,
            VariableType var_type = VariableType::CONTINUOUS,
-           const std::initializer_list<Index> indexes = {})
-      : SymbolComponent(name, SymbolType::VARIABLE), variable_type_(var_type) {
-    for (auto&& index : indexes) {
-      indexes_.insert(std::pair<RegexString, Index>(index.GetName(), index));
-    }
-  }
+           std::initializer_list<Index> indexes = {});
   ~Variable() override = default;
 
-  bool operator==(const Variable& B) const {
+  inline bool operator==(const Variable& B) const {
     return this->name_ == B.name_ && this->indexes_ == B.indexes_;
   }
 
-  inline std::size_t GetNumberOfIndexes() { return indexes_.size(); }
-  inline Index GetIndex(const RegexString& key) const {
-    return indexes_.at(key);
-  }
+  std::size_t GetNumberOfIndexes();
+  Index GetIndex(const RegexString& key) const ;
   std::vector<size_t> GetIndexSizes() const;
-  std::vector<Index> GetIndexes() const {
-    std::vector<Index> ret;
-    for (auto&& index : indexes_) {
-      ret.push_back(index.second);
-    }
-    return ret;
-  }
+  std::vector<Index> GetIndexes() const;
 
  private:
   std::unordered_map<RegexString, Index> indexes_ = {};
