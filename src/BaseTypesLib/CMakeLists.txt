@@ -1,9 +1,14 @@
-project(BaseTypesLib)
+project(basetypeslib)
 set(CMAKE_CXX_STANDARD 20)
 
-file(GLOB files
-*.cpp
-*.h
-)
+file(GLOB files *.cpp *.h)
 
-add_library(BaseTypesLib STATIC ${files})
+add_library(basetypeslib STATIC ${files})
+
+install(
+  TARGETS basetypeslib
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  PRIVATE_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

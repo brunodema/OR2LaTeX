@@ -1,16 +1,17 @@
-project(OR2L_TYPES)
+project(or2l_types)
 set(CMAKE_CXX_STANDARD 20)
 
 include_directories(../../BaseTypesLib)
 
-file(GLOB files
-*.cpp
-*.h
-)
+file(GLOB files *.cpp *.h)
 
-add_library(OR2L_TYPES STATIC ${files})
+add_library(or2l_types STATIC ${files})
+target_include_directories(or2l_types PUBLIC ${basetypeslib_SOURCE_DIR})
 
-install(TARGETS OR2L_TYPES
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+install(
+  TARGETS or2l_types
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  PRIVATE_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
