@@ -1,4 +1,4 @@
-project(OR2L)
+project(OR2L_TYPES)
 set(CMAKE_CXX_STANDARD 20)
 
 include_directories(../../BaseTypesLib)

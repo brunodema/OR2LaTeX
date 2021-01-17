@@ -21,7 +21,8 @@
             "args": [
                 "${workspaceFolder}",
                 "-B",
-                "build"
+                "build",
+                "-DBUILD_TESTING=ON"
             ],
             "group": "build",
             "presentation": {
@@ -78,14 +79,6 @@
             "presentation": {
                 "reveal": "always"
             },
-            "problemMatcher": [
-                "$msCompile"
-            ]
-        },
-        {
-            "label": "cmake-run-tests",
-            "type": "shell",
-            "command": "${workspaceFolder}/build/bin/test-BaseTypesLib && ${workspaceFolder}/build/bin/test-OR2L_Types",
             "problemMatcher": [
                 "$msCompile"
             ]
