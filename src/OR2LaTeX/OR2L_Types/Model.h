@@ -11,9 +11,9 @@
 namespace or2l {
 class Model {
  public:
-  Model(const RegexString& name, const std::initializer_list<Index> indexes,
-        const std::initializer_list<Variable> variables,
-        const std::initializer_list<Constraint> constraints);
+  Model(const RegexString& name, std::initializer_list<Index> indexes,
+        std::initializer_list<Variable> variables,
+        std::initializer_list<Constraint> constraints);
   explicit Model(const RegexString& name) : name_(name) {}
   virtual ~Model() = default;
 

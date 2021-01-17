@@ -11,9 +11,9 @@ class Variable : public SymbolComponent {
  public:
   friend struct std::hash<Variable>;
 
-  Variable(const RegexString& name,
-           VariableType var_type = VariableType::CONTINUOUS,
-           std::initializer_list<Index> indexes = {});
+  explicit Variable(const RegexString& name,
+                    VariableType var_type = VariableType::CONTINUOUS,
+                    std::initializer_list<Index> indexes = {});
   ~Variable() override = default;
 
   inline bool operator==(const Variable& B) const {
@@ -21,7 +21,7 @@ class Variable : public SymbolComponent {
   }
 
   std::size_t GetNumberOfIndexes();
-  Index GetIndex(const RegexString& key) const ;
+  Index GetIndex(const RegexString& key) const;
   std::vector<size_t> GetIndexSizes() const;
   std::vector<Index> GetIndexes() const;
 
