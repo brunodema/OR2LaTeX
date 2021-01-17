@@ -1,5 +1,4 @@
 
-/**
 #include "Model.h"
 #include "ModuleTester.h"
 #include "ortools/linear_solver/linear_solver.h"
@@ -14,14 +13,15 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
     []() {
       // model binding
       or2l::Model model("VRP");  // creates only 'or2l' object
-      model->CreateObjects();    // throws (no model type set)
-      model->GetObject();        // throws or 'null' (no object created)
-      model->SetSolver(
-          SolverLibrary::CBC);  // creates underlying object (and pointer)
-      model->GetObject();       // gets underlying object (and pointer)
-      model->DestroyObjects();  // destroys underlying object (and pointer)
+      // model->CreateObjects();    // throws (no model type set)
+      // model->GetObject();        // throws or 'null' (no object created)
+      // model->SetSolver(SolverLibrary::CBC);  // creates underlying object
+      // (and pointer) model->GetObject();       // gets underlying object (and
+      // pointer) model->DestroyObjects();  // destroys underlying object (and
+      // pointer)
     },
     []() {
       // variable binding
     }};
-**/
+
+int main() { ModuleTester::Run(); }

@@ -1,9 +1,9 @@
 project(or2l_types)
 set(CMAKE_CXX_STANDARD 20)
 
-include_directories(../../BaseTypesLib)
-
 file(GLOB files *.cpp *.h)
+
+include_directories(${basetypeslib_SOURCE_DIR})
 
 add_library(or2l_types STATIC ${files})
 target_include_directories(or2l_types PUBLIC ${basetypeslib_SOURCE_DIR})

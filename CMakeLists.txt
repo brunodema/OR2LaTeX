@@ -3,6 +3,7 @@ project(OR2L)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
+set(CMAKE_CXX_CLANG_TIDY "clang-tidy")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -27,8 +28,6 @@ find_library(
 set(ortools_INCLUDE_DIR ${ortools_SOURCE_DIR}/include)
 message(STATUS "'ortools' library path set to: ${ortools_LIBRARY_DIR}")
 message(STATUS "'ortools' include directory set to: ${ortools_INCLUDE_DIR}")
-
-set(CMAKE_CXX_CLANG_TIDY "clang-tidy")
 
 add_subdirectory(src)
 if((CMAKE_PROJECT_NAME STREQUAL OR2L OR OR2L_BUILD_TESTING) AND BUILD_TESTING)
