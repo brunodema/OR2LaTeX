@@ -82,6 +82,22 @@
             "problemMatcher": [
                 "$msCompile"
             ]
+        },
+        {
+            "label": "cmake-test",
+            "type": "shell",
+            "command": "ctest",
+            "args": [
+                "--verbose"
+            ],
+            "group": "test",
+            "options": {"cwd": "${workspaceFolder}/build"},
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ]
         }
     ]
 }
