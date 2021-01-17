@@ -17,7 +17,7 @@ add_test(NAME basetypeslib COMMAND test-BaseTypesLib)
 add_executable(test-OR2L_Types test-OR2L_Types.cpp)
 target_include_directories(test-OR2L_Types PUBLIC ${basetypeslib_SOURCE_DIR}
                                                   ${or2l_types_SOURCE_DIR})
-target_link_libraries(test-OR2L_Types basetypeslib)
+target_link_libraries(test-OR2L_Types basetypeslib or2l_types)
 install(
   TARGETS test-OR2L_Types
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
