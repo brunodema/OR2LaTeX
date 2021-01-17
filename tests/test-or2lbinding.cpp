@@ -23,6 +23,5 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
     },
     []() {
       // variable binding
-
     }};
 **/
