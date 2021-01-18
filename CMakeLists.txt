@@ -4,6 +4,19 @@ project(OR2L)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 set(CMAKE_CXX_CLANG_TIDY "clang-tidy")
+set(Windows_ORTOOLS_URL
+    "https://github.com/google/or-tools/releases/download/v8.1/or-tools_VisualStudio2019-64bit_v8.1.8487.zip"
+)
+set(MSYS_ORTOOLS_URL
+    "https://github.com/google/or-tools/releases/download/v8.1/or-tools_VisualStudio2019-64bit_v8.1.8487.zip"
+)
+set(Linux_ORTOOLS_URL
+    "https://github.com/google/or-tools/releases/download/v8.1/or-tools_ubuntu-20.04_v8.1.8487.tar.gz"
+)
+message(
+  STATUS
+    "The detected OS is: ${CMAKE_SYSTEM_NAME}. The associated URL will be: ${${CMAKE_SYSTEM_NAME}_ORTOOLS_URL}."
+)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -12,10 +25,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 include(FetchContent)
 set(FETCHCONTENT_QUIET FALSE)
 set(BUILD_DEPS ON) # this is a 'ortools' option definition
-FetchContent_Declare(
-  ortools
-  URL https://github.com/google/or-tools/releases/download/v8.1/or-tools_ubuntu-20.04_v8.1.8487.tar.gz
-)
+FetchContent_Declare(ortools URL ${${CMAKE_SYSTEM_NAME}_ORTOOLS_URL})
 # After the following call, the CMake targets defined by or-tools will be
 # defined and available to the rest of the build
 FetchContent_MakeAvailable(ortools)
