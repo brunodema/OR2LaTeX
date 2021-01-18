@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include <string>
 
 namespace or2l {
 enum class ORTSolverType { CBC, SCIP };
