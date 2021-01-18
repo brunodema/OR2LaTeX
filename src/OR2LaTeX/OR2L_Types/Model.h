@@ -2,6 +2,7 @@
 #include "Constraint.h"
 #include "Index.h"
 #include "RegexString.h"
+#include "SolverType.h"
 #include "SymbolComponent.h"
 #include "Variable.h"
 #include "VariableSet.h"
@@ -11,10 +12,12 @@
 namespace or2l {
 class Model {
  public:
-  Model(const RegexString& name, std::initializer_list<Index> indexes,
+  Model(const RegexString& name, ORTSolverType solver_type,
+        std::initializer_list<Index> indexes,
         std::initializer_list<Variable> variables,
         std::initializer_list<Constraint> constraints);
-  explicit Model(const RegexString& name) : name_(name) {}
+  Model(const RegexString& name, ORTSolverType solver_type)
+      : name_(name), solver_type_(solver_type) {}
   virtual ~Model() = default;
 
   [[nodiscard]] SymbolComponent* Get(const RegexString& str) const;
@@ -41,6 +44,7 @@ class Model {
 
  private:
   RegexString name_ = "";
+  ORTSolverType solver_type_;
   std::map<RegexString, std::unique_ptr<SymbolComponent>> symbol_map_ = {};
 };
 }  // namespace or2l

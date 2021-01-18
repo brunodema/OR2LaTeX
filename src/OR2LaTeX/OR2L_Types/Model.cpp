@@ -1,11 +1,11 @@
 #include "Model.h"
 
 namespace or2l {
-Model::Model(const RegexString& name,
+Model::Model(const RegexString& name, const ORTSolverType solver_type,
              const std::initializer_list<Index> indexes,
              const std::initializer_list<Variable> variables,
              const std::initializer_list<Constraint> constraints)
-    : name_(name) {
+    : name_(name), solver_type_(solver_type) {
   for (auto&& index : indexes) {
     symbol_map_.insert_or_assign(index.GetName(),
                                  std::make_unique<Index>(index));
