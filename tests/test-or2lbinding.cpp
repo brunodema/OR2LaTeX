@@ -12,7 +12,8 @@ using or2l::base_types::ModuleTester;
 std::vector<std::function<void()>> ModuleTester::tests_ = {
     []() {
       // model binding
-      or2l::Model model("VRP");  // creates only 'or2l' object
+      or2l::Model model("VRP",
+                        ORTSolverType::CBC);  // creates only 'or2l' object
       // model->CreateObjects();    // throws (no model type set)
       // model->GetObject();        // throws or 'null' (no object created)
       // model->SetSolver(SolverLibrary::CBC);  // creates underlying object

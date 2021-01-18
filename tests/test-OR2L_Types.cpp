@@ -269,7 +269,7 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       // 						Clearly the only way
       // that all of these constraints can be satisfied is if x1 = 7, x2 = 3,
       // and x3 =5
-      Model model("ValidName");
+      Model model("ValidName", ORTSolverType::CBC);
       Index dummy1("i", 0, 100);
       Index dummy2("j", 15, 300);
       Variable x1("x1");
@@ -297,7 +297,8 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       model.RemoveVariable(x2);
       model.RemoveConstraint(R1);
 
-      ASSERT_THROW(Model model("_invalid_name"), std::invalid_argument);
+      ASSERT_THROW(Model model("_invalid_name", ORTSolverType::SCIP),
+                   std::invalid_argument);
       ASSERT_THROW(Variable x4("$%!GSE#"), std::invalid_argument);
       ASSERT_THROW(
           Constraint R3(
