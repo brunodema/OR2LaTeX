@@ -23,7 +23,7 @@ FetchContent_MakeAvailable(ortools)
 # this is sort of an ugly version of a 'find_package'
 find_library(
   ortools_LIBRARY_DIR
-  NAMES libortools.so
+  NAMES libortools.so ortools.lib
   HINTS ${ortools_SOURCE_DIR}/lib)
 set(ortools_INCLUDE_DIR ${ortools_SOURCE_DIR}/include)
 message(STATUS "'ortools' library path set to: ${ortools_LIBRARY_DIR}")
