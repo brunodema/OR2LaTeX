@@ -293,7 +293,7 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       auto* cstr2 = model.Get("j");
       auto* cstr3 = model.Get("R1");
       model.RemoveIndex(dummy2);
-      model.Remove("x1");
+      model.RemoveSymbol("x1");
       model.RemoveVariable(x2);
       model.RemoveConstraint(R1);
 

@@ -1,16 +1,18 @@
 #pragma once
 #include "Constraint.h"
 #include "Index.h"
+#include "ObjectWrapper.h"
 #include "RegexString.h"
 #include "SolverType.h"
 #include "SymbolComponent.h"
 #include "Variable.h"
 #include "VariableSet.h"
+#include "ortools/linear_solver/linear_solver.h"
 #include <map>
 #include <string>
 
 namespace or2l {
-class Model {
+class Model : public ObjectWrapper<operations_research::MPSolver> {
  public:
   Model(const RegexString& name, ORTSolverType solver_type,
         std::initializer_list<Index> indexes,
@@ -22,25 +24,20 @@ class Model {
 
   [[nodiscard]] SymbolComponent* Get(const RegexString& str) const;
 
-  void Remove(const RegexString& str);
-
+  void RemoveSymbol(const RegexString& str);
   void AddVariable(const Variable& var);
-
   void RemoveVariable(const Variable& var);
-
   void ExtractIndexes(const Variable& var);
-
   void AddIndex(const Index& index);
-
   void RemoveIndex(const Index& index);
-
   void AddVariableSet(const VariableSet& var_set);
-
   void RemoveVariableSet(const VariableSet& var_set);
-
   void AddConstraint(const Constraint& constraint);
-
   void RemoveConstraint(const Constraint& constraint);
+
+  void CreateObjects() override;
+  void DestroyObjects() override;
+  const operations_research::MPSolver* GetObjects() override;
 
  private:
   RegexString name_ = "";

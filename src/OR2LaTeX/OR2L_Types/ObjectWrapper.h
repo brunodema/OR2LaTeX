@@ -9,11 +9,11 @@ class ObjectWrapper {
   ObjectWrapper() = default;
   virtual ~ObjectWrapper() = default;
 
-  virtual void CreateObjects();
-  virtual void DestroyObjects();
-  virtual T GetObject();
+  virtual void CreateObjects() = 0;
+  virtual void DestroyObjects() = 0;
+  virtual const T* GetObjects() = 0;
 
- private:
+ protected:
   base_types::Vecxd<std::unique_ptr<T>> objects_;
 };
 }  // namespace or2l
