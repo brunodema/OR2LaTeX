@@ -4,7 +4,6 @@
 #include <optional>
 #include <vector>
 
-
 namespace or2l::base_types {
 template <class T>
 class Vecxd : public std::vector<std::vector<T>> {
@@ -38,7 +37,7 @@ class Vecxd : public std::vector<std::vector<T>> {
     }
   };
 
-  void ReserveContents(const std::initializer_list<size_t> sizes) {
+  void ReserveContents(std::initializer_list<size_t> sizes) {
     this->resize(sizes.size());  // this one HAS to be a resize, otherwise the
                                  // positions will not be reachable
     int i = 0;
@@ -48,7 +47,7 @@ class Vecxd : public std::vector<std::vector<T>> {
     }
   };
 
-  void ResizeContents(const std::initializer_list<size_t> sizes,
+  void ResizeContents(std::initializer_list<size_t> sizes,
                       const T& template_object) {
     this->resize(sizes.size());
     int i = 0;

@@ -12,24 +12,14 @@ class RegexString
                           // does not seem so wrong
 {
  public:
-  RegexString(const std::string& str) : std::string(str) {
-    if (ContainsInvalidChar())
-      throw std::invalid_argument(
-          "The provided string does not respect the regex rule provided.(" +
-          *this + ")");
-  }
-  RegexString(const char* charp) : std::string(charp) {
-    if (ContainsInvalidChar())
-      throw std::invalid_argument(
-          "The provided string does not respect the regex rule provided.(" +
-          *this + ")");
-  }
+  RegexString(const std::string& str);
+  RegexString(const char* charp);
   virtual ~RegexString() = default;
 
  private:
   std::regex filter_ = std::regex("[^a-zA-Z0-9]");
 
-  [[nodiscard]] bool ContainsInvalidChar() const {
+  [[nodiscard]] inline bool ContainsInvalidChar() const {
     return std::regex_search(*this, filter_);
   }
 };

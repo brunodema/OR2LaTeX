@@ -4,6 +4,7 @@ set(CMAKE_CXX_STANDARD 20)
 # test-BaseTypesLib
 add_executable(test-BaseTypesLib test-BaseTypesLib.cpp)
 target_include_directories(test-BaseTypesLib PUBLIC ${basetypeslib_SOURCE_DIR})
+target_link_libraries(test-BaseTypesLib basetypeslib)
 install(
   TARGETS test-BaseTypesLib
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -30,7 +31,7 @@ add_test(NAME or2l_types COMMAND test-OR2L_Types)
 add_executable(test-ortools test-ortools.cpp)
 target_include_directories(test-ortools PUBLIC ${basetypeslib_SOURCE_DIR}
                                                ${ortools_INCLUDE_DIR})
-target_link_libraries(test-ortools ${ortools_LIBRARY_DIR})
+target_link_libraries(test-ortools basetypeslib ${ortools_LIBRARY_DIR})
 install(
   TARGETS test-ortools
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
