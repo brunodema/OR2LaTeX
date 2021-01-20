@@ -1,5 +1,4 @@
 project(Test)
-set(CMAKE_CXX_STANDARD 20)
 
 # test-BaseTypesLib
 add_executable(test-BaseTypesLib test-BaseTypesLib.cpp)
