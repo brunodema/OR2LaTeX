@@ -1,4 +1,5 @@
 #include "ModuleTester.h"
+#include <string_view>
 
 namespace or2l::base_types {
 int ModuleTester::Run() {
