@@ -3,9 +3,6 @@ project(basetypeslib)
 file(GLOB files *.cpp *.h)
 
 add_library(basetypeslib STATIC ${files})
-set_target_properties(
-  basetypeslib PROPERTIES LINKER_LANGUAGE CXX) # needs this if there is no .cpp
-                                               # in the source directory
 
 install(
   TARGETS basetypeslib
