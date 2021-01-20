@@ -22,7 +22,7 @@ class Expression {
 
   Expression& operator-=(const Expression& expr) {
     for (auto&& var_coeff : expr.variable_map_) {
-      if (this->variable_map_.contains(var_coeff.first))
+      if (this->variable_map_.find(var_coeff.first) != this->variable_map_.end())
         this->variable_map_.at(var_coeff.first) -= var_coeff.second;
       else
         this->variable_map_.emplace(var_coeff.first, var_coeff.second);
@@ -44,7 +44,7 @@ class Expression {
   }
 
   Expression& operator+=(const Variable& var) {
-    if (this->variable_map_.contains(var)) {
+    if (this->variable_map_.find(var) != this->variable_map_.end()) {
       ++this->variable_map_.at(var);
     } else {
       this->variable_map_.emplace(var, 1.00);
@@ -53,7 +53,7 @@ class Expression {
   }
 
   Expression& operator-=(const Variable& var) {
-    if (this->variable_map_.contains(var)) {
+    if (this->variable_map_.find(var) != this->variable_map_.end()) {
       --this->variable_map_.at(var);
       RemoveVariableIfZeroCoefficient(var);
     } else {
@@ -88,7 +88,8 @@ class Expression {
 
   Expression& operator-(const Expression& expr) {
     for (auto&& var_coeff : expr.variable_map_) {
-      if (this->variable_map_.contains(var_coeff.first))
+      if (this->variable_map_.find(var_coeff.first) !=
+          this->variable_map_.end())
         this->variable_map_.at(var_coeff.first) -= var_coeff.second;
       else
         this->variable_map_.emplace(var_coeff.first, var_coeff.second);
@@ -105,7 +106,7 @@ class Expression {
   }
 
   Expression& operator-(const Variable& var) {
-    if (this->variable_map_.contains(var))
+    if (this->variable_map_.find(var) != this->variable_map_.end())
       --this->variable_map_.at(var);
     else
       this->variable_map_.emplace(var, -1.00);
@@ -133,7 +134,7 @@ class Expression {
     variable_map_.at(var) = coeff;
   }
   bool ContainsVariable(const Variable& var) const {
-    return variable_map_.contains(var);
+    return variable_map_.find(var) != this->variable_map_.end();
   }
 
  private:
