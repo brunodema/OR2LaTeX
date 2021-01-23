@@ -37,7 +37,7 @@ class Model : public ObjectWrapper<operations_research::MPSolver> {
 
   void CreateObjects() override;
   void DestroyObjects() override;
-  const operations_research::MPSolver* GetObjects() override;
+  [[nodiscard]] const operations_research::MPSolver* GetObjects() override;
 
  private:
   RegexString name_ = "";

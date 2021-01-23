@@ -95,7 +95,7 @@ void Model::CreateObjects() {
   objects_.at(0).emplace_back(
       MPSolver::CreateSolver(SolverType::GetType(solver_type_)));
 }
-void Model::DestroyObjects() {}
+void Model::DestroyObjects() { objects_.at(0).at(0).reset(); }
 const MPSolver* Model::GetObjects() { return objects_.at(0).at(0).get(); }
 
 }  // namespace or2l
