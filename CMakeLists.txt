@@ -10,7 +10,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
-find_package(ortools MODULE REQUIRED)
+find_package(ortools MODULE)
 message(STATUS "'ortools' library path set to: ${ortools_LIBRARIES}")
 message(STATUS "'ortools' include directory set to: ${ortools_INCLUDES}")
 
