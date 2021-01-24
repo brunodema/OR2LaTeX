@@ -3,6 +3,7 @@ project(basetypeslib)
 file(GLOB files *.cpp *.h)
 
 add_library(basetypeslib STATIC ${files})
+target_include_directories(basetypeslib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 install(
   TARGETS basetypeslib
