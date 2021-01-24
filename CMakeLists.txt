@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.16)
 project(OR2L)
 
+option(BUILD_TESTING
+       "Determines if the standard tests of the library will be built or not."
+       ON)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 set(CMAKE_CXX_CLANG_TIDY "clang-tidy")
@@ -10,7 +14,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
-find_package(ortools MODULE)
+find_package(ortools MODULE REQUIRED)
 message(STATUS "'ortools' library path set to: ${ortools_LIBRARIES}")
 message(STATUS "'ortools' include directory set to: ${ortools_INCLUDES}")
 
