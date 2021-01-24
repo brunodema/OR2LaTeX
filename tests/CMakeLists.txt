@@ -20,7 +20,7 @@ target_include_directories(test-ortools PUBLIC ${basetypeslib_SOURCE_DIR}
 target_link_libraries(test-ortools basetypeslib ${ortools_LIBRARIES})
 add_test(NAME ortools COMMAND test-ortools)
 
-#test-or2lbinding
+# test-or2lbinding
 add_executable(test-or2lbinding test-or2lbinding.cpp)
 target_include_directories(
   test-or2lbinding PUBLIC ${basetypeslib_SOURCE_DIR} ${or2l_types_SOURCE_DIR}
@@ -29,8 +29,6 @@ target_link_libraries(test-or2lbinding basetypeslib or2l_types
                       ${ortools_LIBRARIES})
 add_test(NAME or2lbinding COMMAND test-or2lbinding)
 
-
-
 install(
   TARGETS test-BaseTypesLib test-OR2L_Types test-ortools test-or2lbinding
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -38,4 +36,3 @@ install(
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   PRIVATE_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-
