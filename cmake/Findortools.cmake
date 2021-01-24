@@ -39,10 +39,8 @@ set(MSYS_ORTOOLS_URL
 set(Linux_ORTOOLS_URL
     "https://github.com/google/or-tools/releases/download/v8.1/or-tools_ubuntu-20.04_v8.1.8487.tar.gz"
 )
-message(
-  message(STATUS "'ortools' not found via 'find_package'. Retrieving it from the main repository...")
-  STATUS
-    "The detected OS is: ${CMAKE_SYSTEM_NAME}. The associated URL will be: ${${CMAKE_SYSTEM_NAME}_ORTOOLS_URL}."
+message(STATUS "'ortools' not found via 'find_package'. Retrieving it from the main repository...")
+message(STATUS "The detected OS is: ${CMAKE_SYSTEM_NAME}. The associated URL will be: ${${CMAKE_SYSTEM_NAME}_ORTOOLS_URL}."
 )
 
 include(FetchContent)
