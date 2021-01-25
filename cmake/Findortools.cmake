@@ -45,6 +45,12 @@ if(ortools_FIND_BY_CONFIG)
   message(STATUS "Searching for 'ortools' package using 'CONFIG' approach...")
   find_package(ortools CONFIG)
   if(ortools_FOUND)
+    get_target_property(ortools_INCLUDE_DIR ortools::ortools
+                        INTERFACE_INCLUDE_DIRECTORIES)
+    get_target_property(ortools_LIBRARY_DIR ortools::ortools
+                        INTERFACE_LINK_LIBRARIES)
+    set(ortools_INCLUDES ${ortools_INCLUDE_DIR})
+    set(ortools_LIBRARIES ${ortools_LIBRARY_DIR})
     message(
       STATUS
         "'ortools' package found using 'CONFIG' approach. Exiting 'Findortools.cmake'..."
