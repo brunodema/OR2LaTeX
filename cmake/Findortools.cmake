@@ -128,5 +128,7 @@ if(ortools_FIND_BY_FETCH AND ortools_FOUND EQUAL 0)
   add_library(ortools::ortools ALIAS ortools)
 endif()
 
+message(STATUS "'ortools' library path set to: ${ortools_LIBRARIES}")
+message(STATUS "'ortools' include directory set to: ${ortools_INCLUDES}")
 find_package_handle_standard_args(ortools DEFAULT_MSG ortools_INCLUDE_DIR
                                   ortools_LIBRARY_DIR)
