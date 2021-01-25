@@ -6,7 +6,8 @@
 
 # Define global vairables for the dependency (URLs, paths, names, etc)
 # Search paths:
-list(APPEND _SEARCH_PATHS "$ENV{PROGRAMFILES}" "$ENV{PROGRAMFILES\(X86\)}")
+list(APPEND _SEARCH_PATHS "$ENV{PROGRAMFILES}" "$ENV{PROGRAMFILES\(X86\)}"
+     "usr/local")
 # Include path suffixes:
 list(APPEND _INCLUDE_PATH_SUFFIXES "ortools/include" "include")
 # Library path suffixes:
