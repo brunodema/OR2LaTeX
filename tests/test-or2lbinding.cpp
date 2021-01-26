@@ -14,15 +14,16 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       // model binding
       or2l::Model model("VRP",
                         ORTSolverType::CBC);  // creates only 'or2l' object
+      ASSERT_THROW(model.GetObjects(),
+                   std::out_of_range);  // throws or 'null' (no object created)
       model.CreateObjects();    // throws (no model type set)
-      // model->GetObject();        // throws or 'null' (no object created)
-      // model->SetSolver(SolverLibrary::CBC);  // creates underlying object
-      // (and pointer) model->GetObject();       // gets underlying object (and
-      // pointer) model->DestroyObjects();  // destroys underlying object (and
+      const auto* a = model.GetObjects();  // throws or 'null' (no object created)
+      // (and pointer)
+      model.DestroyObjects();  // destroys underlying object (and
       // pointer)
     },
     []() {
       // variable binding
     }};
 
-int main() { ModuleTester::Run(); }
+int main() { return ModuleTester::Run(); }
