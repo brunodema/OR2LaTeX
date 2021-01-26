@@ -4,19 +4,27 @@
 namespace or2l::base_types {
 int ModuleTester::Run() {
   std::cout << tests_.size() << " tests detected.\n";
-  auto tests_executed = 0;
-  try {
-    for (auto& test : tests_) {
+  auto tests_passed = 0;
+  auto tests_failed = 0;
+
+  for (auto& test : tests_) {
+    try {
       test();
       std::cout << "test executed.\n";
-      ++tests_executed;
+      ++tests_passed;
+    } catch (const std::exception& e) {
+      const std::string_view what(e.what());
+      std::cout << "test failed. (" << what << ")\n";
+      ++tests_failed;
     }
-  } catch (const std::exception& e) {
-    const std::string_view what(e.what());
-    std::cout << "test failed. (" << what << ")\n";
   }
-  std::cout << "total of successful tests: " << tests_executed << "/"
+
+  std::cout << "total of successful tests: " << tests_passed << "/"
             << tests_.size() << ".\n";
+
+  if (tests_failed) {
+    return 1;
+  }
   return 0;
 }
 }  // namespace or2l::base_types
