@@ -4,6 +4,10 @@ project(OR2L)
 option(BUILD_TESTING
        "Determines if the standard tests of the library will be built or not."
        ON)
+option(
+  USE_GUROBI
+  "Determines if the 'Gurobi' libraries will be used during compilation/linking."
+  OFF)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
@@ -15,6 +19,9 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 find_package(ortools MODULE REQUIRED)
+if(USE_GUROBI)
+  find_package(gurobi MODULE REQUIRED)
+endif()
 
 add_subdirectory(src)
 if((CMAKE_PROJECT_NAME STREQUAL OR2L OR OR2L_BUILD_TESTING) AND BUILD_TESTING)
