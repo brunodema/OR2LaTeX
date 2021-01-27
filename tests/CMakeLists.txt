@@ -1,5 +1,7 @@
 project(Test)
 
+set(EXECUTABLES_TO_BE_INSTALLED test-BaseTypesLib test-OR2L_Types test-ortools test-or2lbinding)
+
 # test-BaseTypesLib
 add_executable(test-BaseTypesLib test-BaseTypesLib.cpp)
 # target_include_directories(test-BaseTypesLib PUBLIC
@@ -29,8 +31,17 @@ add_executable(test-or2lbinding test-or2lbinding.cpp)
 target_link_libraries(test-or2lbinding or2l_types)
 add_test(NAME or2lbinding COMMAND test-or2lbinding)
 
+# ----
+# test-gurobi
+if(USE_GUROBI)
+add_executable(test-gurobi test-gurobi.cpp)
+target_link_libraries(test-gurobi basetypeslib gurobi::gurobi)
+add_test(NAME gurobi COMMAND test-gurobi)
+list(APPEND EXECUTABLES_TO_BE_INSTALLED test-gurobi)
+endif()
+
 install(
-  TARGETS test-BaseTypesLib test-OR2L_Types test-ortools test-or2lbinding
+  TARGETS ${EXECUTABLES_TO_BE_INSTALLED}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
