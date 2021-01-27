@@ -7,7 +7,6 @@
 # Define global vairables for the dependency (URLs, paths, names, etc)
 # Search paths:
 set(_SEARCH_PATHS "$ENV{PROGRAMFILES}" "usr/local")
-message(${_SEARCH_PATHS})
 # Include path suffixes:
 set(_INCLUDE_PATH_SUFFIXES "ortools/include" "include")
 # Library path suffixes:
