@@ -93,8 +93,12 @@ void Model<T>::RemoveConstraint(const Constraint& constraint) {
   symbol_map_.erase(constraint.GetName());
 }
 
-
 ModelORTOOLS::ModelORTOOLS(const RegexString& name, ORTSolverType type)
     : Model(name), type_(type) {}
+
+#ifdef GUROBI
+ModelGUROBI::ModelGUROBI(const RegexString& name, const GRBEnv& env)
+    : Model(name), env_(std::make_unique<GRBEnv>(env)) {}
+#endif  // GUROBI
 
 }  // namespace or2l
