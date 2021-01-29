@@ -1,7 +1,6 @@
 #pragma once
 #include "Constraint.h"
 #include "Index.h"
-#include "ObjectWrapper.h"
 #include "RegexString.h"
 #include "SolverType.h"
 #include "SymbolComponent.h"
@@ -11,15 +10,17 @@
 #include <map>
 #include <string>
 
+using operations_research::MPSolver;
+
 namespace or2l {
-class Model : public ObjectWrapper<operations_research::MPSolver> {
+
+template <class T = MPSolver>
+class Model {
  public:
-  Model(const RegexString& name, ORTSolverType solver_type,
-        std::initializer_list<Index> indexes,
+  Model(const RegexString& name, std::initializer_list<Index> indexes,
         std::initializer_list<Variable> variables,
         std::initializer_list<Constraint> constraints);
-  Model(const RegexString& name, ORTSolverType solver_type)
-      : name_(name), solver_type_(solver_type) {}
+  Model(const RegexString& name) : name_(name) {}
   virtual ~Model() = default;
 
   [[nodiscard]] SymbolComponent* Get(const RegexString& str) const;
@@ -35,13 +36,27 @@ class Model : public ObjectWrapper<operations_research::MPSolver> {
   void AddConstraint(const Constraint& constraint);
   void RemoveConstraint(const Constraint& constraint);
 
-  void CreateObjects() override;
-  void DestroyObjects() override;
-  [[nodiscard]] const operations_research::MPSolver* GetObjects() override;
+  inline void CreateModel() { CreateModelImpl(); };
+  virtual void CreateModelImpl() = 0;
+  // virtual void DestroyModel() = 0;
+  // virtual const T* GetModel() = 0;
 
  private:
   RegexString name_ = "";
-  ORTSolverType solver_type_;
   std::map<RegexString, std::unique_ptr<SymbolComponent>> symbol_map_ = {};
 };
+
+
+class ModelORTOOLS : public Model<MPSolver> {
+ public:
+  ModelORTOOLS(const RegexString& name, ORTSolverType type);
+
+  void CreateModelImpl() override { return; }
+
+ private:
+  ORTSolverType type_ = ORTSolverType::CBC;
+};
+
+void lol() { std::unique_ptr<Model<MPSolver>> lol = std::make_unique<ModelORTOOLS>("LOL", ORTSolverType::CBC); }
+
 }  // namespace or2l

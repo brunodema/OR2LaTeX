@@ -4,11 +4,12 @@
 using operations_research::MPSolver;
 
 namespace or2l {
-Model::Model(const RegexString& name, const ORTSolverType solver_type,
-             const std::initializer_list<Index> indexes,
-             const std::initializer_list<Variable> variables,
-             const std::initializer_list<Constraint> constraints)
-    : name_(name), solver_type_(solver_type) {
+template <class T>
+Model<T>::Model(const RegexString& name,
+                const std::initializer_list<Index> indexes,
+                const std::initializer_list<Variable> variables,
+                const std::initializer_list<Constraint> constraints)
+    : name_(name) {
   for (auto&& index : indexes) {
     symbol_map_.insert_or_assign(index.GetName(),
                                  std::make_unique<Index>(index));
@@ -22,8 +23,8 @@ Model::Model(const RegexString& name, const ORTSolverType solver_type,
                                  std::make_unique<Constraint>(constraint));
   }
 }
-
-[[nodiscard]] SymbolComponent* Model::Get(const RegexString& str) const {
+template <class T>
+[[nodiscard]] SymbolComponent* Model<T>::Get(const RegexString& str) const {
   // SymbolType type = symbol_map_.at(str).get()->GetType();
   switch (const SymbolType type = symbol_map_.at(str).get()->GetType()) {
     case SymbolType::INDEX:
@@ -46,60 +47,54 @@ Model::Model(const RegexString& name, const ORTSolverType solver_type,
       throw Exception();
   }
 }
-
-void Model::RemoveSymbol(const RegexString& str) { symbol_map_.erase(str); }
-
-void Model::AddVariable(const Variable& var) {
+template <class T>
+void Model<T>::RemoveSymbol(const RegexString& str) {
+  symbol_map_.erase(str);
+}
+template <class T>
+void Model<T>::AddVariable(const Variable& var) {
   symbol_map_.insert_or_assign(var.GetName(), std::make_unique<Variable>(var));
 }
-
-void Model::RemoveVariable(const Variable& var) {
+template <class T>
+void Model<T>::RemoveVariable(const Variable& var) {
   symbol_map_.erase(var.GetName());
 }
-
-void Model::ExtractIndexes(const Variable& var) {
+template <class T>
+void Model<T>::ExtractIndexes(const Variable& var) {
   for (auto&& index : var.GetIndexes()) {
     symbol_map_.insert_or_assign(index.GetName(),
                                  std::make_unique<Index>(index));
   }
 }
-
-void Model::AddIndex(const Index& index) {
+template <class T>
+void Model<T>::AddIndex(const Index& index) {
   symbol_map_.insert_or_assign(index.GetName(), std::make_unique<Index>(index));
 }
-
-void Model::RemoveIndex(const Index& index) {
+template <class T>
+void Model<T>::RemoveIndex(const Index& index) {
   symbol_map_.erase(index.GetName());
 }
-
-void Model::AddVariableSet(const VariableSet& var_set) {
+template <class T>
+void Model<T>::AddVariableSet(const VariableSet& var_set) {
   symbol_map_.insert_or_assign(var_set.GetName(),
                                std::make_unique<VariableSet>(var_set));
 }
-
-void Model::RemoveVariableSet(const VariableSet& var_set) {
+template <class T>
+void Model<T>::RemoveVariableSet(const VariableSet& var_set) {
   symbol_map_.erase(var_set.GetName());
 }
-
-void Model::AddConstraint(const Constraint& constraint) {
+template <class T>
+void Model<T>::AddConstraint(const Constraint& constraint) {
   symbol_map_.insert_or_assign(constraint.GetName(),
                                std::make_unique<Constraint>(constraint));
 }
-
-void Model::RemoveConstraint(const Constraint& constraint) {
+template <class T>
+void Model<T>::RemoveConstraint(const Constraint& constraint) {
   symbol_map_.erase(constraint.GetName());
 }
 
-void Model::CreateObjects() {
-  objects_.resize(1);
-  objects_.at(0).emplace_back(
-      MPSolver::CreateSolver(SolverType::GetType(solver_type_)));
-}
-void Model::DestroyObjects() {
-  objects_.at(0).at(0).reset();
-  objects_.at(0).clear();
-  objects_.clear();
-}
-const MPSolver* Model::GetObjects() { return objects_.at(0).at(0).get(); }
+
+ModelORTOOLS::ModelORTOOLS(const RegexString& name, ORTSolverType type)
+    : Model(name), type_(type) {}
 
 }  // namespace or2l
