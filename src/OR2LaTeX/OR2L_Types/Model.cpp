@@ -1,14 +1,14 @@
 #include "Model.h"
-#include "ortools/linear_solver/linear_solver.h"
 
 using operations_research::MPSolver;
 
 namespace or2l {
-Model::Model(const RegexString& name, const ORTSolverType solver_type,
+
+Model::Model(const RegexString& name,
              const std::initializer_list<Index> indexes,
              const std::initializer_list<Variable> variables,
              const std::initializer_list<Constraint> constraints)
-    : name_(name), solver_type_(solver_type) {
+    : name_(name) {
   for (auto&& index : indexes) {
     symbol_map_.insert_or_assign(index.GetName(),
                                  std::make_unique<Index>(index));
@@ -89,13 +89,4 @@ void Model::AddConstraint(const Constraint& constraint) {
 void Model::RemoveConstraint(const Constraint& constraint) {
   symbol_map_.erase(constraint.GetName());
 }
-
-void Model::CreateObjects() {
-  objects_.resize(1);
-  objects_.at(0).emplace_back(
-      MPSolver::CreateSolver(SolverType::GetType(solver_type_)));
-}
-void Model::DestroyObjects() { objects_.at(0).at(0).reset(); }
-const MPSolver* Model::GetObjects() { return objects_.at(0).at(0).get(); }
-
 }  // namespace or2l

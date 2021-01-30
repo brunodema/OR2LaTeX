@@ -6,16 +6,15 @@
 
 # Define global vairables for the dependency (URLs, paths, names, etc)
 # Search paths:
-list(APPEND _SEARCH_PATHS "$ENV{PROGRAMFILES}" "$ENV{PROGRAMFILES\(X86\)}"
-     "usr/local")
+set(_SEARCH_PATHS "$ENV{PROGRAMFILES}" "usr/local")
 # Include path suffixes:
-list(APPEND _INCLUDE_PATH_SUFFIXES "ortools/include" "include")
+set(_INCLUDE_PATH_SUFFIXES "ortools/include" "include")
 # Library path suffixes:
-list(APPEND _LIBRARY_PATH_SUFFIXES "ortools/lib" "lib" "lib64")
+set(_LIBRARY_PATH_SUFFIXES "ortools/lib" "lib" "lib64")
 # Target file for 'FIND_PATH':
 set(_FILE_NAMES "ortools/linear_solver/glop_utils.h")
 # Target file for 'FIND_LIBRARY':
-list(APPEND _LIBRARY_NAMES "ortools.lib" "libortools.so")
+set(_LIBRARY_NAMES "ortools.lib" "libortools.so")
 # Set target URLs for manual fetch:
 set(Windows_ORTOOLS_URL
     "https://github.com/google/or-tools/releases/download/v8.1/or-tools_VisualStudio2019-64bit_v8.1.8487.zip"
@@ -60,6 +59,7 @@ if(ortools_FIND_BY_CONFIG)
     message(STATUS "'ortools' package NOT found using 'CONFIG' approach.")
   endif()
 endif()
+
 # (2) Search manually for the dependency (set 'INCLUDES'/'LIBRARIES' variables)
 if(ortools_FIND_BY_PACKAGE AND ortools_FOUND EQUAL 0)
   message(STATUS "Searching for 'ortools' package using manual approach...")
@@ -90,6 +90,7 @@ if(ortools_FIND_BY_PACKAGE AND ortools_FOUND EQUAL 0)
     message(STATUS "'ortools' package NOT found using manual approach.")
   endif()
 endif()
+
 # (3) Fetch it online via 'fetchContent'
 if(ortools_FIND_BY_FETCH AND ortools_FOUND EQUAL 0)
   message(
