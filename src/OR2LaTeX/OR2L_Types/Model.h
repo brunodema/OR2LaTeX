@@ -7,8 +7,10 @@
 #include "Variable.h"
 #include "VariableSet.h"
 #include "ortools/linear_solver/linear_solver.h"
+#include <cassert>
 #include <map>
 #include <string>
+
 
 #ifdef GUROBI
 #include "gurobi_c++.h"
@@ -34,7 +36,7 @@ class Solver {
 class OrtoolsSolver : public Solver {
  public:
   explicit OrtoolsSolver(const SolverType type) : type_(type) {
-    assert(type <= SOLVERTYPE_ORTOOLS_MAX);
+    assert((int)type <= SOLVERTYPE_ORTOOLS_MAX);
   }
 
   void ImplementModel() override {
