@@ -6,10 +6,14 @@
 #include "SymbolComponent.h"
 #include "Variable.h"
 #include "VariableSet.h"
-#include "gurobi_c++.h"
 #include "ortools/linear_solver/linear_solver.h"
 #include <map>
 #include <string>
+
+#ifdef GUROBI
+#include "gurobi_c++.h"
+#endif  // GUROBI
+
 
 using operations_research::MPSolver;
 
