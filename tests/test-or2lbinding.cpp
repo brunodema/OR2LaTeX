@@ -22,12 +22,14 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       const auto* a = model_ortools->GetModel();
       model_ortools->DestroyModel();
 
+#ifdef GUROBI
       std::unique_ptr<GRBEnv> env = std::make_unique<GRBEnv>();
       std::unique_ptr<Model<GRBModel>> model_gurobi =
           std::make_unique<ModelGUROBI>("gurobi", *env);
       model_gurobi->CreateModel();
       const auto* b = model_gurobi->GetModel();
       model_gurobi->DestroyModel();
+#endif  // GUROBI
     },
     []() {
       /*
@@ -55,19 +57,19 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       expected result:
       const int N = 4;
       const or2l::vecxd<int> cost_matrix({4,4}, 0);
-      
+
       // set the cost_matrix values...
 
       std::unique_ptr<GRBEnv> env = std::make_unique<GRBEnv>();
-      std::unique_ptr<Model<MPSolver>> model = std::make_unique<ModelGUROBI>("model", *env);
+      std::unique_ptr<Model<MPSolver>> model =
+      std::make_unique<ModelGUROBI>("model", *env);
 
 
       model->AddVariable(Variable x_ij("x_ij", BINARY, {i,j}));
-      model->AddConstraint(Constraint c1("c1", SUM(x_ij, {i, 1, N}) <= 1, FOR(j,1,N));
-      model->AddConstraint(Constraint c2("c2", SUM(x_ij, {j, 1, N}) <= 1, FOR(i,1,N));
-      model->AddOF(ObjectiveFunction OF("OF", MINIMIZE, c_ij * SUM{x_ij, {i, 1, N}, {i, 1, N}}))
-      model->FireUp();
-      model->Solve();
+      model->AddConstraint(Constraint c1("c1", SUM(x_ij, {i, 1, N}) <= 1,
+      FOR(j,1,N)); model->AddConstraint(Constraint c2("c2", SUM(x_ij, {j, 1, N})
+      <= 1, FOR(i,1,N)); model->AddOF(ObjectiveFunction OF("OF", MINIMIZE, c_ij
+      * SUM{x_ij, {i, 1, N}, {i, 1, N}})) model->FireUp(); model->Solve();
 
 
        */
