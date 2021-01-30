@@ -1,5 +1,4 @@
 #include "Model.h"
-#include "ortools/linear_solver/linear_solver.h"
 
 using operations_research::MPSolver;
 
@@ -101,4 +100,8 @@ ModelGUROBI::ModelGUROBI(const RegexString& name, const GRBEnv& env)
     : Model(name), env_(std::make_unique<GRBEnv>(env)) {}
 #endif  // GUROBI
 
+template class Model<MPSolver>;
+#ifdef GUROBI
+template class Model<GRBModel>;
+#endif  // GUROBI
 }  // namespace or2l

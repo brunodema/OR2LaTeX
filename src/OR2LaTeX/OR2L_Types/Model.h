@@ -6,11 +6,10 @@
 #include "SymbolComponent.h"
 #include "Variable.h"
 #include "VariableSet.h"
+#include "gurobi_c++.h"
+#include "ortools/linear_solver/linear_solver.h"
 #include <map>
 #include <string>
-
-#include "ortools/linear_solver/linear_solver.h"
-#include "gurobi_c++.h"
 
 using operations_research::MPSolver;
 
@@ -39,8 +38,8 @@ class Model {
   void RemoveConstraint(const Constraint& constraint);
 
   virtual void CreateModel() = 0;
-  // virtual void DestroyModel() = 0;
-  // virtual const T* GetModel() = 0;
+  inline void DestroyModel() { model_.reset(); };
+  inline const T* GetModel() { return model_.get(); };
 
  protected:
   RegexString name_ = "";
@@ -48,13 +47,13 @@ class Model {
   std::map<RegexString, std::unique_ptr<SymbolComponent>> symbol_map_ = {};
 };
 
-
 class ModelORTOOLS : public Model<MPSolver> {
  public:
   ModelORTOOLS(const RegexString& name, ORTSolverType type);
 
   void CreateModel() override {
-    model_ = std::unique_ptr<MPSolver>(MPSolver::CreateSolver(SolverType::GetType(type_)));
+    model_ = std::unique_ptr<MPSolver>(
+        MPSolver::CreateSolver(SolverType::GetType(type_)));
   }
 
  private:
@@ -72,9 +71,5 @@ class ModelGUROBI : public Model<GRBModel> {
   std::unique_ptr<GRBEnv> env_ = nullptr;
 };
 #endif  // GUROBI
-
-
-
-void lol() { std::unique_ptr<Model<MPSolver>> lol = std::make_unique<ModelORTOOLS>("LOL", ORTSolverType::CBC); }
 
 }  // namespace or2l
