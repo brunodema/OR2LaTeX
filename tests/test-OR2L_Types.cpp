@@ -269,7 +269,8 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       // 						Clearly the only way
       // that all of these constraints can be satisfied is if x1 = 7, x2 = 3,
       // and x3 =5 
-      std::unique_ptr<Model<MPSolver>> model = std::make_unique<ModelORTOOLS>("ValidName", ORTSolverType::CBC);
+      std::unique_ptr<Model> model =
+          std::make_unique<Model>("ValidName");
       Index dummy1("i", 0, 100);
       Index dummy2("j", 15, 300);
       Variable x1("x1");
@@ -297,9 +298,8 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       model->RemoveVariable(x2);
       model->RemoveConstraint(R1);
 
-      ASSERT_THROW(std::unique_ptr<Model<MPSolver>> model =
-                       std::make_unique<ModelORTOOLS>("_invalid_name",
-                                                          ORTSolverType::SCIP),
+      ASSERT_THROW(std::unique_ptr<Model> model =
+                       std::make_unique<Model>("_invalid_name"),
                    std::invalid_argument);
       ASSERT_THROW(Variable x4("$%!GSE#"), std::invalid_argument);
       ASSERT_THROW(

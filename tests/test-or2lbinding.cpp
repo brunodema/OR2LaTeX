@@ -16,19 +16,21 @@ using or2l::base_types::ModuleTester;
 std::vector<std::function<void()>> ModuleTester::tests_ = {
     []() {
       // model binding
-      std::unique_ptr<Model<MPSolver>> model_ortools =
-          std::make_unique<ModelORTOOLS>("ortools", ORTSolverType::CBC);
-      model_ortools->CreateModel();
+      std::unique_ptr<Model> model_ortools =
+          std::make_unique<Model>("ortools");
+      model_ortools->DefineSolver(SolverType::ORTOOLS_CBC);
+      model_ortools->ImplementModel();
       const auto* a = model_ortools->GetModel();
-      model_ortools->DestroyModel();
+      model_ortools->FreeModel();
 
 #ifdef GUROBI
       std::unique_ptr<GRBEnv> env = std::make_unique<GRBEnv>();
-      std::unique_ptr<Model<GRBModel>> model_gurobi =
-          std::make_unique<ModelGUROBI>("gurobi", *env);
-      model_gurobi->CreateModel();
+      std::unique_ptr<Model> model_gurobi =
+          std::make_unique<Model>("gurobi");
+      model_gurobi->DefineSolver(*env);
+      model_gurobi->ImplementModel();
       const auto* b = model_gurobi->GetModel();
-      model_gurobi->DestroyModel();
+      model_gurobi->FreeModel();
 #endif  // GUROBI
     },
     []() {
@@ -68,8 +70,9 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       model->AddVariable(Variable x_ij("x_ij", BINARY, {i,j}));
       model->AddConstraint(Constraint c1("c1", SUM(x_ij, {i, 1, N}) <= 1,
       FOR(j,1,N)); model->AddConstraint(Constraint c2("c2", SUM(x_ij, {j, 1, N})
-      <= 1, FOR(i,1,N)); model->AddOF(ObjectiveFunction OF("OF", MINIMIZE, c_ij
-      * SUM{x_ij, {i, 1, N}, {i, 1, N}})) model->FireUp(); model->Solve();
+      <= 1, FOR(i,1,N)); model->AddOF(ObjectiveFunction OF("OF", MINIMIZE, c_ij * SUM{x_ij, {i, 1, N}, {j, 1, N}})) 
+      model->FireUp(); 
+      model->Solve();
 
 
        */
