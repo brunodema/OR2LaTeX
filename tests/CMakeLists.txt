@@ -2,7 +2,6 @@ project(Test)
 
 set(EXECUTABLES_TO_BE_INSTALLED test-BaseTypesLib test-OR2L_Types test-ortools test-or2lbinding)
 
-if(BUILD_TESTING)
 # test-BaseTypesLib
 add_executable(test-BaseTypesLib test-BaseTypesLib.cpp)
 # target_include_directories(test-BaseTypesLib PUBLIC
@@ -48,4 +47,3 @@ install(
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   PRIVATE_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-endif()
