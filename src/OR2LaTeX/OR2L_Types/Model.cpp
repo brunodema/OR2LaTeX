@@ -1,7 +1,5 @@
 #include "Model.h"
 
-using operations_research::MPSolver;
-
 namespace or2l {
 
 Model::Model(const RegexString& name,
@@ -32,10 +30,6 @@ Model::Model(const RegexString& name,
 
     case SymbolType::VARIABLE:
       return static_cast<Variable*>(symbol_map_.at(str).get());
-      break;
-
-    case SymbolType::VARIABLE_SET:
-      return static_cast<VariableSet*>(symbol_map_.at(str).get());
       break;
 
     case SymbolType::CONSTRAINT:
@@ -70,15 +64,6 @@ void Model::AddIndex(const Index& index) {
 
 void Model::RemoveIndex(const Index& index) {
   symbol_map_.erase(index.GetName());
-}
-
-void Model::AddVariableSet(const VariableSet& var_set) {
-  symbol_map_.insert_or_assign(var_set.GetName(),
-                               std::make_unique<VariableSet>(var_set));
-}
-
-void Model::RemoveVariableSet(const VariableSet& var_set) {
-  symbol_map_.erase(var_set.GetName());
 }
 
 void Model::AddConstraint(const Constraint& constraint) {

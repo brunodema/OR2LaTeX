@@ -2,6 +2,7 @@
 #include "Constraint.h"
 #include "Index.h"
 #include "RegexString.h"
+#include "Solver.h"
 #include "SolverType.h"
 #include "SymbolComponent.h"
 #include "Variable.h"
@@ -9,12 +10,6 @@
 #include <cassert>
 #include <map>
 #include <string>
-
-#ifdef GUROBI
-#include "gurobi_c++.h"
-#endif  // GUROBI
-
-using operations_research::MPSolver;
 
 namespace or2l {
 class Model {
@@ -33,8 +28,6 @@ class Model {
   void ExtractIndexes(const Variable& var);
   void AddIndex(const Index& index);
   void RemoveIndex(const Index& index);
-  void AddVariableSet(const VariableSet& var_set);
-  void RemoveVariableSet(const VariableSet& var_set);
   void AddConstraint(const Constraint& constraint);
   void RemoveConstraint(const Constraint& constraint);
 

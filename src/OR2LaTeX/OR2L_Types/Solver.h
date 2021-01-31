@@ -5,7 +5,7 @@
 #endif
 
 namespace or2l {
-
+using operations_research::MPSolver;
 class Solver {
  public:
   Solver() = default;
