@@ -1,6 +1,7 @@
 project(Test)
 
-set(EXECUTABLES_TO_BE_INSTALLED test-BaseTypesLib test-OR2L_Types test-ortools test-or2lbinding)
+set(EXECUTABLES_TO_BE_INSTALLED test-BaseTypesLib test-OR2L_Types test-ortools
+                                test-or2lbinding test-memory)
 
 # test-BaseTypesLib
 add_executable(test-BaseTypesLib test-BaseTypesLib.cpp)
@@ -31,13 +32,18 @@ add_executable(test-or2lbinding test-or2lbinding.cpp)
 target_link_libraries(test-or2lbinding or2l_types)
 add_test(NAME or2lbinding COMMAND test-or2lbinding)
 
+#test-memory
+add_executable(test-memory test-memory.cpp)
+target_link_libraries(test-memory or2l_types)
+add_test(NAME memory COMMAND test-memory)
+
 # ----
 # test-gurobi
 if(USE_GUROBI)
-add_executable(test-gurobi test-gurobi.cpp)
-target_link_libraries(test-gurobi basetypeslib gurobi::gurobi)
-add_test(NAME gurobi COMMAND test-gurobi)
-list(APPEND EXECUTABLES_TO_BE_INSTALLED test-gurobi)
+  add_executable(test-gurobi test-gurobi.cpp)
+  target_link_libraries(test-gurobi basetypeslib gurobi::gurobi)
+  add_test(NAME gurobi COMMAND test-gurobi)
+  list(APPEND EXECUTABLES_TO_BE_INSTALLED test-gurobi)
 endif()
 
 install(
