@@ -32,4 +32,6 @@ std::vector<Index> Variable::GetIndexes() const {
   }
   return ret;
 }
+
+VariableType Variable::GetVariableType() const { return variable_type_; }
 }  // namespace or2l

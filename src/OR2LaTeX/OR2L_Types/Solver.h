@@ -1,4 +1,6 @@
 #include "SolverType.h"
+#include "Variable.h"
+#include "VariableType.h"
 #include "ortools/linear_solver/linear_solver.h"
 #ifdef GUROBI
 #include "gurobi_c++.h"
@@ -13,9 +15,10 @@ class Solver {
   virtual void ImplementModel() = 0;
   virtual void FreeModel() = 0;
 
- protected:
   // virtual void AddVariable(const Variable& var) = 0;
   // virtual void RemoveVariable(const Variable& var) = 0;
+
+ protected:
   // virtual void AddConstraint(const Constraint& constraint) = 0;
   // virtual void RemoveConstraint(const Constraint& constraint) = 0;
 };
@@ -31,6 +34,9 @@ class OrtoolsSolver : public Solver {
         MPSolver::CreateSolver(SolverTypeDictionary::GetType(type_)));
   }
   void FreeModel() override { model_.reset(); }
+
+  // void AddVariable(const Variable& var) override {}
+  // void RemoveVariable(const Variable& var) override {}
 
  private:
   SolverType type_;
