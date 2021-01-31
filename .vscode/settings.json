@@ -88,5 +88,10 @@
     },
     "cmake.sourceDirectory": "${workspaceFolder}/.",
     "cmake.buildDirectory": "${workspaceFolder}/build",
-    "clangd.arguments": ["--compile-commands-dir=${workspaceFolder}/build/"]
+    "clangd.arguments": [
+        "--compile-commands-dir=${workspaceFolder}/build/"
+    ],
+    "lldb.dereferencePointers": true,
+    "lldb.displayFormat": "auto",
+    "lldb.showDisassembly": "auto"
 }
