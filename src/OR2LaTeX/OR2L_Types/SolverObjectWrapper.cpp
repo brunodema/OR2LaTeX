@@ -6,6 +6,7 @@ SolverVariableWrapper<T>::SolverVariableWrapper(
     const Variable& var, std::weak_ptr<T> object,
     std::initializer_list<size_t> index_value)
     : object_(object) {
+  auto indexes = var.GetIndexes();
   if (indexes.size() != index_value.size()) {
     throw std::invalid_argument(
         "Number of index values provided do no match then number of indexes "
