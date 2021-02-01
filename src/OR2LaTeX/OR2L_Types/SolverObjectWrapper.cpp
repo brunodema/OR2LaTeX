@@ -25,6 +25,9 @@ SolverVariableWrapper<T>::SolverVariableWrapper(
     ++it;
   }
 }
-SolverVariableWrapper<GRBVar>;
 SolverVariableWrapper<MPVariable>;
+#ifdef GUROBI
+SolverVariableWrapper<GRBVar>;
+#endif  // GUROBI
+
 }  // namespace or2l
