@@ -25,8 +25,10 @@ SolverVariableWrapper<T>::SolverVariableWrapper(
     ++it;
   }
 }
-SolverVariableWrapper<MPVariable>;
+template <>
+class SolverVariableWrapper<MPVariable>;
 #ifdef GUROBI
+template <>
 SolverVariableWrapper<GRBVar>;
 #endif  // GUROBI
 
