@@ -260,17 +260,7 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
                    std::invalid_argument);
     },
     []() {
-      // some tests related to the 'Model' class
-      // Template problem:
-      // 						x1 + x2 + x3 ≥ 15
-      // 						x1 ≤ 7
-      // 						x2 ≤ 3
-      // 						x3 ≤ 5
-      // 						Clearly the only way
-      // that all of these constraints can be satisfied is if x1 = 7, x2 = 3,
-      // and x3 =5 
-      std::unique_ptr<Model> model =
-          std::make_unique<Model>("ValidName");
+      std::unique_ptr<Model> model = std::make_unique<Model>("ValidName");
       Index dummy1("i", 0, 100);
       Index dummy2("j", 15, 300);
       Variable x1("x1");

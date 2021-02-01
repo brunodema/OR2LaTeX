@@ -8,7 +8,7 @@ namespace or2l {
 class Expression {
  public:
   Expression(const double coeff = 0.00)
-      : scalar_coefficient_(coeff), variable_map_() {}
+      : scalar_coefficient_(coeff) {}
   Expression(const Variable& var) : variable_map_({{var, 1.00}}) {}
   virtual ~Expression() = default;
 

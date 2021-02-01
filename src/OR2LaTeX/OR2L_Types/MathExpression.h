@@ -8,7 +8,7 @@ class MathExpression {
   MathExpression(const Expression& lhs,
                  const MathExpressionOperatorTypes eq_type,
                  const Expression& rhs)
-      : lhs_(lhs), eq_type_(eq_type), rhs_(rhs) {}
+      : lhs_(lhs), rhs_(rhs), eq_type_(eq_type) {}
   virtual ~MathExpression() = default;
 
  private:

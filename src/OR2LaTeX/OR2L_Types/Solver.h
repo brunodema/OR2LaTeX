@@ -13,7 +13,7 @@ using operations_research::MPSolver;
 class Solver {
  public:
   Solver() = default;
-  ~Solver() = default;
+  virtual  ~Solver() = default;
 
   virtual void ImplementModel() = 0;
   virtual void FreeModel() = 0;
@@ -31,7 +31,7 @@ class OrtoolsSolver : public Solver {
   explicit OrtoolsSolver(const SolverType type) : type_(type) {
     assert((int)type <= SOLVERTYPE_ORTOOLS_MAX);
   }
-  ~OrtoolsSolver() = default;
+  virtual ~OrtoolsSolver() = default;
 
   void ImplementModel() override {
     model_ = std::unique_ptr<MPSolver>(
@@ -52,7 +52,7 @@ class GurobiSolver : public Solver {
  public:
   explicit GurobiSolver(const GRBEnv& env)
       : env_(std::make_unique<GRBEnv>(env)) {}
-  ~GurobiSolver() = default;
+  virtual ~GurobiSolver() = default;
 
   void ImplementModel() override { model_ = std::make_unique<GRBModel>(*env_); }
   void FreeModel() override { model_.reset(); }
