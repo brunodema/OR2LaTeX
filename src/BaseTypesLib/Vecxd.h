@@ -1,10 +1,18 @@
 #pragma once
+#include "boost/multi_array.hpp"
 #include <initializer_list>
 #include <iostream>
 #include <optional>
 #include <vector>
 
 namespace or2l::base_types {
+
+template <class T, size_t N>
+class TestVecxd : public boost::multi_array<T, N> {
+ public:
+  TestVecxd(std::initializer_list<T>& args) : boost::multi_array<T, N>(args) {}
+};
+
 template <class T>
 class Vecxd : public std::vector<std::vector<T>> {
  public:
