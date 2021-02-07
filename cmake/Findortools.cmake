@@ -2,7 +2,7 @@
 # Standard 'FindPackage.cmake' procedure:
 # (1) Search for 'Config' file (user must provide search paths)
 # (2) Search manually for the dependency (set 'INCLUDES'/'LIBRARIES' variables)
-# (3) Fecth it online via 'fetchContent'
+# (3) Fetch it online via 'fetchContent'
 
 # Define global vairables for the dependency (URLs, paths, names, etc)
 # Search paths:
