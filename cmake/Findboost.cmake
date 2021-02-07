@@ -12,9 +12,6 @@ set(_INCLUDE_PATH_SUFFIXES "boost")
 # Library path suffixes:
 set(_FILE_NAMES "align.hpp")
 # Set target URLs for manual fetch:
-#2set(boost_WINDOWS_URL
-#    "https://github.com/google/or-tools/releases/download/v8.1/or-tools_VisualStudio2019-64bit_v8.1.8487.zip"
-#)
 set(boost_Windows_URL
     "https://dl.bintray.com/boostorg/release/1.75.0/source/boost_1_75_0.tar.gz")
 set(boost_Linux_URL
@@ -79,7 +76,6 @@ if(boost_FIND_BY_FETCH AND boost_FOUND EQUAL 0)
 
   set(boost_INCLUDE_DIR ${boost_SOURCE_DIR})
 
-  #add_library(boost INTERFACE)
   target_include_directories(boost INTERFACE ${boost_INCLUDE_DIR})
 
   add_library(boost::boost ALIAS boost)
