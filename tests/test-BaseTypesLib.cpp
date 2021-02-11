@@ -65,6 +65,23 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       assert(test.at(1).at(1) == coord1);
       assert(test.at(2).at(2) == coord1);
       assert(test.at(3).at(3) == coord1);
+    },
+    []() {
+      // temporary tests with the new dynamic multi-array
+      MultiArray<double> test1({1});
+      test1[{0}] = 10;
+      // test1[{1}] = 100;  // must give runtime error: OK!
+      assert(test1.dims()[0] == 1);
+      assert(test1[{0}] == 10);
+
+      MultiArray<double> test2({10, 10, 3});
+      assert((test2.dims() == std::vector<int>{10, 10, 3}));
+      test2[{1, 1, 2}] = 10;
+      test2[{9, 9, 2}] = 100;
+      // test2[{1, 1}] = 10;  // must give runtime error: OK
+      // test2[{11, 1, 1}] = 10;  // must give runtime error: OK
+      assert((test2[{1, 1, 2}] == 10));
+      assert((test2[{9, 9, 2}] == 100));
     }};
 
 int main() { return ModuleTester::Run(); }
