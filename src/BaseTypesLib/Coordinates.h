@@ -6,6 +6,7 @@ namespace or2l::base_types {
 template <class T = double>
 class Coordinates {
  public:
+  Coordinates() = default;
   Coordinates(std::string pId, const T px, const T py)
       : id_(std::move(pId)), x_(px), y_(py) {}
 

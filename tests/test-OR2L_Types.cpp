@@ -16,32 +16,36 @@ using or2l::Constraint;
 using or2l::Index;
 using or2l::Variable;
 using or2l::base_types::ModuleTester;
-using or2l::base_types::Vecxd;
+using or2l::base_types::MultiArray;
 
 std::vector<std::function<void()>> ModuleTester::tests_ = {
     []() {
       // tests the multi-vector class with the 'index' class
-      Vecxd<Index> indexes;
+      MultiArray<Index> indexes;
 
       std::initializer_list<size_t> sizes = {1, 2, 3, 4, 5};
       Index dflt_init = Index("i", 0, 20);
 
-      indexes.ResizeContents(sizes, dflt_init);
-      assert(indexes.at(0).at(0) == dflt_init);
-      assert(indexes.at(1).at(1) == dflt_init);
-      assert(indexes.at(2).at(2) == dflt_init);
-      assert(indexes.at(3).at(3) == dflt_init);
-      assert(indexes.at(4).at(4) == dflt_init);
+      indexes.ResizeContents(sizes);
+      indexes.FillWith(dflt_init);
+      assert((indexes[{0, 0}] == dflt_init));
+      assert((indexes[{1, 1}] == dflt_init));
+      assert((indexes[{2, 2}] == dflt_init));
+      assert((indexes[{3, 3}] == dflt_init));
+      assert((indexes[{4, 4}] == dflt_init));
     },
     []() {
       // tests the default initializer for the multi-vector class, using the
       // 'index' class
-      Vecxd<Index> indexes({1, 2, 3, 4, 5}, Index("i", 0, 20));
-      assert(indexes.at(0).at(0) == Index("i", 0, 20));
-      assert(indexes.at(1).at(1) == Index("i", 0, 20));
-      assert(indexes.at(2).at(2) == Index("i", 0, 20));
-      assert(indexes.at(3).at(3) == Index("i", 0, 20));
-      assert(indexes.at(4).at(4) == Index("i", 0, 20));
+      MultiArray<Index> indexes;
+      indexes.ResizeContents({1, 2, 3, 4, 5});
+      Index sample("i", 0, 20);
+      indexes.FillWith(sample);
+      assert((indexes[{0, 0}] == sample));
+      assert((indexes[{1, 1}] == sample));
+      assert((indexes[{2, 2}] == sample));
+      assert((indexes[{3, 3}] == sample));
+      assert((indexes[{4, 4}] == sample));
     },
     []() {
       // tests the constructor for the 'variable' class. Also tests the
@@ -50,30 +54,31 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       Index j("j", 0, 10);
       Index k("k", 1110, 23210);
       Variable var = Variable("X", VariableType::CONTINUOUS, {i, j, k});
-      Vecxd<Variable> variables({1, 2, 3, 4, 5}, var);
-      assert(variables.at(0).at(0) == var);
-      assert(variables.at(1).at(1) == var);
-      assert(variables.at(2).at(2) == var);
-      assert(variables.at(3).at(3) == var);
-      assert(variables.at(4).at(4) == var);
+      MultiArray<Variable> variables({1, 2, 3, 4, 5});
+      variables.FillWith(var);
+      assert((variables[{0, 0}] == var));
+      assert((variables[{1, 1}] == var));
+      assert((variables[{2, 2}] == var));
+      assert((variables[{3, 3}] == var));
+      assert((variables[{4, 4}] == var));
     },
     []() {
       // tests direct initialization of the multi-vector class using the
       // 'variable' class as template argument
       Index i("i", 0, 20);
       Index j("j", 0, 10);
-      Vecxd<Variable> variables(
-          {1, 2, 3, 4, 5}, Variable("X", VariableType::CONTINUOUS, {i, j}));
-      assert(variables.at(0).at(0) ==
-             Variable("X", VariableType::CONTINUOUS, {i, j}));
-      assert(variables.at(1).at(1) ==
-             Variable("X", VariableType::CONTINUOUS, {i, j}));
-      assert(variables.at(2).at(2) ==
-             Variable("X", VariableType::CONTINUOUS, {i, j}));
-      assert(variables.at(3).at(3) ==
-             Variable("X", VariableType::CONTINUOUS, {i, j}));
-      assert(variables.at(4).at(4) ==
-             Variable("X", VariableType::CONTINUOUS, {i, j}));
+      MultiArray<Variable> variables({1, 2, 3, 4, 5});
+      variables.FillWith(Variable("X", VariableType::CONTINUOUS, {i, j}));
+      assert((variables[{0,0}] ==
+             Variable("X", VariableType::CONTINUOUS, {i, j})));
+      assert((variables[{1,1}] ==
+             Variable("X", VariableType::CONTINUOUS, {i, j})));
+      assert((variables[{2,2}] ==
+             Variable("X", VariableType::CONTINUOUS, {i, j})));
+      assert((variables[{3,3}] ==
+             Variable("X", VariableType::CONTINUOUS, {i, j})));
+      assert((variables[{4,4}] ==
+             Variable("X", VariableType::CONTINUOUS, {i, j})));
     },
     []() {
       // tests the following operators of the 'expression' class:

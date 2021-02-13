@@ -23,48 +23,49 @@ struct RandomStruct {
 
 std::vector<std::function<void()>> ModuleTester::tests_ = {
     []() {
-      // tests default constructor and default initialization
-      Vecxd<std::string> test({1, 5}, "a");
-      Vecxd<double> test1({13, 42}, 23.4);
-      Vecxd<int> test2({4, 1}, 5);
-      Vecxd<int> test3({1, 23, 4, 6, 67, 54, 5}, 0);
+      // tests default constructor
+      MultiArray<std::string> test({1, 2});
+      MultiArray<double> test1({13, 42});
+      MultiArray<int> test2({4, 1});
+      MultiArray<int64_t> test3({1, 23, 4, 6, 67, 54, 5});
     },
     []() {
       // tests the 'resizecontents' and 'fillwith' functions
-      Vecxd<size_t> test;
-      test.ReserveContents({1, 2, 4, 5});
-      test.ResizeContents({1, 2, 4, 5}, 10);
+      MultiArray<size_t> test;
+      test.ResizeContents({1, 2, 4, 5});
+      test.FillWith(10);
 
-      assert(test.at(0).at(0) == (size_t)10);
-      assert(test.at(1).at(1) == (size_t)10);
-      assert(test.at(2).at(2) == (size_t)10);
-      assert(test.at(3).at(3) == (size_t)10);
+      assert((test[{0, 0}] == (size_t)10));
+      assert((test[{1, 1}] == (size_t)10));
+      assert((test[{2, 2}] == (size_t)10));
+      assert((test[{3, 3}] == (size_t)10));
     },
     []() {
       // tests the same functions above, but now using a custom class as
       // argument for the multi-vector class
-      Vecxd<RandomStruct> test;
-      test.ResizeContents({1, 2, 3, 4}, {});
+      MultiArray<RandomStruct> test;
+      test.ResizeContents({1, 2, 3, 4});
 
       RandomStruct sample = {1, 5.66, "this_is_a_test"};
       test.FillWith(sample);
 
-      assert(test.at(0).at(0) == sample);
-      assert(test.at(1).at(1) == sample);
-      assert(test.at(2).at(2) == sample);
-      assert(test.at(3).at(3) == sample);
+      assert((test[{0,0}] == sample));
+      assert((test[{1,1}] == sample));
+      assert((test[{2,2}] == sample));
+      assert((test[{3,3}] == sample));
     },
     []() {
       // tests the multi-vector class with the 'coordinates' class.
-      Vecxd<Coordinates<double>> test;
+      MultiArray<Coordinates<double>> test;
       Coordinates coord1("1", 12.00, 56.33);
       std::initializer_list<size_t> ContentsSizes = {3, 10, 100, 10, 15, 16};
-      test.ResizeContents(ContentsSizes, coord1);
+      test.ResizeContents(ContentsSizes);
+      test.FillWith(coord1);
 
-      assert(test.at(0).at(0) == coord1);
-      assert(test.at(1).at(1) == coord1);
-      assert(test.at(2).at(2) == coord1);
-      assert(test.at(3).at(3) == coord1);
+      assert((test[{0,0}] == coord1));
+      assert((test[{1,1}] == coord1));
+      assert((test[{2,2}] == coord1));
+      assert((test[{3,3}] == coord1));
     },
     []() {
       // temporary tests with the new dynamic multi-array
