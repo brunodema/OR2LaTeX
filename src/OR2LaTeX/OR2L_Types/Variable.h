@@ -10,7 +10,7 @@ namespace or2l {
 class Variable : public SymbolComponent {
  public:
   friend struct std::hash<Variable>;
-
+  Variable() : SymbolComponent("", SymbolType::VARIABLE) {};
   explicit Variable(const RegexString& name,
                     VariableType var_type = VariableType::CONTINUOUS,
                     std::initializer_list<Index> indexes = {});
