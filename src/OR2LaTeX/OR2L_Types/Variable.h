@@ -25,6 +25,7 @@ class Variable : public SymbolComponent {
   std::vector<size_t> GetIndexSizes() const;
   std::vector<Index> GetIndexes() const;
   VariableType GetVariableType() const;
+  std::vector<std::vector<size_t>> GetAllIndexCombinations() const;
 
  private:
   std::unordered_map<RegexString, Index> indexes_ = {};

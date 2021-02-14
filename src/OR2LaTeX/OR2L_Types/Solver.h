@@ -1,5 +1,4 @@
 #pragma once
-#include "SolverObjectWrapper.h"
 #include "SolverType.h"
 #include "Variable.h"
 #include "VariableType.h"
@@ -7,6 +6,16 @@
 #ifdef GUROBI
 #include "gurobi_c++.h"
 #endif
+
+template <class T1, class T2>
+struct HashPair {
+  size_t operator()(const std::pair<T1, T2>& p) const {
+    auto hash1 = std::hash<T1>{}(p.first);
+    auto hash2 = std::hash<T2>{}(p.second);
+    // XOR is pottentially dangerous here
+    return hash1 ^ hash2;
+  }
+};
 
 namespace or2l {
 using operations_research::MPSolver;
@@ -44,24 +53,27 @@ class OrtoolsSolver : public Solver {
 
   void AddVariableSet(const Variable& var) override {
     auto indexes = var.GetIndexes();
+
     auto index_sizes =
         var.GetIndexSizes();  // should reserve first, to avoid a bunch of
                               // resizes mid-through push-backs
     for (const auto& ind : indexes) {
       for (size_t i = 0; i < ind.GetSize(); i++) {
-        std::weak_ptr<MPVariable> var_ptr;
+        std::weak_ptr<operations_research::MPVariable> var_ptr;
         switch (var.GetVariableType()) {
           case VariableType::CONTINUOUS:
-            var_ptr = std::shared_ptr<MPVariable>(model_->MakeNumVar(
-                0.00, 100000000, var.GetName() + std::to_string(i)));
+            var_ptr = std::shared_ptr<operations_research::MPVariable>(
+                model_->MakeNumVar(0.00, 100000000,
+                                   var.GetName() + std::to_string(i)));
             break;
           case VariableType::BINARY:
-            var_ptr = std::shared_ptr<MPVariable>(
+            var_ptr = std::shared_ptr<operations_research::MPVariable>(
                 model_->MakeBoolVar(var.GetName() + std::to_string(i)));
             break;
           case VariableType::INTEGER:
-            var_ptr = std::shared_ptr<MPVariable>(model_->MakeIntVar(
-                0.00, 100000000, var.GetName() + std::to_string(i)));
+            var_ptr = std::shared_ptr<operations_research::MPVariable>(
+                model_->MakeIntVar(0.00, 100000000,
+                                   var.GetName() + std::to_string(i)));
             break;
           default:
             throw std::invalid_argument(
@@ -69,8 +81,8 @@ class OrtoolsSolver : public Solver {
                 "BINARY, or INTEGER)");  // change this to or2l::Exception later
                                          // (better string management)
             break;
-            SolverVariableWrapper<MPVariable> a(var, var_ptr, {i});
-            variable_vec_.push_back(a);
+            std::weak_ptr<operations_research::MPVariable> a(var_ptr);
+            // variable_vec_.emplace();
         }
       }
     }
@@ -78,9 +90,13 @@ class OrtoolsSolver : public Solver {
   // void RemoveVariable(const Variable& var) override {}
 
  private:
+  using VariableIndexPair = std::pair<Variable, std::vector<size_t>>;
   SolverType type_;
   std::unique_ptr<MPSolver> model_ = nullptr;
-  std::vector<SolverVariableWrapper<MPVariable>> variable_vec_ = {};
+  std::map<VariableIndexPair,
+           std::vector<std::weak_ptr<operations_research::MPVariable>>,
+           HashPair<Variable, std::vector<size_t>>>
+      variable_vec_;
 };  // namespace or2l
 
 #ifdef GUROBI

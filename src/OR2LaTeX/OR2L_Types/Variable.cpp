@@ -34,4 +34,8 @@ std::vector<Index> Variable::GetIndexes() const {
 }
 
 VariableType Variable::GetVariableType() const { return variable_type_; }
+
+std::vector<std::vector<size_t>> Variable::GetAllIndexCombinations() const {
+  return {};
+}
 }  // namespace or2l
