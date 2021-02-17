@@ -33,6 +33,7 @@ class ArrayIterator {
         return current_;
       }
     }
+    return current_;
   }
 
   [[nodiscard]] bool HasNext() const { return counter_ <= max_iter_; }
