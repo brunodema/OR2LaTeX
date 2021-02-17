@@ -1,4 +1,5 @@
 #pragma once
+#include "ArrayIterator.h"
 #include "SolverType.h"
 #include "Variable.h"
 #include "VariableType.h"
@@ -40,7 +41,7 @@ class OrtoolsSolver : public Solver {
   explicit OrtoolsSolver(const SolverType type) : type_(type) {
     assert((int)type <= SOLVERTYPE_ORTOOLS_MAX);
   }
-  virtual ~OrtoolsSolver() = default;
+  ~OrtoolsSolver() override = default;
 
   void ImplementModel() override {
     model_ = std::unique_ptr<MPSolver>(

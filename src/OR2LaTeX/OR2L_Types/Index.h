@@ -1,4 +1,5 @@
 #pragma once
+#include "Bounds.h"
 #include "Exception.h"
 #include "SymbolComponent.h"
 #include <string>
@@ -17,6 +18,10 @@ class Index : public SymbolComponent {
 
   inline bool operator==(const Index& B) const {
     return this->lb_ == B.lb_ && this->ub_ == B.ub_ && this->name_ == B.name_;
+  }
+
+  explicit operator base_types::Bounds() const {
+    return base_types::Bounds{lb_, ub_};
   }
 
   [[nodiscard]] inline size_t GetUB() const { return ub_; }

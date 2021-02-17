@@ -1,7 +1,9 @@
+#pragma once
 #include "Bounds.h"
 #include <iostream>
 #include <vector>
 
+namespace or2l::base_types {
 class ArrayIterator {
  public:
   explicit ArrayIterator(std::vector<Bounds>& bounds) : bounds_(bounds) {
@@ -70,3 +72,4 @@ class ArrayIterator {
   std::size_t counter_ = 1;
   std::vector<std::size_t> current_ = {};
 };
+}  // namespace or2l::base_types
