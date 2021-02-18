@@ -3,7 +3,6 @@
 #include "Coordinates.h"
 #include "ModuleTester.h"
 #include "Vecxd.h"
-#include <c++/9/bits/c++config.h>
 #include <cassert>
 #include <cstddef>
 #include <utility>
