@@ -1,6 +1,7 @@
 #pragma once
 #include "Bounds.h"
 #include <iostream>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -36,22 +37,6 @@ class ArrayIterator {
 #endif
   }
 
-  std::vector<std::size_t> IncreaseToTheLeft() {
-    if (current_.size() == 1) {
-      return current_;
-    }
-    for (auto&& i = bounds_.size() - 2; i < bounds_.size(); --i) {
-      if (current_[i] + 1 < bounds_[i].ub) {
-        ++current_[i];
-        for (auto&& ii = i + 1; ii < bounds_.size(); ++ii) {
-          current_[ii] = 0;
-        }
-        return current_;
-      }
-    }
-    return current_;
-  }
-
   [[nodiscard]] bool HasNext() const { return counter_ <= max_iter_; }
 
   std::vector<std::size_t> Next() {
@@ -80,10 +65,36 @@ class ArrayIterator {
     return ret;
   }
 
+  [[nodiscard]] std::size_t GetCounter() const { return counter_; }
+
+  [[nodiscard]] std::string GetCurrentCombinationString() const {
+    std::string ret;
+    for (const auto& i : current_) {
+      ret += &"_"[i];
+    }
+    return ret;
+  }
+
  private:
   std::vector<Bounds> bounds_ = {};
   std::size_t max_iter_ = 1;
   std::size_t counter_ = 1;
   std::vector<std::size_t> current_ = {};
+
+  std::vector<std::size_t> IncreaseToTheLeft() {
+    if (current_.size() == 1) {
+      return current_;
+    }
+    for (auto&& i = bounds_.size() - 2; i < bounds_.size(); --i) {
+      if (current_[i] + 1 < bounds_[i].ub) {
+        ++current_[i];
+        for (auto&& ii = i + 1; ii < bounds_.size(); ++ii) {
+          current_[ii] = 0;
+        }
+        return current_;
+      }
+    }
+    return current_;
+  }
 };
 }  // namespace or2l::base_types
