@@ -5,6 +5,7 @@
 #include <utility>
 
 using or2l::base_types::ModuleTester;
+using or2l::base_types::MultiArray;
 
 struct RandomStruct {
   RandomStruct(int a, double b, std::string str = "")
@@ -35,10 +36,10 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       test.ResizeContents({1, 2, 4, 5});
       test.FillWith(10);
 
-      assert((test[{0, 0}] == (size_t)10));
-      assert((test[{1, 1}] == (size_t)10));
-      assert((test[{2, 2}] == (size_t)10));
-      assert((test[{3, 3}] == (size_t)10));
+      assert((test[{0, 0, 0, 0}] == (size_t)10));
+      assert((test[{0, 1, 1, 1}] == (size_t)10));
+      assert((test[{0, 1, 2, 2}] == (size_t)10));
+      assert((test[{0, 1, 3, 4}] == (size_t)10));
     },
     []() {
       // tests the same functions above, but now using a custom class as
@@ -49,10 +50,10 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       RandomStruct sample = {1, 5.66, "this_is_a_test"};
       test.FillWith(sample);
 
-      assert((test[{0,0}] == sample));
-      assert((test[{1,1}] == sample));
-      assert((test[{2,2}] == sample));
-      assert((test[{3,3}] == sample));
+      assert((test[{0, 0, 0, 0}] == sample));
+      assert((test[{0, 1, 1, 1}] == sample));
+      assert((test[{0, 1, 2, 2}] == sample));
+      assert((test[{0, 1, 2, 3}] == sample));
     },
     []() {
       // tests the multi-vector class with the 'coordinates' class.
@@ -62,10 +63,10 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       test.ResizeContents(ContentsSizes);
       test.FillWith(coord1);
 
-      assert((test[{0,0}] == coord1));
-      assert((test[{1,1}] == coord1));
-      assert((test[{2,2}] == coord1));
-      assert((test[{3,3}] == coord1));
+      assert((test[{2, 2, 1, 3, 2, 1}] == coord1));
+      assert((test[{2, 5, 4, 1, 3, 2}] == coord1));
+      assert((test[{1, 3, 4, 2, 5, 1}] == coord1));
+      assert((test[{1, 9, 1, 1, 1, 1}] == coord1));
     },
     []() {
       // temporary tests with the new dynamic multi-array
@@ -76,7 +77,7 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       assert(test1[{0}] == 10);
 
       MultiArray<double> test2({10, 10, 3});
-      assert((test2.dims() == std::vector<int>{10, 10, 3}));
+      assert((test2.dims() == std::vector<std::size_t>{10, 10, 3}));
       test2[{1, 1, 2}] = 10;
       test2[{9, 9, 2}] = 100;
       // test2[{1, 1}] = 10;  // must give runtime error: OK

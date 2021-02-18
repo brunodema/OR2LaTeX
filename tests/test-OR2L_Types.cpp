@@ -1,3 +1,4 @@
+#include "Bounds.h"
 #include "Constraint.h"
 #include "Exception.h"
 #include "Expression.h"
@@ -23,7 +24,7 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       // tests the multi-vector class with the 'index' class
       MultiArray<Index> indexes;
 
-      std::initializer_list<size_t> sizes = {1, 2, 3, 4, 5};
+      std::initializer_list<size_t> sizes = {7, 6};
       Index dflt_init = Index("i", 0, 20);
 
       indexes.ResizeContents(sizes);
@@ -41,11 +42,11 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       indexes.ResizeContents({1, 2, 3, 4, 5});
       Index sample("i", 0, 20);
       indexes.FillWith(sample);
-      assert((indexes[{0, 0}] == sample));
-      assert((indexes[{1, 1}] == sample));
-      assert((indexes[{2, 2}] == sample));
-      assert((indexes[{3, 3}] == sample));
-      assert((indexes[{4, 4}] == sample));
+      assert((indexes[{0, 0, 0, 0, 0}] == sample));
+      assert((indexes[{0, 1, 1, 1, 1}] == sample));
+      assert((indexes[{0, 1, 2, 2, 2}] == sample));
+      assert((indexes[{0, 1, 2, 3, 3}] == sample));
+      assert((indexes[{0, 1, 2, 3, 4}] == sample));
     },
     []() {
       // tests the constructor for the 'variable' class. Also tests the
@@ -54,31 +55,31 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       Index j("j", 0, 10);
       Index k("k", 1110, 23210);
       Variable var = Variable("X", VariableType::CONTINUOUS, {i, j, k});
-      MultiArray<Variable> variables({1, 2, 3, 4, 5});
+      MultiArray<Variable> variables({30, 30, 30});
       variables.FillWith(var);
-      assert((variables[{0, 0}] == var));
-      assert((variables[{1, 1}] == var));
-      assert((variables[{2, 2}] == var));
-      assert((variables[{3, 3}] == var));
-      assert((variables[{4, 4}] == var));
+      assert((variables[{3, 5, 4}] == var));
+      assert((variables[{1, 1, 1}] == var));
+      assert((variables[{2, 20, 20}] == var));
+      assert((variables[{15, 14, 11}] == var));
+      assert((variables[{2, 13, 23}] == var));
     },
     []() {
       // tests direct initialization of the multi-vector class using the
       // 'variable' class as template argument
       Index i("i", 0, 20);
       Index j("j", 0, 10);
-      MultiArray<Variable> variables({1, 2, 3, 4, 5});
+      MultiArray<Variable> variables({10, 20});
       variables.FillWith(Variable("X", VariableType::CONTINUOUS, {i, j}));
-      assert((variables[{0,0}] ==
-             Variable("X", VariableType::CONTINUOUS, {i, j})));
-      assert((variables[{1,1}] ==
-             Variable("X", VariableType::CONTINUOUS, {i, j})));
-      assert((variables[{2,2}] ==
-             Variable("X", VariableType::CONTINUOUS, {i, j})));
-      assert((variables[{3,3}] ==
-             Variable("X", VariableType::CONTINUOUS, {i, j})));
-      assert((variables[{4,4}] ==
-             Variable("X", VariableType::CONTINUOUS, {i, j})));
+      assert((variables[{0, 0}] ==
+              Variable("X", VariableType::CONTINUOUS, {i, j})));
+      assert((variables[{1, 1}] ==
+              Variable("X", VariableType::CONTINUOUS, {i, j})));
+      assert((variables[{2, 2}] ==
+              Variable("X", VariableType::CONTINUOUS, {i, j})));
+      assert((variables[{3, 3}] ==
+              Variable("X", VariableType::CONTINUOUS, {i, j})));
+      assert((variables[{4, 4}] ==
+              Variable("X", VariableType::CONTINUOUS, {i, j})));
     },
     []() {
       // tests the following operators of the 'expression' class:
@@ -308,6 +309,21 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       ASSERT_THROW(auto* cstr7 = model->Get("dummy2"), std::out_of_range);
       ASSERT_THROW(auto* cstr8 = model->Get("x2"), std::out_of_range);
       ASSERT_THROW(auto* cstr9 = model->Get("R1"), std::out_of_range);
+    },
+    []() {
+      using base_types::Bounds;
+      // test the Index -> Bounds conversion
+      Index i("i", 0, 20);
+      Index j("j", 5, 17);
+      Index k("k", 50, 225);
+
+      const Bounds& ii = Bounds(i);
+      const Bounds& jj = Bounds(j);
+      const Bounds& kk = Bounds(k);
+
+      assert(i.GetUB() == ii.ub && i.GetLB() == ii.lb);
+      assert(j.GetUB() == jj.ub && j.GetLB() == jj.lb);
+      assert(k.GetUB() == kk.ub && k.GetLB() == kk.lb);
     }};
 
 int main() { return ModuleTester::Run(); }
