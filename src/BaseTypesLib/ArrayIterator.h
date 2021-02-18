@@ -1,6 +1,5 @@
 #pragma once
 #include "Bounds.h"
-#include <c++/9/bits/c++config.h>
 #include <iostream>
 #include <utility>
 #include <vector>
