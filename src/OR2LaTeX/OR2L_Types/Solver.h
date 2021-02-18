@@ -19,7 +19,9 @@ struct HashPair {
 };
 
 namespace or2l {
+using base_types::ArrayIterator;
 using operations_research::MPSolver;
+
 class Solver {
  public:
   Solver() = default;
@@ -53,38 +55,36 @@ class OrtoolsSolver : public Solver {
   void FreeModel() override { model_.reset(); }
 
   void AddVariableSet(const Variable& var) override {
-    auto indexes = var.GetIndexes();
+    const auto indexes = var.GetIndexSizes();
+    auto it = ArrayIterator(indexes);
 
-    auto index_sizes =
-        var.GetIndexSizes();  // should reserve first, to avoid a bunch of
-                              // resizes mid-through push-backs
-    for (const auto& ind : indexes) {
-      for (size_t i = 0; i < ind.GetSize(); i++) {
-        std::weak_ptr<operations_research::MPVariable> var_ptr;
-        switch (var.GetVariableType()) {
-          case VariableType::CONTINUOUS:
-            var_ptr = std::shared_ptr<operations_research::MPVariable>(
-                model_->MakeNumVar(0.00, 100000000,
-                                   var.GetName() + std::to_string(i)));
-            break;
-          case VariableType::BINARY:
-            var_ptr = std::shared_ptr<operations_research::MPVariable>(
-                model_->MakeBoolVar(var.GetName() + std::to_string(i)));
-            break;
-          case VariableType::INTEGER:
-            var_ptr = std::shared_ptr<operations_research::MPVariable>(
-                model_->MakeIntVar(0.00, 100000000,
-                                   var.GetName() + std::to_string(i)));
-            break;
-          default:
-            throw std::invalid_argument(
-                "An invalid variable type was assigned (not CONTINUOUS, "
-                "BINARY, or INTEGER)");  // change this to or2l::Exception later
-                                         // (better string management)
-            break;
-            std::weak_ptr<operations_research::MPVariable> a(var_ptr);
-            // variable_vec_.emplace();
-        }
+    while (it.HasNext()) {
+      std::weak_ptr<operations_research::MPVariable> var_ptr;
+      switch (var.GetVariableType()) {
+        case VariableType::CONTINUOUS:
+          var_ptr = std::shared_ptr<operations_research::MPVariable>(
+              model_->MakeNumVar(
+                  0.00, 100000000,
+                  var.GetName() + it.GetCurrentCombinationString()));
+          break;
+        case VariableType::BINARY:
+          var_ptr = std::shared_ptr<operations_research::MPVariable>(
+              model_->MakeBoolVar(var.GetName() +
+                                  it.GetCurrentCombinationString()));
+          break;
+        case VariableType::INTEGER:
+          var_ptr = std::shared_ptr<operations_research::MPVariable>(
+              model_->MakeIntVar(
+                  0.00, 100000000,
+                  var.GetName() + it.GetCurrentCombinationString()));
+          break;
+        default:
+          throw std::invalid_argument(
+              "An invalid variable type was assigned (not CONTINUOUS, "
+              "BINARY, or INTEGER)");  // change this to or2l::Exception later
+                                       // (better string management)
+          break;
+          std::weak_ptr<operations_research::MPVariable> a(var_ptr);
       }
     }
   }
