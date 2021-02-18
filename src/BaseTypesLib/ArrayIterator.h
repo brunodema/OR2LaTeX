@@ -1,25 +1,40 @@
 #pragma once
 #include "Bounds.h"
+#include <c++/9/bits/c++config.h>
 #include <iostream>
+#include <utility>
 #include <vector>
 
 namespace or2l::base_types {
 class ArrayIterator {
  public:
-  explicit ArrayIterator(std::vector<Bounds>& bounds) : bounds_(bounds) {
+  explicit ArrayIterator(std::vector<Bounds> bounds)
+      : bounds_(std::move(bounds)) {
     for (const auto& bound : bounds_) {
       max_iter_ *= (bound.ub - bound.lb);
       current_.push_back(bound.lb);
     }
   }
+  explicit ArrayIterator(const std::vector<std::size_t>& sizes) {
+    for (const auto& size : sizes) {
+      max_iter_ *= size;
+      bounds_.emplace_back(0, size);
+      current_.emplace_back(0);
+    }
+  }
+
   static void Print(std::vector<std::size_t>& combination,
                     const size_t curr_iter) {
+#ifdef _DEBUG_PRINT
+
     std::cout << "{";
     for (auto&& i = 0; i < combination.size(); ++i) {
       std::cout << combination[i];
       if (i < combination.size() - 1) std::cout << ",";
     }
     std::cout << "}, current iteration: << " << curr_iter << "\n";
+
+#endif
   }
 
   std::vector<std::size_t> IncreaseToTheLeft() {

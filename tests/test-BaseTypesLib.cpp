@@ -3,6 +3,7 @@
 #include "Coordinates.h"
 #include "ModuleTester.h"
 #include "Vecxd.h"
+#include <c++/9/bits/c++config.h>
 #include <cassert>
 #include <cstddef>
 #include <utility>
@@ -105,6 +106,15 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
 
       assert((it2_combs[0] == std::vector<std::size_t>{1, 0, 0}));
       assert((it2_combs.back() == std::vector<std::size_t>{9, 1, 29}));
+
+      // should be the same as above, except the overload assumes a 0 lower
+      // bound
+      std::vector<std::size_t> bnds3{10, 2, 30};
+      ArrayIterator it3(bnds3);
+      auto it3_combs = it3.Iterate();
+
+      assert((it3_combs[1] == std::vector<std::size_t>{0, 0, 1}));
+      assert((it3_combs.back() == std::vector<std::size_t>{9, 1, 29}));
     }};
 
 int main() { return ModuleTester::Run(); }
