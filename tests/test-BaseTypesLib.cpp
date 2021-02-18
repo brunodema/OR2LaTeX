@@ -1,7 +1,10 @@
+#include "ArrayIterator.h"
+#include "Bounds.h"
 #include "Coordinates.h"
 #include "ModuleTester.h"
 #include "Vecxd.h"
 #include <cassert>
+#include <cstddef>
 #include <utility>
 
 using or2l::base_types::ModuleTester;
@@ -84,6 +87,24 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       // test2[{11, 1, 1}] = 10;  // must give runtime error: OK
       assert((test2[{1, 1, 2}] == 10));
       assert((test2[{9, 9, 2}] == 100));
+    },
+    []() {
+      // test 'ArrayIterator'
+      using or2l::base_types::Bounds;
+
+      std::vector<Bounds> bnds1{{0, 2}, {0, 2}};
+      ArrayIterator it1(bnds1);
+      auto it1_combs = it1.Iterate();
+
+      assert((it1_combs[0] == std::vector<std::size_t>{0, 0}));
+      assert((it1_combs.back() == std::vector<std::size_t>{1, 1}));
+
+      std::vector<Bounds> bnds2{{1, 10}, {0, 2}, {0, 30}};
+      ArrayIterator it2(bnds2);
+      auto it2_combs = it2.Iterate();
+
+      assert((it2_combs[0] == std::vector<std::size_t>{1, 0, 0}));
+      assert((it2_combs.back() == std::vector<std::size_t>{9, 1, 29}));
     }};
 
 int main() { return ModuleTester::Run(); }
