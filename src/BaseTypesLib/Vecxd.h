@@ -14,33 +14,36 @@ template <typename T>
 class MultiArray {
  public:
   MultiArray() = default;
-  MultiArray(const std::initializer_list<int>& dims)
+  MultiArray(const std::initializer_list<std::size_t>& dims)
       : dims_(dims), data_(CalculateLinearDimension(dims_)) {}
 
-  void ResizeContents(const std::initializer_list<std::size_t>& dims) {
-    data_.resize(CalculateLinearDimension(dims_));
+  void ResizeContents(const std::vector<std::size_t>& dims) {
+    dims_ = dims;
+    data_.resize(CalculateLinearDimension(dims));
   }
   void FillWith(const T& default_value) {
     std::fill(data_.begin(), data_.end(), default_value);
   }
 
-  [[nodiscard]] const std::vector<int>& dims() const { return dims_; }
-  const T& operator[](const std::initializer_list<int>& indices) const {
+  [[nodiscard]] const std::vector<std::size_t>& dims() const { return dims_; }
+  const T& operator[](const std::initializer_list<std::size_t>& indices) const {
     return data_[index(indices)];
   }
-  T& operator[](const std::initializer_list<int>& indices) {
+  T& operator[](const std::initializer_list<std::size_t>& indices) {
     return data_[index(indices)];
   }
 
  private:
-  std::vector<int> dims_;
+  std::vector<std::size_t> dims_;
   std::vector<T> data_;
-  static std::size_t CalculateLinearDimension(const std::vector<int>& dims) {
+  static std::size_t CalculateLinearDimension(
+      const std::vector<std::size_t>& dims) {
     size_t result = 1;
     for (size_t i = 0; i < dims.size(); ++i) result *= size_t(dims[i]);
     return result;
   }
-  [[nodiscard]] std::size_t index(const std::vector<int>& indices) const {
+  [[nodiscard]] std::size_t index(
+      const std::vector<std::size_t>& indices) const {
     assert(indices.size() == dims_.size());
     size_t v = 0;
     for (size_t i = 0; i < dims_.size(); ++i) {
