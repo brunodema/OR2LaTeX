@@ -3,7 +3,7 @@ project(or2l_types)
 file(GLOB files *.cpp *.h)
 
 set(_target_include_directories ${CMAKE_CURRENT_SOURCE_DIR} ${ortools_INCLUDE_DIR})
-set(_target_link_libraries basetypeslib ortools::ortools)
+set(_target_link_libraries basetypeslib::basetypeslib ortools::ortools)
 
 if(USE_GUROBI)
 	list(APPEND _target_link_libraries gurobi::gurobi)
