@@ -7,11 +7,17 @@
 #include "Model.h"
 #include "ModuleTester.h"
 #include "RegexString.h"
+#include "Solver.h"
 #include "SymbolComponent.h"
 #include "Variable.h"
 #include "Vecxd.h"
+#include <c++/9/bits/c++config.h>
+#include <ortools/linear_solver/linear_solver.h>
 #include <cassert>
+#include <cstddef>
+#include <memory>
 #include <stdexcept>
+#include <string>
 
 using or2l::Constraint;
 using or2l::Index;
@@ -324,6 +330,46 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       assert(i.GetUB() == ii.ub && i.GetLB() == ii.lb);
       assert(j.GetUB() == jj.ub && j.GetLB() == jj.lb);
       assert(k.GetUB() == kk.ub && k.GetLB() == kk.lb);
+    },
+    []() {
+      // trying to understand how the map with key = 'VariableIndexPair' works
+      std::map<std::pair<std::string, std::string>, int> a = {
+          {std::make_pair("hello", "there"), 1},
+          {std::make_pair("hello", "again"), 2},
+          {std::make_pair("there", "hello"), 3}};
+
+      assert(a[std::make_pair("hello", "there")] == 1);
+
+      std::map<std::pair<Variable, std::string>, int> b = {
+          {std::make_pair(Variable(), "there"), 1},
+          {std::make_pair(Variable(), "again"), 2},
+          {std::make_pair(Variable(), "hello"), 3}};
+
+      assert(b[std::make_pair(Variable(), "there")] == 1);
+
+      std::map<std::pair<Variable, std::vector<std::size_t>>, int> c = {
+          {std::make_pair(Variable(), std::vector<std::size_t>{1}), 1},
+          {std::make_pair(Variable(), std::vector<std::size_t>{2}), 2},
+          {std::make_pair(Variable(), std::vector<std::size_t>{3}), 3}};
+
+      assert(c[std::make_pair(Variable(), std::vector<std::size_t>{1})] == 1);
+
+      std::map<std::pair<Variable, std::vector<std::size_t>>,
+               std::weak_ptr<int>>
+          d = {{std::make_pair(Variable(), std::vector<std::size_t>{1, 2, 3}),
+                std::make_shared<int>(1)},
+               {std::make_pair(Variable(), std::vector<std::size_t>{1, 2, 4}),
+                std::make_shared<int>(2)},
+               {std::make_pair(Variable(), std::vector<std::size_t>{2, 0, 0}),
+                std::make_shared<int>(3)}};
+
+      auto* const val =
+          d[std::make_pair(Variable(), std::vector<std::size_t>{1, 2, 3})]
+              .lock()
+              .get();
+
+      assert(*val == 1);
     }};
+// discover what the fuck is going on over here
 
 int main() { return ModuleTester::Run(); }

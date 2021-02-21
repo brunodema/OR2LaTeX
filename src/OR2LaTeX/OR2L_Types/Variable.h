@@ -10,7 +10,7 @@ namespace or2l {
 class Variable : public SymbolComponent {
  public:
   friend struct std::hash<Variable>;
-  Variable() : SymbolComponent("", SymbolType::VARIABLE) {};
+  Variable() : SymbolComponent("", SymbolType::VARIABLE){};
   explicit Variable(const RegexString& name,
                     VariableType var_type = VariableType::CONTINUOUS,
                     std::initializer_list<Index> indexes = {});
@@ -18,6 +18,9 @@ class Variable : public SymbolComponent {
 
   inline bool operator==(const Variable& B) const {
     return this->name_ == B.name_ && this->indexes_ == B.indexes_;
+  }
+  inline bool operator<(const Variable& A) const {
+    return this->name_ < A.name_;
   }
 
   std::size_t GetNumberOfIndexes();

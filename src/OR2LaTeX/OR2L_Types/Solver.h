@@ -4,6 +4,9 @@
 #include "Variable.h"
 #include "VariableType.h"
 #include "ortools/linear_solver/linear_solver.h"
+#include <c++/9/bits/c++config.h>
+#include <map>
+#include <utility>
 #ifdef GUROBI
 #include "gurobi_c++.h"
 #endif
@@ -15,6 +18,19 @@ struct HashPair {
     auto hash2 = std::hash<T2>{}(p.second);
     // XOR is pottentially dangerous here
     return hash1 ^ hash2;
+  }
+};
+
+using VariableIndexPair = std::pair<or2l::Variable, std::vector<size_t>>;
+struct Comp {
+  bool operator()(const VariableIndexPair& l,
+                  const VariableIndexPair& r) const {
+    if (l.first == r.first) {
+      if (l.second == r.second) {
+        return true;
+      }
+    }
+    return false;
   }
 };
 
@@ -59,6 +75,7 @@ class OrtoolsSolver : public Solver {
     auto it = ArrayIterator(indexes);
 
     while (it.HasNext()) {
+      auto current_combination = it.Next();
       std::weak_ptr<operations_research::MPVariable> var_ptr;
       switch (var.GetVariableType()) {
         case VariableType::CONTINUOUS:
@@ -84,19 +101,17 @@ class OrtoolsSolver : public Solver {
               "BINARY, or INTEGER)");  // change this to or2l::Exception later
                                        // (better string management)
           break;
-          std::weak_ptr<operations_research::MPVariable> a(var_ptr);
       }
     }
   }
   // void RemoveVariable(const Variable& var) override {}
 
  private:
-  using VariableIndexPair = std::pair<Variable, std::vector<size_t>>;
   SolverType type_;
   std::unique_ptr<MPSolver> model_ = nullptr;
   std::map<VariableIndexPair,
            std::vector<std::weak_ptr<operations_research::MPVariable>>,
-           HashPair<Variable, std::vector<size_t>>>
+           HashPair<Variable, std::vector<std::size_t>>>
       variable_vec_;
 };  // namespace or2l
 
