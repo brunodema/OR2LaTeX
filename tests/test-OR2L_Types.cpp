@@ -14,7 +14,6 @@
 #include "Variable.h"
 #include "VariableType.h"
 #include "Vecxd.h"
-#include <c++/9/bits/c++config.h>
 #include <ortools/linear_solver/linear_solver.h>
 #include <cassert>
 #include <cstddef>
