@@ -1,7 +1,7 @@
 namespace or2l {
-static constexpr double kEpsilon = 0.000001;
+static constexpr double EPSILON = 0.000001;
 
 static constexpr bool IsNumericallyNull(double val) {
-  return val < kEpsilon && val > -kEpsilon;
+  return val < EPSILON && val > -EPSILON;
 }
 }  // namespace or2l

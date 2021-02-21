@@ -2,11 +2,11 @@
 #include "ortools/constraint_solver/constraint_solver.h"
 #include "ortools/linear_solver/linear_solver.h"
 
+using base_types::ModuleTester;
 using operations_research::MPConstraint;
 using operations_research::MPObjective;
 using operations_research::MPSolver;
 using operations_research::MPVariable;
-using or2l::base_types::ModuleTester;
 
 std::vector<std::function<void()>> ModuleTester::tests_ = {
     []() {

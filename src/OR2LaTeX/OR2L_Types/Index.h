@@ -8,7 +8,7 @@ namespace or2l {
 class Index : public SymbolComponent {
  public:
   Index() : SymbolComponent("", SymbolType::INDEX) {}
-  Index(const RegexString& name, const size_t lb, const size_t ub)
+  Index(const base_types::RegexString& name, const size_t lb, const size_t ub)
       : SymbolComponent(name, SymbolType::INDEX), lb_(lb), ub_(ub) {
     if (ub < lb) {
       throw Exception(ExceptionType::ERR_INDEX_BOUNDS);

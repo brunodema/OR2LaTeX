@@ -1,13 +1,22 @@
 
+#include "Index.h"
 #include "Model.h"
 #include "ModuleTester.h"
+#include "SolverType.h"
+#include "Variable.h"
+#include "VariableType.h"
 #include "ortools/linear_solver/linear_solver.h"
 
 #if GUROBI
 #include "gurobi_c++.h"
 #endif  // GUROBI
 
-using or2l::base_types::ModuleTester;
+using base_types::ModuleTester;
+using or2l::Index;
+using or2l::Model;
+using or2l::SolverType;
+using or2l::Variable;
+using or2l::VariableType;
 
 std::vector<std::function<void()>> ModuleTester::tests_ = {
     []() {
@@ -36,7 +45,6 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       model.AddVariable(x_ij);
       model.DefineSolver(SolverType::ORTOOLS_CBC);
       model.ImplementModel();
-
 
       /*
       the big test!

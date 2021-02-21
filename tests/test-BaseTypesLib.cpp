@@ -7,8 +7,9 @@
 #include <cstddef>
 #include <utility>
 
-using or2l::base_types::ModuleTester;
-using or2l::base_types::MultiArray;
+using base_types::Bounds;
+using base_types::ModuleTester;
+using base_types::MultiArray;
 
 struct RandomStruct {
   RandomStruct(int a, double b, std::string str = "")
@@ -90,8 +91,6 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
     },
     []() {
       // test 'ArrayIterator'
-      using or2l::base_types::Bounds;
-
       std::vector<Bounds> bnds1{{0, 2}, {0, 2}};
       ArrayIterator it1(bnds1);
       auto it1_combs = it1.Iterate();

@@ -2,7 +2,7 @@
 
 namespace or2l {
 
-Model::Model(const RegexString& name,
+Model::Model(const base_types::RegexString& name,
              const std::initializer_list<Index> indexes,
              const std::initializer_list<Variable> variables,
              const std::initializer_list<Constraint> constraints)
@@ -21,7 +21,8 @@ Model::Model(const RegexString& name,
   }
 }
 
-[[nodiscard]] SymbolComponent* Model::Get(const RegexString& str) const {
+[[nodiscard]] SymbolComponent* Model::Get(
+    const base_types::RegexString& str) const {
   // SymbolType type = symbol_map_.at(str).get()->GetType();
   switch (const SymbolType type = symbol_map_.at(str).get()->GetType()) {
     case SymbolType::INDEX:
@@ -41,7 +42,9 @@ Model::Model(const RegexString& name,
   }
 }
 
-void Model::RemoveSymbol(const RegexString& str) { symbol_map_.erase(str); }
+void Model::RemoveSymbol(const base_types::RegexString& str) {
+  symbol_map_.erase(str);
+}
 
 void Model::AddVariable(const Variable& var) {
   symbol_map_.insert_or_assign(var.GetName(), std::make_unique<Variable>(var));

@@ -1,17 +1,19 @@
 #include "Variable.h"
 
 namespace or2l {
-Variable::Variable(const RegexString& name, const VariableType var_type,
+Variable::Variable(const base_types::RegexString& name,
+                   const VariableType var_type,
                    const std::initializer_list<Index> indexes)
     : SymbolComponent(name, SymbolType::VARIABLE), variable_type_(var_type) {
   for (auto&& index : indexes) {
-    indexes_.insert(std::pair<RegexString, Index>(index.GetName(), index));
+    indexes_.insert(
+        std::pair<base_types::RegexString, Index>(index.GetName(), index));
   }
 }
 
 std::size_t Variable::GetNumberOfIndexes() { return indexes_.size(); }
 
-Index Variable::GetIndex(const RegexString& key) const {
+Index Variable::GetIndex(const base_types::RegexString& key) const {
   return indexes_.at(key);
 }
 

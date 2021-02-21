@@ -2,11 +2,11 @@
 #include "gurobi_c++.h"
 #include <sstream>
 
-using or2l::base_types::ModuleTester;
+using base_types::ModuleTester;
 using std::cout;
 using std::endl;
-using std::string;
 using std::ostringstream;
+using std::string;
 
 int solveAndPrint(GRBModel& model, GRBVar& totSlack, int nWorkers,
                   string* Workers, GRBVar* totShifts) {
