@@ -363,21 +363,24 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
 
       assert(c[std::make_pair(Variable(), std::vector<std::size_t>{1})] == 1);
 
+      auto d1 = std::make_pair(Variable(), std::vector<std::size_t>{1, 2, 3});
+      auto d2 = std::make_pair(Variable(), std::vector<std::size_t>{1, 2, 4});
+      auto d3 = std::make_pair(Variable(), std::vector<std::size_t>{2, 0, 0});
+
+      auto v1 = std::make_shared<int>(1);
+      auto v2 = std::make_shared<int>(2);
+      auto v3 = std::make_shared<int>(3);
+
       std::map<std::pair<Variable, std::vector<std::size_t>>,
                std::weak_ptr<int>>
-          d = {{std::make_pair(Variable(), std::vector<std::size_t>{1, 2, 3}),
-                std::make_shared<int>(1)},
-               {std::make_pair(Variable(), std::vector<std::size_t>{1, 2, 4}),
-                std::make_shared<int>(2)},
-               {std::make_pair(Variable(), std::vector<std::size_t>{2, 0, 0}),
-                std::make_shared<int>(3)}};
+          d = {{d1, v1}, {d2, v2}, {d3, v3}};
 
-      auto* const val =
-          d[std::make_pair(Variable(), std::vector<std::size_t>{1, 2, 3})]
-              .lock()
-              .get();
-
-      assert(*val == 1);
+      auto const val1 = *d[d1].lock();
+      assert(val1 == 1);
+      auto const val2 = *d[d2].lock();
+      assert(val2 == 2);
+      auto const val3 = *d[d3].lock();
+      assert(val3 == 3);
     }};
 // discover what the fuck is going on over here
 

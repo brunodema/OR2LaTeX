@@ -1,12 +1,12 @@
 project(Test)
 
-set(EXECUTABLES_TO_BE_INSTALLED test-OR2L_Types test-ortools
-                                test-or2lbinding test-memory)
+set(EXECUTABLES_TO_BE_INSTALLED test-or2ltypes test-ortools test-or2lbinding
+                                test-memory)
 
 # test-OR2L_Types
-add_executable(test-OR2L_Types test-OR2L_Types.cpp)
-target_link_libraries(test-OR2L_Types or2l_types)
-add_test(NAME or2l_types COMMAND test-OR2L_Types)
+add_executable(test-or2ltypes test-or2ltypes.cpp)
+target_link_libraries(test-or2ltypes or2l_types)
+add_test(NAME or2ltypes COMMAND test-or2ltypes)
 
 # test-ortools
 add_executable(test-ortools test-ortools.cpp)
