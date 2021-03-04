@@ -5,11 +5,13 @@
 #include "Solver.h"
 #include "SolverType.h"
 #include "SymbolComponent.h"
+#include "SymbolType.h"
 #include "Variable.h"
 #include "ortools/linear_solver/linear_solver.h"
 #include <cassert>
 #include <map>
 #include <string>
+#include <vector>
 
 namespace or2l {
 class Model {
@@ -43,7 +45,14 @@ class Model {
   inline void ImplementModel() {
     if (solver_ == nullptr)
       throw or2l::Exception(ExceptionType::ERR_MODEL_NULLPTRSOLVER);
-    solver_->ImplementModel();
+
+    for (const auto& [name, symbol] : symbol_map_) {
+      switch (symbol->GetType()) {
+        case SymbolType::VARIABLE:
+          solver_->AddVariableSet(*static_cast<Variable*>(symbol.get()));
+                                  break;
+      }
+    }
   }
   inline void FreeModel() { solver_.reset(); };
   inline const Solver* GetModel() { return solver_.get(); };
@@ -53,5 +62,5 @@ class Model {
   std::unique_ptr<Solver> solver_;
   std::map<base_types::RegexString, std::unique_ptr<SymbolComponent>>
       symbol_map_ = {};
-};
+};  // namespace or2l
 }  // namespace or2l

@@ -101,6 +101,10 @@ class OrtoolsSolver : public Solver {
                                        // (better string management)
           break;
       }
+      variable_vec_.insert(
+          std::pair<VariableIndexPair,
+                    std::weak_ptr<operations_research::MPVariable>>(
+              VariableIndexPair({var, current_combination}), var_ptr));
     }
   }
   // void RemoveVariable(const Variable& var) override {}
@@ -108,9 +112,8 @@ class OrtoolsSolver : public Solver {
  private:
   SolverType type_;
   std::unique_ptr<MPSolver> model_ = nullptr;
-  std::map<VariableIndexPair,
-           std::vector<std::weak_ptr<operations_research::MPVariable>>,
-           HashPair<Variable, std::vector<std::size_t>>>
+  std::map<VariableIndexPair, std::weak_ptr<operations_research::MPVariable>,
+           Comp>
       variable_vec_;
 };  // namespace or2l
 
