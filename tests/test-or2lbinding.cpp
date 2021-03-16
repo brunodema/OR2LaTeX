@@ -40,22 +40,15 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       // testing the 'AddVariableSet' function
       Model model("ValidName");
       Index i("i", 0, 20);
-      Index j("i", 0, 20);
-      Variable x("x", or2l::VariableType::BINARY, {i, j});
+      Index j("j", 0, 20);
+      Variable x("x", or2l::VariableType::CONTINUOUS, {i, j});
+
       model.AddVariable(x);
       model.DefineSolver(SolverType::ORTOOLS_CBC);
       model.ImplementModel();
+      model.FreeModel();
     },
     []() {
-      Model model("LOL");
-      Index i("i", 0, 10);
-      Index j("j", 0, 20);
-      Variable x_ij("xij", VariableType::CONTINUOUS, {i, j});
-
-      model.AddVariable(x_ij);
-      model.DefineSolver(SolverType::ORTOOLS_CBC);
-      model.ImplementModel();
-
       /*
       the big test!
       (http://www.hungarianalgorithm.com/solve.php?c=21-5-1-27--39-55-41-59--90-85-46-52--14-91-53-39&random=1)

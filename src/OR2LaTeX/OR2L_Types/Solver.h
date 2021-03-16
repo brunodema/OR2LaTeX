@@ -57,6 +57,7 @@ class OrtoolsSolver : public Solver {
  public:
   explicit OrtoolsSolver(const SolverType type) : type_(type) {
     assert((int)type <= SOLVERTYPE_ORTOOLS_MAX);
+    ImplementModel();
   }
   ~OrtoolsSolver() override = default;
 
@@ -75,24 +76,21 @@ class OrtoolsSolver : public Solver {
 
     while (it.HasNext()) {
       auto current_combination = it.Next();
-      std::weak_ptr<operations_research::MPVariable> var_ptr;
+      operations_research::MPVariable* var_ptr; // so about this... I discovered that casting the return value of the function (MPVariable*) to 'shared_ptr' causes the shared_ptr to be destroyed right after its declaration, therefore reducing the number of references to zero, and making the 'weak_ptr' point to nothing - or in this case, to some sort of malformed element. I decided to use a normal pointer in this, so it simply points to nothing if the associated variable gets destroyed
       switch (var.GetVariableType()) {
         case VariableType::CONTINUOUS:
-          var_ptr = std::shared_ptr<operations_research::MPVariable>(
-              model_->MakeNumVar(
+          var_ptr = model_->MakeNumVar(
                   0.00, 100000000,
-                  var.GetName() + it.GetCurrentCombinationString()));
+                  var.GetName() + it.GetCurrentCombinationString());
           break;
         case VariableType::BINARY:
-          var_ptr = std::shared_ptr<operations_research::MPVariable>(
-              model_->MakeBoolVar(var.GetName() +
-                                  it.GetCurrentCombinationString()));
+          var_ptr = model_->MakeBoolVar(var.GetName() +
+                                  it.GetCurrentCombinationString());
           break;
         case VariableType::INTEGER:
-          var_ptr = std::shared_ptr<operations_research::MPVariable>(
-              model_->MakeIntVar(
+          var_ptr = model_->MakeIntVar(
                   0.00, 100000000,
-                  var.GetName() + it.GetCurrentCombinationString()));
+                  var.GetName() + it.GetCurrentCombinationString());
           break;
         default:
           throw std::invalid_argument(
@@ -101,9 +99,9 @@ class OrtoolsSolver : public Solver {
                                        // (better string management)
           break;
       }
-      variable_vec_.insert(
+      variable_vec_.emplace(
           std::pair<VariableIndexPair,
-                    std::weak_ptr<operations_research::MPVariable>>(
+                    operations_research::MPVariable*>(
               VariableIndexPair({var, current_combination}), var_ptr));
     }
   }
@@ -112,17 +110,18 @@ class OrtoolsSolver : public Solver {
  private:
   SolverType type_;
   std::unique_ptr<MPSolver> model_ = nullptr;
-  std::map<VariableIndexPair, std::weak_ptr<operations_research::MPVariable>,
-           Comp>
-      variable_vec_;
+  std::map<VariableIndexPair,operations_research::MPVariable*> variable_vec_;
 };  // namespace or2l
 
 #ifdef GUROBI
 class GurobiSolver : public Solver {
  public:
   explicit GurobiSolver(const GRBEnv& env)
-      : env_(std::make_unique<GRBEnv>(env)) {}
-  virtual ~GurobiSolver() = default;
+      : env_(std::make_unique<GRBEnv>(env)) 
+  {
+    ImplementModel();
+  }
+  ~GurobiSolver() override = default;
 
   void ImplementModel() override { model_ = std::make_unique<GRBModel>(*env_); }
   void FreeModel() override { model_.reset(); }
