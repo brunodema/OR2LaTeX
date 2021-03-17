@@ -35,9 +35,9 @@ class Model {
   void RemoveConstraint(const Constraint& constraint);
 
   // solver objects (variables, constraints)
-  void GetVariable(const Variable& var, const std::vector<std::size_t>& index_values) const
+  double GetVariable(const Variable& var, const std::vector<std::size_t>& index_values) const
   {
-
+    return solver_->GetVariable(var, index_values);
   }
 
 

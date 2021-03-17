@@ -49,7 +49,9 @@ class ISolver {
 
   virtual void ImplementModel() = 0;
   virtual void FreeSolver() = 0;
-
+  
+  virtual double GetVariable(const Variable& var,
+                             const std::vector<std::size_t>& index_values) = 0;
   virtual void AddVariableSet(const Variable& var) = 0;
   // virtual void RemoveVariable(const Variable& var) = 0;
 
@@ -75,6 +77,13 @@ class OrtoolsSolver : public ISolver {
   }
   void FreeSolver() override { model_.reset(); }
 
+
+  double GetVariable(const Variable& var, const
+                     std::vector<std::size_t>& index_values) override {
+    VariableIndexPair a({var, index_values});
+
+    return variable_vec_[a]->solution_value();
+  }
   void AddVariableSet(const Variable& var) override {
     const auto indexes = var.GetIndexSizes();
     auto it = ArrayIterator(indexes);
@@ -130,6 +139,11 @@ class GurobiSolver : public ISolver {
   void ImplementModel() override { model_ = std::make_unique<GRBModel>(*env_); }
   void FreeSolver() override { model_.reset(); }
 
+    double GetVariable (const Variable& var,
+                     const std::vector<std::size_t>& index_values) override {
+    // wrote this only so another test could pass
+    return 0.00;
+  }
   void AddVariableSet(const Variable& var) override {
   }  // wrote this only so another test could pass
 
