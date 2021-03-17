@@ -50,7 +50,7 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       model.DefineSolver(SolverType::ORTOOLS_CBC);
       model.ImplementModel();
 
-      // model.Get
+      auto test = model.GetVariable(x, {0, 0});
 
 
 
