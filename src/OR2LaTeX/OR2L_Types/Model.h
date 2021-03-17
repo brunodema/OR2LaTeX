@@ -62,12 +62,12 @@ class Model {
       }
     }
   }
-  inline const Solver* GetSolver() { return solver_.get(); };
+  inline const ISolver* GetSolver() { return solver_.get(); };
   inline void FreeSolver() { solver_.reset(); };
 
  protected:
   base_types::RegexString name_ = "";
-  std::unique_ptr<Solver> solver_;
+  std::unique_ptr<ISolver> solver_;
   std::map<base_types::RegexString, std::unique_ptr<SymbolComponent>>
       symbol_map_ = {};
 };  // namespace or2l

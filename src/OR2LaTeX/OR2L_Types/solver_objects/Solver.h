@@ -41,10 +41,11 @@ namespace or2l {
 using base_types::ArrayIterator;
 using operations_research::MPSolver;
 
-class Solver {
+// interface
+class ISolver {
  public:
-  Solver() = default;
-  virtual ~Solver() = default;
+  ISolver() = default;
+  virtual ~ISolver() = default;
 
   virtual void ImplementModel() = 0;
   virtual void FreeSolver() = 0;
@@ -57,7 +58,7 @@ class Solver {
   // virtual void RemoveConstraint(const Constraint& constraint) = 0;
 };
 
-class OrtoolsSolver : public Solver {
+class OrtoolsSolver : public ISolver {
  public:
   explicit OrtoolsSolver(const SolverType type) : type_(type) {
     assert((int)type <= SOLVERTYPE_ORTOOLS_MAX);
@@ -117,7 +118,7 @@ class OrtoolsSolver : public Solver {
 };  // namespace or2l
 
 #ifdef GUROBI
-class GurobiSolver : public Solver {
+class GurobiSolver : public ISolver {
  public:
   explicit GurobiSolver(const GRBEnv& env)
       : env_(std::make_unique<GRBEnv>(env)) 
