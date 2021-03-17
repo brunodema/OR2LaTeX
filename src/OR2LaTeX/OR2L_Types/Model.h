@@ -54,8 +54,8 @@ class Model {
       }
     }
   }
-  inline void FreeModel() { solver_.reset(); };
-  inline const Solver* GetModel() { return solver_.get(); };
+  inline void FreeSolver() { solver_.reset(); };
+  inline const Solver* GetSolver() { return solver_.get(); };
 
  protected:
   base_types::RegexString name_ = "";

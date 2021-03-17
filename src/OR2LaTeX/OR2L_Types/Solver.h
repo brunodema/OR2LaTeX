@@ -46,7 +46,7 @@ class Solver {
   virtual ~Solver() = default;
 
   virtual void ImplementModel() = 0;
-  virtual void FreeModel() = 0;
+  virtual void FreeSolver() = 0;
 
   virtual void AddVariableSet(const Variable& var) = 0;
   // virtual void RemoveVariable(const Variable& var) = 0;
@@ -71,7 +71,7 @@ class OrtoolsSolver : public Solver {
                        // access information about the model ('Variable' for
                        // instance)
   }
-  void FreeModel() override { model_.reset(); }
+  void FreeSolver() override { model_.reset(); }
 
   void AddVariableSet(const Variable& var) override {
     const auto indexes = var.GetIndexSizes();
@@ -126,7 +126,7 @@ class GurobiSolver : public Solver {
   ~GurobiSolver() override = default;
 
   void ImplementModel() override { model_ = std::make_unique<GRBModel>(*env_); }
-  void FreeModel() override { model_.reset(); }
+  void FreeSolver() override { model_.reset(); }
 
   void AddVariableSet(const Variable& var) override {
   }  // wrote this only so another test could pass

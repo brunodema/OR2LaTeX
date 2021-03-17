@@ -24,16 +24,16 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       std::unique_ptr<Model> model_ortools = std::make_unique<Model>("ortools");
       model_ortools->DefineSolver(SolverType::ORTOOLS_CBC);
       model_ortools->ImplementModel();
-      const auto* a = model_ortools->GetModel();
-      model_ortools->FreeModel();
+      const auto* a = model_ortools->GetSolver();
+      model_ortools->FreeSolver();
 
 #ifdef GUROBI
       std::unique_ptr<GRBEnv> env = std::make_unique<GRBEnv>();
       std::unique_ptr<Model> model_gurobi = std::make_unique<Model>("gurobi");
       model_gurobi->DefineSolver(*env);
       model_gurobi->ImplementModel();
-      const auto* b = model_gurobi->GetModel();
-      model_gurobi->FreeModel();
+      const auto* b = model_gurobi->GetSolver();
+      model_gurobi->FreeSolver();
 #endif  // GUROBI
     },
     []() {
@@ -42,11 +42,19 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       Index i("i", 0, 20);
       Index j("j", 0, 20);
       Variable x("x", or2l::VariableType::CONTINUOUS, {i, j});
+      Variable c("c", or2l::VariableType::INTEGER, {i});
 
       model.AddVariable(x);
+      model.AddVariable(c);
+
       model.DefineSolver(SolverType::ORTOOLS_CBC);
       model.ImplementModel();
-      model.FreeModel();
+
+      // model.Get
+
+
+
+      model.FreeSolver();
     },
     []() {
       /*
