@@ -8,7 +8,7 @@
 #include "ModuleTester.h"
 #include "OperatorTypes.h"
 #include "RegexString.h"
-#include "Solver.h"
+#include "solver_objects/Solver.h"
 #include "SymbolComponent.h"
 #include "SymbolType.h"
 #include "Variable.h"

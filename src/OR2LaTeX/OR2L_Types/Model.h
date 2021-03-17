@@ -2,7 +2,7 @@
 #include "Constraint.h"
 #include "Index.h"
 #include "RegexString.h"
-#include "Solver.h"
+#include "solver_objects/Solver.h"
 #include "SolverType.h"
 #include "SymbolComponent.h"
 #include "SymbolType.h"
@@ -23,8 +23,8 @@ class Model {
   Model(const base_types::RegexString& name) : name_(name) {}
   virtual ~Model() = default;
 
+  // symbol
   [[nodiscard]] SymbolComponent* Get(const base_types::RegexString& str) const;
-
   void RemoveSymbol(const base_types::RegexString& str);
   void AddVariable(const Variable& var);
   void RemoveVariable(const Variable& var);
@@ -34,6 +34,14 @@ class Model {
   void AddConstraint(const Constraint& constraint);
   void RemoveConstraint(const Constraint& constraint);
 
+  // solver objects (variables, constraints)
+  void GetVariable(const Variable& var, const std::vector<std::size_t>& index_values) const
+  {
+
+  }
+
+
+  // solver
   inline void DefineSolver(const SolverType type) {
     solver_ = std::make_unique<OrtoolsSolver>(type);
   }
@@ -54,8 +62,8 @@ class Model {
       }
     }
   }
-  inline void FreeSolver() { solver_.reset(); };
   inline const Solver* GetSolver() { return solver_.get(); };
+  inline void FreeSolver() { solver_.reset(); };
 
  protected:
   base_types::RegexString name_ = "";

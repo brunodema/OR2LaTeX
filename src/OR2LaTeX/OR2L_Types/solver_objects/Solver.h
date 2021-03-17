@@ -1,5 +1,6 @@
 #pragma once
 #include "ArrayIterator.h"
+#include <Auxiliary.h>
 #include "SolverType.h"
 #include "Variable.h"
 #include "VariableType.h"
@@ -9,7 +10,7 @@
 #ifdef GUROBI
 #include "gurobi_c++.h"
 #endif
-#include <Auxiliary.h>
+
 
 template <class T1, class T2>
 struct HashPair {
