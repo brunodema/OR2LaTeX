@@ -9,6 +9,7 @@
 #ifdef GUROBI
 #include "gurobi_c++.h"
 #endif
+#include <Auxiliary.h>
 
 template <class T1, class T2>
 struct HashPair {
@@ -32,6 +33,8 @@ struct Comp {
     return false;
   }
 };
+
+
 
 namespace or2l {
 using base_types::ArrayIterator;
@@ -81,16 +84,15 @@ class OrtoolsSolver : public Solver {
         case VariableType::CONTINUOUS:
           var_ptr = model_->MakeNumVar(
                   0.00, 100000000,
-                  var.GetName() + it.GetCurrentCombinationString());
+              var.GetName() + GetCurrentCombinationString(current_combination));
           break;
         case VariableType::BINARY:
-          var_ptr = model_->MakeBoolVar(var.GetName() +
-                                  it.GetCurrentCombinationString());
+          var_ptr = model_->MakeBoolVar(var.GetName() + GetCurrentCombinationString(current_combination));
           break;
         case VariableType::INTEGER:
           var_ptr = model_->MakeIntVar(
                   0.00, 100000000,
-                  var.GetName() + it.GetCurrentCombinationString());
+              var.GetName() + GetCurrentCombinationString(current_combination));
           break;
         default:
           throw std::invalid_argument(
