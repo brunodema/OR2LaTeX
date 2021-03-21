@@ -50,9 +50,14 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       model.DefineSolver(SolverType::ORTOOLS_CBC);
       model.ImplementModel();
 
-      auto test = model.GetVariable(x, {0, 0});
-
-
+      // it seems that there is some sort of undefined behavior between Windows
+      // and Linux here:
+      // (1) it seems that VS build use "NDEBUG" by default, which breaks
+      // 'assert'.
+      // (2) When running on Linux, 'ortools' seem to no be able to retrieve the
+      // value before optimizing the problem, which seems to be possible on
+      // Windows.
+      // auto test = model.GetVariable(x, {0, 0});
 
       model.FreeSolver();
     },
