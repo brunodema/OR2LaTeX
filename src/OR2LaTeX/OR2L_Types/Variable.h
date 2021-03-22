@@ -6,41 +6,45 @@
 #include <string>
 #include <unordered_map>
 
-namespace or2l {
-class Variable : public SymbolComponent {
- public:
-  friend struct std::hash<Variable>;
-  Variable() : SymbolComponent("", SymbolType::VARIABLE){};
-  explicit Variable(const base_types::RegexString& name,
-                    VariableType var_type = VariableType::CONTINUOUS,
-                    std::initializer_list<Index> indexes = {});
-  ~Variable() override = default;
+namespace or2l
+{
+class Variable : public SymbolComponent
+{
+  public:
+    friend struct std::hash<Variable>;
+    Variable() : SymbolComponent("", SymbolType::VARIABLE){};
+    explicit Variable(const base_types::RegexString &name, VariableType var_type = VariableType::CONTINUOUS,
+                      std::initializer_list<Index> indexes = {});
+    ~Variable() override = default;
 
-  inline bool operator==(const Variable& B) const {
-    return this->name_ == B.name_ && this->indexes_ == B.indexes_;
-  }
-  inline bool operator<(const Variable& A) const {
-    return this->name_ < A.name_;
-  }
+    inline bool operator==(const Variable &B) const
+    {
+        return this->name_ == B.name_ && this->indexes_ == B.indexes_;
+    }
+    inline bool operator<(const Variable &A) const
+    {
+        return this->name_ < A.name_;
+    }
 
-  std::size_t GetNumberOfIndexes();
-  Index GetIndex(const base_types::RegexString& key) const;
-  std::vector<size_t> GetIndexSizes() const;
-  std::vector<Index> GetIndexes() const;
-  VariableType GetVariableType() const;
-  std::vector<std::vector<size_t>> GetAllIndexCombinations() const;
+    std::size_t GetNumberOfIndexes();
+    Index GetIndex(const base_types::RegexString &key) const;
+    std::vector<size_t> GetIndexSizes() const;
+    std::vector<Index> GetIndexes() const;
+    VariableType GetVariableType() const;
+    std::vector<std::vector<size_t>> GetAllIndexCombinations() const;
 
- private:
-  std::unordered_map<base_types::RegexString, Index> indexes_ = {};
-  VariableType variable_type_ = VariableType::CONTINUOUS;
+  private:
+    std::unordered_map<base_types::RegexString, Index> indexes_ = {};
+    VariableType variable_type_ = VariableType::CONTINUOUS;
 };
-}  // namespace or2l
+} // namespace or2l
 
-template <>
-struct std::hash<or2l::Variable> {
-  std::size_t operator()(const or2l::Variable& k) const {
-    // changed it to be based on their names, which makes sense when thinking
-    // about the LaTeX implementation
-    return std::hash<std::string>()(k.GetName());
-  };
+template <> struct std::hash<or2l::Variable>
+{
+    std::size_t operator()(const or2l::Variable &k) const
+    {
+        // changed it to be based on their names, which makes sense when thinking
+        // about the LaTeX implementation
+        return std::hash<std::string>()(k.GetName());
+    };
 };
