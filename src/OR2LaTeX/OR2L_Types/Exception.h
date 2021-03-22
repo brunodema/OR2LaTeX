@@ -27,22 +27,22 @@ class Exception : public std::exception
   public:
     explicit Exception(const std::exception &e, const std::string &message = "")
     {
-        buffer_ << e.what() << " | " << message << "\n";
+        buffer << e.what() << " | " << message << "\n";
     }
 
     explicit Exception(ExceptionType type)
     {
-        buffer_ << "OR2L Exception | " << or2l::EXCEPTION_TEXT.at(type) << "\n";
+        buffer << "OR2L Exception | " << or2l::EXCEPTION_TEXT.at(type) << "\n";
     }
 
     explicit Exception(const std::string &message = "")
     {
-        buffer_ << "OR2L Exception | " << message << "\n";
+        buffer << "OR2L Exception | " << message << "\n";
     }
     ~Exception() override = default;
 
   private:
-    inline static std::stringstream buffer_;
+    inline static std::stringstream buffer;
 };
 
 } // namespace or2l
