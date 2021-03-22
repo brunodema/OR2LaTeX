@@ -8,7 +8,7 @@ namespace or2l
 class SymbolComponent
 {
   public:
-    SymbolComponent(const base_types::RegexString &str, const SymbolType &type) : name_(str), type_(type)
+    SymbolComponent(const base_types::RegexString &str, const SymbolType &type) : name_(str), type(type)
     {
     }
     virtual ~SymbolComponent() = default;
@@ -24,11 +24,11 @@ class SymbolComponent
     }
     [[nodiscard]] virtual inline SymbolType GetType() const
     {
-        return type_;
+        return type;
     }
 
   protected:
     base_types::RegexString name_;
-    SymbolType type_;
+    SymbolType type;
 };
 } // namespace or2l

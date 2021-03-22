@@ -12,8 +12,8 @@ class Index : public SymbolComponent
     Index() : SymbolComponent("", SymbolType::INDEX)
     {
     }
-    Index(const base_types::RegexString &name, const size_t lb, const size_t ub)
-        : SymbolComponent(name, SymbolType::INDEX), lb_(lb), ub_(ub)
+    Index(const base_types::RegexString &name, const size_t plb, const size_t pub)
+        : SymbolComponent(name, SymbolType::INDEX), lb(plb), ub(pub)
     {
         if (ub < lb)
         {
@@ -24,30 +24,30 @@ class Index : public SymbolComponent
 
     inline bool operator==(const Index &B) const
     {
-        return this->lb_ == B.lb_ && this->ub_ == B.ub_ && this->name_ == B.name_;
+        return this->lb == B.lb && this->ub == B.ub && this->name_ == B.name_;
     }
 
     explicit operator base_types::Bounds() const
     {
-        return base_types::Bounds{lb_, ub_};
+        return base_types::Bounds{lb, ub};
     }
 
     [[nodiscard]] inline size_t GetUB() const
     {
-        return ub_;
+        return ub;
     }
     [[nodiscard]] inline size_t GetLB() const
     {
-        return lb_;
+        return lb;
     }
     [[nodiscard]] inline size_t GetSize() const
     {
-        return ub_ - lb_;
+        return ub - lb;
     }
 
   private:
-    size_t lb_ = 0;
-    size_t ub_ = 0;
+    size_t lb = 0;
+    size_t ub = 0;
 };
 } // namespace or2l
 

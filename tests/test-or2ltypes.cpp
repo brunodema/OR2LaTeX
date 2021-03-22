@@ -34,7 +34,7 @@ using or2l::SymbolType;
 using or2l::Variable;
 using or2l::VariableType;
 
-std::vector<std::function<void()>> ModuleTester::tests_ = {
+std::vector<std::function<void()>> ModuleTester::tests = {
     []() {
         // tests the multi-vector class with the 'index' class
         MultiArray<Index> indexes;

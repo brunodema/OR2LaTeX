@@ -39,13 +39,13 @@ class Model
     // solver objects (variables, constraints)
     [[nodiscard]] double GetVariable(const Variable &var, const std::vector<std::size_t> &index_values) const
     {
-        return solver_->GetVariable(var, index_values);
+        return solver->GetVariable(var, index_values);
     }
 
     // solver
     inline void DefineSolver(const SolverType type)
     {
-        solver_ = std::make_unique<OrtoolsSolver>(type);
+        solver = std::make_unique<OrtoolsSolver>(type);
     }
 #ifdef GUROBI
     inline void DefineSolver(const GRBEnv &env)
@@ -55,7 +55,7 @@ class Model
 #endif // GUROBI
     inline void ImplementModel()
     {
-        if (solver_ == nullptr)
+        if (solver == nullptr)
             throw or2l::Exception(ExceptionType::ERR_MODEL_NULLPTRSOLVER);
 
         for (const auto &[name, symbol] : symbol_map_)
@@ -63,23 +63,23 @@ class Model
             switch (symbol->GetType())
             {
             case SymbolType::VARIABLE:
-                solver_->AddVariableSet(*static_cast<Variable *>(symbol.get()));
+                solver->AddVariableSet(*static_cast<Variable *>(symbol.get()));
                 break;
             }
         }
     }
     inline const ISolver *GetSolver()
     {
-        return solver_.get();
+        return solver.get();
     };
     inline void FreeSolver()
     {
-        solver_.reset();
+        solver.reset();
     };
 
   protected:
     base_types::RegexString name_ = "";
-    std::unique_ptr<ISolver> solver_;
+    std::unique_ptr<ISolver> solver;
     std::map<base_types::RegexString, std::unique_ptr<SymbolComponent>> symbol_map_ = {};
 }; // namespace or2l
 } // namespace or2l

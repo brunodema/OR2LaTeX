@@ -74,21 +74,21 @@ class OrtoolsSolver : public ISolver
 
     void ImplementModel() override
     {
-        model_ = std::unique_ptr<MPSolver>(
+        model = std::unique_ptr<MPSolver>(
             MPSolver::CreateSolver(SolverTypeDictionary::GetType(type_))); // in order to implement the model, the
                                                                            // solver needs to access information about
                                                                            // the model ('Variable' for instance)
     }
     void FreeSolver() override
     {
-        model_.reset();
+        model.reset();
     }
 
     double GetVariable(const Variable &var, const std::vector<std::size_t> &index_values) override
     {
         VariableIndexPair a({var, index_values});
 
-        return variable_vec_[a]->solution_value();
+        return variable_vec[a]->solution_value();
     }
     void AddVariableSet(const Variable &var) override
     {
@@ -107,15 +107,15 @@ class OrtoolsSolver : public ISolver
             switch (var.GetVariableType())
             {
             case VariableType::CONTINUOUS:
-                var_ptr = model_->MakeNumVar(0.00, 100000000,
-                                             var.GetName() + GetCurrentCombinationString(current_combination));
+                var_ptr = model->MakeNumVar(0.00, 100000000,
+                                            var.GetName() + GetCurrentCombinationString(current_combination));
                 break;
             case VariableType::BINARY:
-                var_ptr = model_->MakeBoolVar(var.GetName() + GetCurrentCombinationString(current_combination));
+                var_ptr = model->MakeBoolVar(var.GetName() + GetCurrentCombinationString(current_combination));
                 break;
             case VariableType::INTEGER:
-                var_ptr = model_->MakeIntVar(0.00, 100000000,
-                                             var.GetName() + GetCurrentCombinationString(current_combination));
+                var_ptr = model->MakeIntVar(0.00, 100000000,
+                                            var.GetName() + GetCurrentCombinationString(current_combination));
                 break;
             default:
                 throw std::invalid_argument("An invalid variable type was assigned (not CONTINUOUS, "
@@ -123,7 +123,7 @@ class OrtoolsSolver : public ISolver
                                                                     // (better string management)
                 break;
             }
-            variable_vec_.emplace(std::pair<VariableIndexPair, operations_research::MPVariable *>(
+            variable_vec.emplace(std::pair<VariableIndexPair, operations_research::MPVariable *>(
                 VariableIndexPair({var, current_combination}), var_ptr));
         }
     }
@@ -131,8 +131,8 @@ class OrtoolsSolver : public ISolver
 
   private:
     SolverType type_;
-    std::unique_ptr<MPSolver> model_ = nullptr;
-    std::map<VariableIndexPair, operations_research::MPVariable *> variable_vec_;
+    std::unique_ptr<MPSolver> model = nullptr;
+    std::map<VariableIndexPair, operations_research::MPVariable *> variable_vec;
 }; // namespace or2l
 
 #ifdef GUROBI

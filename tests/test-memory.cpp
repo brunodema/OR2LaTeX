@@ -11,7 +11,7 @@ using or2l::MathExpressionOperatorTypes;
 using or2l::Model;
 using or2l::Variable;
 
-std::vector<std::function<void()>> base_types::ModuleTester::tests_ = {
+std::vector<std::function<void()>> base_types::ModuleTester::tests = {
     []() {
         // these tests are supposed to be run locally with valgrind...
         // 'ModuleTester' was tested by itself on 30/01/2021 for memory leaks

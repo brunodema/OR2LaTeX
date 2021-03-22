@@ -24,7 +24,7 @@ using or2l::SolverType;
 using or2l::Variable;
 using or2l::VariableType;
 
-std::vector<std::function<void()>> ModuleTester::tests_ = {[]() {
+std::vector<std::function<void()>> ModuleTester::tests = {[]() {
                                                                // model binding
                                                                std::unique_ptr<Model> model_ortools =
                                                                    std::make_unique<Model>("ortools");

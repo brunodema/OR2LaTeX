@@ -7,13 +7,13 @@ namespace or2l
 class ObjectiveWrapper
 {
   public:
-    ObjectiveWrapper(ObjectiveExpressionOperatorTypes type, const Expression &expr) : type_(type), expr_(expr)
+    ObjectiveWrapper(ObjectiveExpressionOperatorTypes type, const Expression &expr) : type(type), expr(expr)
     {
     }
     virtual ~ObjectiveWrapper() = default;
 
   private:
-    ObjectiveExpressionOperatorTypes type_ = ObjectiveExpressionOperatorTypes::MINIMIZE;
-    Expression expr_ = {};
+    ObjectiveExpressionOperatorTypes type = ObjectiveExpressionOperatorTypes::MINIMIZE;
+    Expression expr = {};
 };
 } // namespace or2l

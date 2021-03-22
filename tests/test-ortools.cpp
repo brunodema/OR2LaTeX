@@ -8,7 +8,7 @@ using operations_research::MPObjective;
 using operations_research::MPSolver;
 using operations_research::MPVariable;
 
-std::vector<std::function<void()>> ModuleTester::tests_ = {
+std::vector<std::function<void()>> ModuleTester::tests = {
     []() {
         // [START solver]
         // Create the linear solver with the GLOP backend.

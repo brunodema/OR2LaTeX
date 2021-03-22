@@ -8,15 +8,15 @@ class MathExpression
 {
   public:
     MathExpression(const Expression &lhs, const MathExpressionOperatorTypes eq_type, const Expression &rhs)
-        : lhs_(lhs), rhs_(rhs), eq_type_(eq_type)
+        : lhs(lhs), rhs(rhs), eq_type(eq_type)
     {
     }
     virtual ~MathExpression() = default;
 
   private:
-    Expression lhs_ = Expression(0.00);
-    Expression rhs_ = Expression(0.00);
-    MathExpressionOperatorTypes eq_type_ = MathExpressionOperatorTypes::EQUAL;
+    Expression lhs = Expression(0.00);
+    Expression rhs = Expression(0.00);
+    MathExpressionOperatorTypes eq_type = MathExpressionOperatorTypes::EQUAL;
 };
 
 } // namespace or2l
