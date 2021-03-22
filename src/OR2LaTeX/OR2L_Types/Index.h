@@ -4,41 +4,59 @@
 #include "SymbolComponent.h"
 #include <string>
 
-namespace or2l {
-class Index : public SymbolComponent {
- public:
-  Index() : SymbolComponent("", SymbolType::INDEX) {}
-  Index(const base_types::RegexString& name, const size_t lb, const size_t ub)
-      : SymbolComponent(name, SymbolType::INDEX), lb_(lb), ub_(ub) {
-    if (ub < lb) {
-      throw Exception(ExceptionType::ERR_INDEX_BOUNDS);
+namespace or2l
+{
+class Index : public SymbolComponent
+{
+  public:
+    Index() : SymbolComponent("", SymbolType::INDEX)
+    {
     }
-  }
-  ~Index() override = default;
+    Index(const base_types::RegexString &name, const size_t lb, const size_t ub)
+        : SymbolComponent(name, SymbolType::INDEX), lb_(lb), ub_(ub)
+    {
+        if (ub < lb)
+        {
+            throw Exception(ExceptionType::ERR_INDEX_BOUNDS);
+        }
+    }
+    ~Index() override = default;
 
-  inline bool operator==(const Index& B) const {
-    return this->lb_ == B.lb_ && this->ub_ == B.ub_ && this->name_ == B.name_;
-  }
+    inline bool operator==(const Index &B) const
+    {
+        return this->lb_ == B.lb_ && this->ub_ == B.ub_ && this->name_ == B.name_;
+    }
 
-  explicit operator base_types::Bounds() const {
-    return base_types::Bounds{lb_, ub_};
-  }
+    explicit operator base_types::Bounds() const
+    {
+        return base_types::Bounds{lb_, ub_};
+    }
 
-  [[nodiscard]] inline size_t GetUB() const { return ub_; }
-  [[nodiscard]] inline size_t GetLB() const { return lb_; }
-  [[nodiscard]] inline size_t GetSize() const { return ub_ - lb_; }
+    [[nodiscard]] inline size_t GetUB() const
+    {
+        return ub_;
+    }
+    [[nodiscard]] inline size_t GetLB() const
+    {
+        return lb_;
+    }
+    [[nodiscard]] inline size_t GetSize() const
+    {
+        return ub_ - lb_;
+    }
 
- private:
-  size_t lb_ = 0;
-  size_t ub_ = 0;
+  private:
+    size_t lb_ = 0;
+    size_t ub_ = 0;
 };
-}  // namespace or2l
+} // namespace or2l
 
-template <>
-struct std::hash<or2l::Index> {
-  std::size_t operator()(const or2l::Index& k) const {
-    // changed it to be based on their names, which makes sense when thinking
-    // about the LaTeX implementation
-    return std::hash<std::string>()(k.GetName());
-  };
+template <> struct std::hash<or2l::Index>
+{
+    std::size_t operator()(const or2l::Index &k) const
+    {
+        // changed it to be based on their names, which makes sense when thinking
+        // about the LaTeX implementation
+        return std::hash<std::string>()(k.GetName());
+    };
 };
