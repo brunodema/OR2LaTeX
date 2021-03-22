@@ -1,7 +1,10 @@
 
+#include "Constraint.h"
 #include "Index.h"
+#include "MathExpression.h"
 #include "Model.h"
 #include "ModuleTester.h"
+#include "OperatorTypes.h"
 #include "SolverType.h"
 #include "Variable.h"
 #include "VariableType.h"
@@ -12,7 +15,10 @@
 #endif  // GUROBI
 
 using base_types::ModuleTester;
+using or2l::Constraint;
 using or2l::Index;
+using or2l::MathExpression;
+using or2l::MathExpressionOperatorTypes;
 using or2l::Model;
 using or2l::SolverType;
 using or2l::Variable;
@@ -60,6 +66,31 @@ std::vector<std::function<void()>> ModuleTester::tests_ = {
       // auto test = model.GetVariable(x, {0, 0});
 
       model.FreeSolver();
+    },
+    []() {
+      // Constraint tests
+      Model model("ContraintTest");
+      Index i("i", 0, 5);
+      Index j("j", 0, 5);
+      Variable x("x", or2l::VariableType::CONTINUOUS, {i, j});
+      Variable c("c", or2l::VariableType::INTEGER, {i});
+
+      model.AddVariable(x);
+      model.AddVariable(c);
+
+      // Concept
+      /*
+
+      MathExpression expr1(ExpressionOperator::SUM(x, {j}),MathExpressionOperatorTypes::LESS_EQUAL,c);  // the summation operator here will use as bounds the values associated LB/UB of index 'j' of variable 'x', since no custom values were provided.
+      Constraint cstr1("cstr1", expr1); // might need to expand this class in the future (include index rules). IMPORTANT: There should be a new 'RuleSet' class, which should contain specific bounds for indexes. The default behavior should be to include the associated bounds for each index.
+      model.AddConstraint(cstr1);
+
+      */
+
+      model.DefineSolver(SolverType::ORTOOLS_SCIP);
+      model.ImplementModel();
+
+
     },
     []() {
       /*
