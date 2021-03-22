@@ -16,12 +16,12 @@ static const int SOLVERTYPE_ORTOOLS_MAX = static_cast<int>(SolverType::ORTOOLS_S
 class SolverTypeDictionary
 {
   private:
-    static std::map<SolverType, std::string> types_;
+    static std::map<SolverType, std::string> types;
 
   public:
     [[nodiscard]] inline static std::string GetType(const SolverType ort_solver_type)
     {
-        return types_.at(ort_solver_type);
+        return types.at(ort_solver_type);
     }
 };
 } // namespace or2l
