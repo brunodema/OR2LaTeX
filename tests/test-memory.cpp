@@ -2,7 +2,6 @@
 #include "symbol/MathExpression.h"
 #include "model/Model.h"
 #include "ModuleTester.h"
-#include "symbol/OperatorTypes.h"
 #include "symbol/Variable.h"
 
 using or2l::Constraint;

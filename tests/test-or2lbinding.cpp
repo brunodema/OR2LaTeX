@@ -3,10 +3,8 @@
 #include "symbol/Index.h"
 #include "symbol/MathExpression.h"
 #include "model/Model.h"
-#include "symbol/OperatorTypes.h"
 #include "solver/SolverType.h"
 #include "symbol/Variable.h"
-#include "symbol/VariableType.h"
 
 #include "gtest/gtest.h"
 #include "ortools/linear_solver/linear_solver.h"

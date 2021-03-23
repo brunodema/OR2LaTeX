@@ -1,13 +1,20 @@
 #pragma once
 #include "Index.h"
 #include "SymbolComponent.h"
-#include "VariableType.h"
+#include "Variable.h"
 #include <optional>
 #include <string>
 #include <unordered_map>
 
 namespace or2l
 {
+enum class VariableType
+{
+    CONTINUOUS,
+    INTEGER,
+    BINARY
+};
+
 class Variable : public SymbolComponent
 {
   public:

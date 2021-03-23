@@ -2,7 +2,6 @@
 #include "ArrayIterator.h"
 #include "solver/SolverType.h"
 #include "symbol/Variable.h"
-#include "symbol/VariableType.h"
 #include "ortools/linear_solver/linear_solver.h"
 #include <auxiliary/Auxiliary.h>
 #include <map>

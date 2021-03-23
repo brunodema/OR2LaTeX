@@ -1,9 +1,24 @@
 #pragma once
 #include "Expression.h"
-#include "OperatorTypes.h"
+#include "MathExpression.h"
 
 namespace or2l
 {
+enum class MathExpressionOperatorTypes
+{
+    EQUAL,
+    GREATER_EQUAL,
+    GREATER,
+    LESS_EQUAL,
+    LESS
+};
+
+enum class ObjectiveExpressionOperatorTypes
+{
+    MINIMIZE,
+    MAXIMIZE
+};
+
 class MathExpression
 {
   public:
@@ -19,4 +34,16 @@ class MathExpression
     MathExpressionOperatorTypes eq_type = MathExpressionOperatorTypes::EQUAL;
 };
 
+class ObjectiveWrapper
+{
+  public:
+    ObjectiveWrapper(ObjectiveExpressionOperatorTypes type, const Expression &expr) : type(type), expr(expr)
+    {
+    }
+    virtual ~ObjectiveWrapper() = default;
+
+  private:
+    ObjectiveExpressionOperatorTypes type = ObjectiveExpressionOperatorTypes::MINIMIZE;
+    Expression expr = {};
+};
 } // namespace or2l

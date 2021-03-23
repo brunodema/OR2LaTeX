@@ -4,7 +4,6 @@
 #include "RegexString.h"
 #include "solver/SolverType.h"
 #include "symbol/SymbolComponent.h"
-#include "symbol/SymbolType.h"
 #include "symbol/Variable.h"
 #include "ortools/linear_solver/linear_solver.h"
 #include "solver/Solver.h"

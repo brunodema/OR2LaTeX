@@ -6,12 +6,9 @@
 #include "symbol/MathExpression.h"
 #include "model/Model.h"
 #include "ModuleTester.h"
-#include "symbol/OperatorTypes.h"
 #include "RegexString.h"
 #include "symbol/SymbolComponent.h"
-#include "symbol/SymbolType.h"
 #include "symbol/Variable.h"
-#include "symbol/VariableType.h"
 #include "Vecxd.h"
 #include "solver/Solver.h"
 #include <cassert>
