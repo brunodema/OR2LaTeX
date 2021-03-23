@@ -36,7 +36,7 @@ int solveAndPrint(GRBModel &model, GRBVar &totSlack, int nWorkers, string *Worke
     return status;
 }
 
-std::vector<std::function<void()>> ModuleTester::tests_ = {
+std::vector<std::function<void()>> ModuleTester::tests = {
     []() {
         try
         {

@@ -50,7 +50,7 @@ class Model
 #ifdef GUROBI
     inline void DefineSolver(const GRBEnv &env)
     {
-        solver_ = std::make_unique<GurobiSolver>(env);
+        solver = std::make_unique<GurobiSolver>(env);
     }
 #endif // GUROBI
     inline void ImplementModel()
