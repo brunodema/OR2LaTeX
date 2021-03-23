@@ -1,10 +1,10 @@
 #pragma once
 #include "ArrayIterator.h"
-#include "SolverType.h"
-#include "Variable.h"
-#include "VariableType.h"
+#include "solver/SolverType.h"
+#include "symbol/Variable.h"
+#include "symbol/VariableType.h"
 #include "ortools/linear_solver/linear_solver.h"
-#include <Auxiliary.h>
+#include <auxiliary/Auxiliary.h>
 #include <map>
 #include <utility>
 #ifdef GUROBI

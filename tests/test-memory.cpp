@@ -1,9 +1,9 @@
-#include "Constraint.h"
-#include "MathExpression.h"
-#include "Model.h"
+#include "symbol/Constraint.h"
+#include "symbol/MathExpression.h"
+#include "model/Model.h"
 #include "ModuleTester.h"
-#include "OperatorTypes.h"
-#include "Variable.h"
+#include "symbol/OperatorTypes.h"
+#include "symbol/Variable.h"
 
 using or2l::Constraint;
 using or2l::MathExpression;
