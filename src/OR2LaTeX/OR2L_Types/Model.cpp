@@ -58,7 +58,7 @@ void Model::RemoveVariable(const Variable &var)
     symbol_map_.erase(var.GetName());
 }
 
-void Model::ExtractIndexes(const Variable &var)
+void Model::MapIndexesFromVariable(const Variable &var)
 {
     for (auto &&index : var.GetIndexes())
     {

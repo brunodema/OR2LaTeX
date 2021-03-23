@@ -30,7 +30,7 @@ class Model
     void RemoveSymbol(const base_types::RegexString &str);
     void AddVariable(const Variable &var);
     void RemoveVariable(const Variable &var);
-    void ExtractIndexes(const Variable &var);
+    void MapIndexesFromVariable(const Variable &var);
     void AddIndex(const Index &index);
     void RemoveIndex(const Index &index);
     void AddConstraint(const Constraint &constraint);
