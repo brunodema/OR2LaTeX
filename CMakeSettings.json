@@ -3,10 +3,10 @@
     {
       "name": "x64-Clang-Release",
       "generator": "Visual Studio 16 2019 Win64",
-      "configurationType": "RelWithDebInfo",
+      "configurationType": "Release",
       "buildRoot": "${projectDir}\\out\\build\\${name}",
       "installRoot": "${projectDir}\\out\\install\\${name}",
-      "cmakeCommandArgs": "-DBUILD_TESTING=ON -DUSE_GUROBI=ON -DCMAKE_PREFIX_PATH=\"C:\\Program Files (x86)\\ortools\"",
+      "cmakeCommandArgs": "-DBUILD_TESTING=ON -DUSE_GUROBI=ON -Dortools_FIND_BY_CONFIG=OFF -Dortools_FIND_BY_PACKAGE=OFF -DCMAKE_PREFIX_PATH=\"C:\\Program Files (x86)\\ortools\"",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "inheritEnvironments": [ "clang_cl_x64_x64" ],

@@ -3,18 +3,21 @@
 #include <functional>
 #include <optional>
 
-namespace or2l {
-class CustomValidationRule
-    : public std::optional<std::function<bool(const Variable&)>> {
- public:
-  CustomValidationRule() = default;
-  virtual ~CustomValidationRule() = default;
+namespace or2l
+{
+class CustomValidationRule : public std::optional<std::function<bool(const Variable &)>>
+{
+  public:
+    CustomValidationRule() = default;
+    virtual ~CustomValidationRule() = default;
 
-  [[nodiscard]] inline bool IsVariableValid(const Variable& var) const {
-    if (!this->has_value()) {
-      return true;
+    [[nodiscard]] inline bool IsVariableValid(const Variable &var) const
+    {
+        if (!this->has_value())
+        {
+            return true;
+        }
+        return this->value()(var);
     }
-    return this->value()(var);
-  }
 };
-}  // namespace or2l
+} // namespace or2l
