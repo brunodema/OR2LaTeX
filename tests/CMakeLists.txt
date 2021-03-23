@@ -15,7 +15,7 @@ add_test(NAME ortools COMMAND test-ortools)
 
 # test-or2lbinding
 add_executable(test-or2lbinding test-or2lbinding.cpp)
-target_link_libraries(test-or2lbinding or2l_types)
+target_link_libraries(test-or2lbinding or2l_types gtest)
 add_test(NAME or2lbinding COMMAND test-or2lbinding)
 
 #test-memory

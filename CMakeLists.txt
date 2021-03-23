@@ -19,6 +19,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 find_package(basetypeslib MODULE REQUIRED)
+find_package(gtest MODULE REQUIRED)
 #find_package(boost MODULE REQUIRED)
 find_package(ortools MODULE REQUIRED)
 if(USE_GUROBI)
