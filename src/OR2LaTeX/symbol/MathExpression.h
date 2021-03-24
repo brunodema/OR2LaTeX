@@ -1,6 +1,5 @@
 #pragma once
 #include "Expression.h"
-#include "MathExpression.h"
 
 namespace or2l
 {

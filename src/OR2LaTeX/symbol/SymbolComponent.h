@@ -1,6 +1,5 @@
 #pragma once
 #include "RegexString.h"
-#include "SymbolComponent.h"
 #include <memory>
 
 namespace or2l
