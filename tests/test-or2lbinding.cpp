@@ -16,7 +16,7 @@
 using or2l::Constraint;
 using or2l::Index;
 using or2l::MathExpression;
-using or2l::MathExpressionOperatorTypes;
+using or2l::MathExpressionOperatorType;
 using or2l::Model;
 using or2l::SolverType;
 using or2l::Variable;

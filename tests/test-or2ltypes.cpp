@@ -24,7 +24,7 @@ using or2l::Constraint;
 using or2l::Expression;
 using or2l::Index;
 using or2l::MathExpression;
-using or2l::MathExpressionOperatorTypes;
+using or2l::MathExpressionOperatorType;
 using or2l::Model;
 using or2l::SymbolComponent;
 using or2l::SymbolType;
@@ -241,7 +241,7 @@ std::vector<std::function<void()>> ModuleTester::tests = {
         // tests related to 'MathExpression'
         Expression expr1 = 2.00;
         Expression expr2 = 3.00;
-        MathExpression mexpr(expr1, MathExpressionOperatorTypes::EQUAL, expr2);
+        MathExpression mexpr(expr1, MathExpressionOperatorType::EQUAL, expr2);
     },
     []() {
         // tests related to the new string wrapper (used to avoid invalid chars in
@@ -288,10 +288,10 @@ std::vector<std::function<void()>> ModuleTester::tests = {
         Variable x1("x1");
         Variable x2("x2");
         Variable x3("x3");
-        MathExpression expr1(x1, MathExpressionOperatorTypes::LESS_EQUAL, 7);
+        MathExpression expr1(x1, MathExpressionOperatorType::LESS_EQUAL, 7);
         Constraint R1("R1", expr1);
-        Constraint R2("R2", MathExpression(x2, MathExpressionOperatorTypes::LESS_EQUAL, 3));
-        Constraint R3("R3", MathExpression(x3, MathExpressionOperatorTypes::LESS_EQUAL, 5));
+        Constraint R2("R2", MathExpression(x2, MathExpressionOperatorType::LESS_EQUAL, 3));
+        Constraint R3("R3", MathExpression(x3, MathExpressionOperatorType::LESS_EQUAL, 5));
 
         model->AddIndex(dummy1);
         model->AddIndex(dummy2);
@@ -310,7 +310,7 @@ std::vector<std::function<void()>> ModuleTester::tests = {
 
         ASSERT_THROW(std::unique_ptr<Model> model = std::make_unique<Model>("_invalid_name"), std::invalid_argument);
         ASSERT_THROW(Variable x4("$%!GSE#"), std::invalid_argument);
-        ASSERT_THROW(Constraint R3("_$_#_#", MathExpression(x3, MathExpressionOperatorTypes::LESS_EQUAL, 5)),
+        ASSERT_THROW(Constraint R3("_$_#_#", MathExpression(x3, MathExpressionOperatorType::LESS_EQUAL, 5)),
                      std::invalid_argument);
         ASSERT_THROW(auto *cstr4 = model->Get("N/A"), std::invalid_argument);
         ASSERT_THROW(auto *cstr5 = model->Get("x4"), std::out_of_range);

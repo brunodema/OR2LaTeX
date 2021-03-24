@@ -6,7 +6,7 @@
 
 using or2l::Constraint;
 using or2l::MathExpression;
-using or2l::MathExpressionOperatorTypes;
+using or2l::MathExpressionOperatorType;
 using or2l::Model;
 using or2l::Variable;
 
@@ -32,7 +32,7 @@ std::vector<std::function<void()>> base_types::ModuleTester::tests = {
         // the statement below is only for the madness of it, nothing actually
         // interesting in it
         model->AddConstraint(Constraint("c1", MathExpression(*dynamic_cast<Variable *>(model->Get("var1")),
-                                                             MathExpressionOperatorTypes::LESS_EQUAL, 1)));
+                                                             MathExpressionOperatorType::LESS_EQUAL, 1)));
     }};
 
 int main()

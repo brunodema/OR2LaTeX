@@ -4,7 +4,7 @@
 
 namespace or2l
 {
-enum class MathExpressionOperatorTypes
+enum class MathExpressionOperatorType
 {
     EQUAL,
     GREATER_EQUAL,
@@ -13,7 +13,7 @@ enum class MathExpressionOperatorTypes
     LESS
 };
 
-enum class ObjectiveExpressionOperatorTypes
+enum class ObjectiveExpressionOperatorType
 {
     MINIMIZE,
     MAXIMIZE
@@ -22,7 +22,7 @@ enum class ObjectiveExpressionOperatorTypes
 class MathExpression
 {
   public:
-    MathExpression(const Expression &lhs, const MathExpressionOperatorTypes eq_type, const Expression &rhs)
+    MathExpression(const Expression &lhs, const MathExpressionOperatorType eq_type, const Expression &rhs)
         : lhs(lhs), rhs(rhs), eq_type(eq_type)
     {
     }
@@ -31,19 +31,19 @@ class MathExpression
   private:
     Expression lhs = Expression(0.00);
     Expression rhs = Expression(0.00);
-    MathExpressionOperatorTypes eq_type = MathExpressionOperatorTypes::EQUAL;
+    MathExpressionOperatorType eq_type = MathExpressionOperatorType::EQUAL;
 };
 
 class ObjectiveWrapper
 {
   public:
-    ObjectiveWrapper(ObjectiveExpressionOperatorTypes type, const Expression &expr) : type(type), expr(expr)
+    ObjectiveWrapper(ObjectiveExpressionOperatorType type, const Expression &expr) : type(type), expr(expr)
     {
     }
     virtual ~ObjectiveWrapper() = default;
 
   private:
-    ObjectiveExpressionOperatorTypes type = ObjectiveExpressionOperatorTypes::MINIMIZE;
+    ObjectiveExpressionOperatorType type = ObjectiveExpressionOperatorType::MINIMIZE;
     Expression expr = {};
 };
 } // namespace or2l
