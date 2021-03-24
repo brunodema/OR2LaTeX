@@ -1,6 +1,7 @@
 #pragma once
 #include "auxiliary/Auxiliary.h"
 #include "symbol/Variable.h"
+#include <absl/hash/hash.h>
 #include <unordered_map>
 #include <utility>
 
@@ -172,7 +173,7 @@ class Expression
     }
 
   private:
-    std::unordered_map<Variable, double> variable_map = {};
+    std::unordered_map<Variable, double, absl::Hash<Variable>> variable_map = {};
     double scalar_coefficient = 0.00;
 
     void RemoveVariableIfZeroCoefficient(const Variable &_var)

@@ -1,7 +1,6 @@
 #pragma once
 #include "Index.h"
 #include "SymbolComponent.h"
-#include "Variable.h"
 #include <optional>
 #include <string>
 #include <unordered_map>
@@ -18,7 +17,6 @@ enum class VariableType
 class Variable : public SymbolComponent
 {
   public:
-    friend struct std::hash<Variable>;
     Variable() : SymbolComponent("", SymbolType::VARIABLE){};
     explicit Variable(const base_types::RegexString &_name, VariableType _var_type = VariableType::CONTINUOUS,
                       std::initializer_list<Index> _indexes = {});
@@ -33,6 +31,8 @@ class Variable : public SymbolComponent
         return this->name_ < _A.name_;
     }
 
+    template <typename H> friend H AbslHashValue(H _h, const Variable &_var);
+
     std::size_t GetNumberOfIndexes();
     Index GetIndex(const base_types::RegexString &_key) const;
     std::vector<size_t> GetIndexSizes() const;
@@ -46,12 +46,7 @@ class Variable : public SymbolComponent
 };
 } // namespace or2l
 
-template <> struct std::hash<or2l::Variable>
+template <typename H> H or2l::AbslHashValue(H _h, const or2l::Variable &_var)
 {
-    std::size_t operator()(const or2l::Variable &_k) const
-    {
-        // changed it to be based on their names, which makes sense when thinking
-        // about the LaTeX implementation
-        return std::hash<std::string>()(_k.GetName());
-    };
-};
+    return H::combine(std::move(_h), _var.name_);
+}
