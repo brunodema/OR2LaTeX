@@ -1,12 +1,12 @@
 #pragma once
-#include "symbol/Constraint.h"
-#include "symbol/Index.h"
 #include "RegexString.h"
-#include "solver/SolverType.h"
-#include "symbol/SymbolComponent.h"
-#include "symbol/Variable.h"
 #include "ortools/linear_solver/linear_solver.h"
 #include "solver/Solver.h"
+#include "solver/SolverType.h"
+#include "symbol/Constraint.h"
+#include "symbol/Index.h"
+#include "symbol/SymbolComponent.h"
+#include "symbol/Variable.h"
 #include <cassert>
 #include <map>
 #include <string>

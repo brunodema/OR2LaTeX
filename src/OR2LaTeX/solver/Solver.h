@@ -1,8 +1,8 @@
 #pragma once
 #include "ArrayIterator.h"
+#include "ortools/linear_solver/linear_solver.h"
 #include "solver/SolverType.h"
 #include "symbol/Variable.h"
-#include "ortools/linear_solver/linear_solver.h"
 #include <auxiliary/Auxiliary.h>
 #include <map>
 #include <utility>
