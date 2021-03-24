@@ -10,17 +10,6 @@
 #include "gurobi_c++.h"
 #endif
 
-template <class T1, class T2> struct HashPair
-{
-    size_t operator()(const std::pair<T1, T2> &_p) const
-    {
-        auto hash1 = std::hash<T1>{}(_p.first);
-        auto hash2 = std::hash<T2>{}(_p.second);
-        // XOR is pottentially dangerous here
-        return hash1 ^ hash2;
-    }
-};
-
 using VariableIndexPair = std::pair<or2l::Variable, std::vector<size_t>>;
 struct Comp
 {
