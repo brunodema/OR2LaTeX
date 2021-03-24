@@ -18,12 +18,18 @@ add_executable(test-or2lbinding test-or2lbinding.cpp)
 target_link_libraries(test-or2lbinding or2l_types gtest)
 add_test(NAME or2lbinding COMMAND test-or2lbinding)
 
+# test-new-expression-operators
+add_executable(test-new-expression-operators test-new-expression-operators.cpp)
+target_link_libraries(test-new-expression-operators or2l_types gtest)
+add_test(NAME new-expression-operators
+         COMMAND test-test-new-expression-operators)
+
 #test-memory
 add_executable(test-memory test-memory.cpp)
 target_link_libraries(test-memory or2l_types)
 add_test(NAME memory COMMAND test-memory)
 
-# ----
+# --------------------------------------------------------------------------
 # test-gurobi
 if(USE_GUROBI)
   add_executable(test-gurobi test-gurobi.cpp)
@@ -31,6 +37,7 @@ if(USE_GUROBI)
   add_test(NAME gurobi COMMAND test-gurobi)
   list(APPEND EXECUTABLES_TO_BE_INSTALLED test-gurobi)
 endif()
+# --------------------------------------------------------------------------
 
 install(
   TARGETS ${EXECUTABLES_TO_BE_INSTALLED}

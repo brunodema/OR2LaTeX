@@ -1,28 +1,96 @@
 #pragma once
+#include "Bounds.h"
 #include "auxiliary/Auxiliary.h"
 #include "symbol/Variable.h"
 #include <absl/hash/hash.h>
+#include <initializer_list>
 #include <unordered_map>
 #include <utility>
+#include <vector>
 
 namespace or2l
 {
+using base_types::Bounds;
+
+class ExpressionCoefficient
+{
+  public:
+    ExpressionCoefficient(const Variable &_var) : variable(_var), coefficient(1.00){};
+    ExpressionCoefficient(const double &_value) : coefficient(_value){};
+
+  private:
+    Variable variable = {};
+    double coefficient = 0.00;
+};
+
+class ExpressionV2
+{
+  public:
+    ExpressionV2() = default;
+
+  private:
+    std::unordered_map<ExpressionCoefficient, double, absl::Hash<Variable>> coefficient_map = {};
+    double scalar_coefficient = 0.00;
+};
+
+namespace operators // should include all other operators in the future
+{
+enum class ExpressionOperatorType
+{
+    SCALAR,
+    SUMMATION
+};
+class ExpressionOperator
+{
+  public:
+    // implement custom rules for bounds in the future
+    ExpressionOperator() = default;
+    ExpressionOperator(const ExpressionOperatorType _type, const ExpressionV2 &_expr,
+                       const std::initializer_list<Index> _indexes)
+        : type(_type), inner_expression(_expr), indexes(_indexes){};
+
+    bool IsValid() const
+    {
+    }
+
+    operators::ExpressionOperatorType GetType() const
+    {
+        return type;
+    }
+    ExpressionV2 GetExpression() const
+    {
+        return inner_expression;
+    }
+    std::vector<Index> GetIndexes() const
+    {
+        return indexes;
+    }
+
+  private:
+    operators::ExpressionOperatorType type = operators::ExpressionOperatorType::SCALAR;
+    ExpressionV2 inner_expression = {};
+    std::vector<Index> indexes = {};
+};
+} // namespace operators
+
+// -----------------------------------------------------------------
+
 class Expression
 {
   public:
     Expression(const double _coeff = 0.00) : scalar_coefficient(_coeff)
     {
     }
-    Expression(const Variable &_var) : variable_map({{_var, 1.00}})
+    Expression(const Variable &_var) : coefficient_map({{_var, 1.00}})
     {
     }
     virtual ~Expression() = default;
 
     Expression &operator+=(const Expression &_expr)
     {
-        for (auto &&var_coeff : _expr.variable_map)
+        for (auto &&var_coeff : _expr.coefficient_map)
         {
-            this->variable_map.at(var_coeff.first) += var_coeff.second;
+            this->coefficient_map.at(var_coeff.first) += var_coeff.second;
         }
         this->scalar_coefficient += _expr.scalar_coefficient;
         return *this;
@@ -30,12 +98,12 @@ class Expression
 
     Expression &operator-=(const Expression &_expr)
     {
-        for (auto &&var_coeff : _expr.variable_map)
+        for (auto &&var_coeff : _expr.coefficient_map)
         {
-            if (this->variable_map.find(var_coeff.first) != this->variable_map.end())
-                this->variable_map.at(var_coeff.first) -= var_coeff.second;
+            if (this->coefficient_map.find(var_coeff.first) != this->coefficient_map.end())
+                this->coefficient_map.at(var_coeff.first) -= var_coeff.second;
             else
-                this->variable_map.emplace(var_coeff.first, var_coeff.second);
+                this->coefficient_map.emplace(var_coeff.first, var_coeff.second);
 
             RemoveVariableIfZeroCoefficient(var_coeff.first);
         }
@@ -57,34 +125,34 @@ class Expression
 
     Expression &operator+=(const Variable &_var)
     {
-        if (this->variable_map.find(_var) != this->variable_map.end())
+        if (this->coefficient_map.find(_var) != this->coefficient_map.end())
         {
-            ++this->variable_map.at(_var);
+            ++this->coefficient_map.at(_var);
         }
         else
         {
-            this->variable_map.emplace(_var, 1.00);
+            this->coefficient_map.emplace(_var, 1.00);
         }
         return *this;
     }
 
     Expression &operator-=(const Variable &_var)
     {
-        if (this->variable_map.find(_var) != this->variable_map.end())
+        if (this->coefficient_map.find(_var) != this->coefficient_map.end())
         {
-            --this->variable_map.at(_var);
+            --this->coefficient_map.at(_var);
             RemoveVariableIfZeroCoefficient(_var);
         }
         else
         {
-            this->variable_map.emplace(_var, -1.00);
+            this->coefficient_map.emplace(_var, -1.00);
         }
         return *this;
     }
 
     Expression &operator*=(const double _coeff)
     {
-        for (auto &var_coeff : variable_map)
+        for (auto &var_coeff : coefficient_map)
         {
             var_coeff.second *= _coeff;
         }
@@ -94,7 +162,7 @@ class Expression
 
     Expression &operator/=(const double _coeff)
     {
-        for (auto &var_coeff : variable_map)
+        for (auto &var_coeff : coefficient_map)
         {
             var_coeff.second /= _coeff;
         }
@@ -104,9 +172,9 @@ class Expression
 
     Expression &operator+(const Expression &_expr)
     {
-        for (auto &&var_coeff : _expr.variable_map)
+        for (auto &&var_coeff : _expr.coefficient_map)
         {
-            this->variable_map.at(var_coeff.first) += var_coeff.second;
+            this->coefficient_map.at(var_coeff.first) += var_coeff.second;
         }
         this->scalar_coefficient += _expr.scalar_coefficient;
         return *this;
@@ -114,12 +182,12 @@ class Expression
 
     Expression &operator-(const Expression &_expr)
     {
-        for (auto &&var_coeff : _expr.variable_map)
+        for (auto &&var_coeff : _expr.coefficient_map)
         {
-            if (this->variable_map.find(var_coeff.first) != this->variable_map.end())
-                this->variable_map.at(var_coeff.first) -= var_coeff.second;
+            if (this->coefficient_map.find(var_coeff.first) != this->coefficient_map.end())
+                this->coefficient_map.at(var_coeff.first) -= var_coeff.second;
             else
-                this->variable_map.emplace(var_coeff.first, var_coeff.second);
+                this->coefficient_map.emplace(var_coeff.first, var_coeff.second);
 
             RemoveVariableIfZeroCoefficient(var_coeff.first);
         }
@@ -129,16 +197,16 @@ class Expression
 
     Expression &operator+(const Variable &_var)
     {
-        ++this->variable_map.at(_var);
+        ++this->coefficient_map.at(_var);
         return *this;
     }
 
     Expression &operator-(const Variable &_var)
     {
-        if (this->variable_map.find(_var) != this->variable_map.end())
-            --this->variable_map.at(_var);
+        if (this->coefficient_map.find(_var) != this->coefficient_map.end())
+            --this->coefficient_map.at(_var);
         else
-            this->variable_map.emplace(_var, -1.00);
+            this->coefficient_map.emplace(_var, -1.00);
 
         RemoveVariableIfZeroCoefficient(_var);
         return *this;
@@ -161,25 +229,25 @@ class Expression
     }
     double GetCoefficient(const Variable &_var) const
     {
-        return variable_map.at(_var);
+        return coefficient_map.at(_var);
     }
     void SetCoefficient(const Variable &_var, const double _coeff)
     {
-        variable_map.at(_var) = _coeff;
+        coefficient_map.at(_var) = _coeff;
     }
     bool ContainsVariable(const Variable &_var) const
     {
-        return variable_map.find(_var) != this->variable_map.end();
+        return coefficient_map.find(_var) != this->coefficient_map.end();
     }
 
   private:
-    std::unordered_map<Variable, double, absl::Hash<Variable>> variable_map = {};
+    std::unordered_map<Variable, double, absl::Hash<Variable>> coefficient_map = {};
     double scalar_coefficient = 0.00;
 
     void RemoveVariableIfZeroCoefficient(const Variable &_var)
     {
         if (IsNumericallyNull(this->GetCoefficient(_var)))
-            this->variable_map.erase(_var);
+            this->coefficient_map.erase(_var);
     }
 };
 
@@ -234,7 +302,7 @@ inline Expression operator*(const double _coeff, const Variable &_var)
 {
     Expression expr;
     expr += _var;
-    expr.variable_map.at(_var) *= _coeff;
+    expr.coefficient_map.at(_var) *= _coeff;
     return expr;
 }
 
@@ -242,7 +310,7 @@ inline Expression operator*(const Variable &_var, const double _coeff)
 {
     Expression expr;
     expr += _var;
-    expr.variable_map.at(_var) *= _coeff;
+    expr.coefficient_map.at(_var) *= _coeff;
     return expr;
 }
 
@@ -250,7 +318,7 @@ inline Expression operator/(const Variable &_var, const double _coeff)
 {
     Expression expr;
     expr += _var;
-    expr.variable_map.at(_var) /= _coeff;
+    expr.coefficient_map.at(_var) /= _coeff;
     return expr;
 }
 
@@ -258,7 +326,7 @@ inline Expression operator/(const double _coeff, const Variable &_var)
 {
     Expression expr;
     expr += _var;
-    expr.variable_map.at(_var) *= pow(_coeff, -1);
+    expr.coefficient_map.at(_var) *= pow(_coeff, -1);
     return expr;
 }
 } // namespace or2l
