@@ -45,18 +45,14 @@ class Index : public SymbolComponent
         return ub - lb;
     }
 
+    template <typename H> friend H AbslHashValue(H _h, const Index &_index)
+    {
+        return H::combine(std::move(_h), _index.lb, _index.ub);
+    }
+
   private:
     size_t lb = 0;
     size_t ub = 0;
 };
 } // namespace or2l
 
-template <> struct std::hash<or2l::Index>
-{
-    std::size_t operator()(const or2l::Index &_k) const
-    {
-        // changed it to be based on their names, which makes sense when thinking
-        // about the LaTeX implementation
-        return std::hash<std::string>()(_k.GetName());
-    };
-};
