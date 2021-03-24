@@ -24,57 +24,60 @@ include(FindPackageHandleStandardArgs)
 set(gurobi_FOUND 0)
 
 # (1) Search manually for the dependency (set 'INCLUDES'/'LIBRARIES' variables)
-  message(STATUS "Searching for 'Gurobi' package using manual approach...")
-  list(APPEND gurobi_SEARCH_PATHS ${_SEARCH_PATHS})
+message(STATUS "Searching for 'Gurobi' package using manual approach...")
+list(APPEND gurobi_SEARCH_PATHS ${_SEARCH_PATHS})
 
-  find_path(
-    gurobi_INCLUDE_DIR
-    NAMES ${_FILE_NAMES}
-    PATH_SUFFIXES ${_INCLUDE_PATH_SUFFIXES}
-    HINTS ${gurobi_SEARCH_PATHS})
+find_path(
+  gurobi_INCLUDE_DIR
+  NAMES ${_FILE_NAMES}
+  PATH_SUFFIXES ${_INCLUDE_PATH_SUFFIXES}
+  HINTS ${gurobi_SEARCH_PATHS})
 
-  find_path(
-    gurobi_LIBRARY_DIR
-    NAMES ${_LIBRARY_NAMES}
-    PATH_SUFFIXES ${_LIBRARY_PATH_SUFFIXES}
-    PATHS ${gurobi_SEARCH_PATHS})
+find_path(
+  gurobi_LIBRARY_DIR
+  NAMES ${_LIBRARY_NAMES}
+  PATH_SUFFIXES ${_LIBRARY_PATH_SUFFIXES}
+  PATHS ${gurobi_SEARCH_PATHS})
 
-  find_library(
-    gurobi_DEBUG_LIBRARY
-    NAMES ${_LIBRARY_DEBUG_NAMES}
-    PATH_SUFFIXES ${_LIBRARY_PATH_SUFFIXES}
-    PATHS ${gurobi_SEARCH_PATHS})
+find_library(
+  gurobi_DEBUG_LIBRARY
+  NAMES ${_LIBRARY_DEBUG_NAMES}
+  PATH_SUFFIXES ${_LIBRARY_PATH_SUFFIXES}
+  PATHS ${gurobi_SEARCH_PATHS})
 
-  find_library(
-    gurobi_RELEASE_LIBRARY
-    NAMES ${_LIBRARY_RELEASE_NAMES}
-    PATH_SUFFIXES ${_LIBRARY_PATH_SUFFIXES}
-    PATHS ${gurobi_SEARCH_PATHS})
+find_library(
+  gurobi_RELEASE_LIBRARY
+  NAMES ${_LIBRARY_RELEASE_NAMES}
+  PATH_SUFFIXES ${_LIBRARY_PATH_SUFFIXES}
+  PATHS ${gurobi_SEARCH_PATHS})
 
-  find_library(
-    gurobi_LIBRARY
-    NAMES ${_LIBRARY_NAMES}
-    PATH_SUFFIXES ${_LIBRARY_PATH_SUFFIXES}
-    PATHS ${gurobi_SEARCH_PATHS})
+find_library(
+  gurobi_LIBRARY
+  NAMES ${_LIBRARY_NAMES}
+  PATH_SUFFIXES ${_LIBRARY_PATH_SUFFIXES}
+  PATHS ${gurobi_SEARCH_PATHS})
 
-  if(gurobi_INCLUDE_DIR AND gurobi_LIBRARY_DIR)
-    message(STATUS "'gurobi' found via manual search. Setting variables...")
-    set(gurobi_INCLUDES ${gurobi_INCLUDE_DIR})
-    set(gurobi_LIBRARIES ${gurobi_LIBRARY_DIR})
+if(gurobi_INCLUDE_DIR AND gurobi_LIBRARY_DIR)
+  message(STATUS "'gurobi' found via manual search. Setting variables...")
+  set(gurobi_INCLUDES ${gurobi_INCLUDE_DIR})
+  set(gurobi_LIBRARIES ${gurobi_LIBRARY_DIR})
 
-    add_library(gurobi INTERFACE IMPORTED GLOBAL)
-    target_link_libraries(gurobi INTERFACE ${gurobi_LIBRARY} $<$<CONFIG:Debug>:${gurobi_DEBUG_LIBRARY}> $<$<CONFIG:Release>:${gurobi_RELEASE_LIBRARY}>)
-    target_include_directories(gurobi INTERFACE ${gurobi_INCLUDE_DIR})
-    target_compile_definitions(gurobi INTERFACE GUROBI)
-    add_library(gurobi::gurobi ALIAS gurobi)
-  else()
-    message(STATUS "'gurobi' package NOT found using manual approach.")
-  endif()
-  #message(STATUS "'gurobi' debug library path set to: ${gurobi_DEBUG_LIBRARY}")
-  #message(STATUS "'gurobi' release library path set to: ${gurobi_RELEASE_LIBRARY}")
-  get_target_property(TARGET_LIBRARY gurobi INTERFACE_LINK_LIBRARIES)
-  message(STATUS "'gurobi' target library path set to: ${TARGET_LIBRARY}")
-  message(STATUS "'gurobi' library path set to: ${gurobi_LIBRARIES}")
-  message(STATUS "'gurobi' include directory set to: ${gurobi_INCLUDES}")
+  add_library(gurobi INTERFACE IMPORTED GLOBAL)
+  target_link_libraries(
+    gurobi
+    INTERFACE ${gurobi_LIBRARY} $<$<CONFIG:Debug>:${gurobi_DEBUG_LIBRARY}>
+              $<$<CONFIG:Release>:${gurobi_RELEASE_LIBRARY}>)
+  target_include_directories(gurobi INTERFACE ${gurobi_INCLUDE_DIR})
+  target_compile_definitions(gurobi INTERFACE GUROBI)
+  add_library(gurobi::gurobi ALIAS gurobi)
+else()
+  message(STATUS "'gurobi' package NOT found using manual approach.")
+endif()
+#message(STATUS "'gurobi' debug library path set to: ${gurobi_DEBUG_LIBRARY}")
+#message(STATUS "'gurobi' release library path set to: ${gurobi_RELEASE_LIBRARY}")
+get_target_property(TARGET_LIBRARY gurobi INTERFACE_LINK_LIBRARIES)
+message(STATUS "'gurobi' target library path set to: ${TARGET_LIBRARY}")
+message(STATUS "'gurobi' library path set to: ${gurobi_LIBRARIES}")
+message(STATUS "'gurobi' include directory set to: ${gurobi_INCLUDES}")
 find_package_handle_standard_args(gurobi DEFAULT_MSG gurobi_INCLUDE_DIR
                                   gurobi_LIBRARY_DIR)
