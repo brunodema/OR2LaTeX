@@ -15,7 +15,7 @@ enum class SymbolType
 class SymbolComponent
 {
   public:
-    SymbolComponent(const base_types::RegexString &str, const SymbolType &type) : name_(str), type(type)
+    SymbolComponent(const base_types::RegexString &_str, const SymbolType &_type) : name_(_str), type(_type)
     {
     }
     virtual ~SymbolComponent() = default;
@@ -25,9 +25,9 @@ class SymbolComponent
     {
         return name_;
     }
-    virtual inline void SetName(const base_types::RegexString &str)
+    virtual inline void SetName(const base_types::RegexString &_str)
     {
-        name_ = str;
+        name_ = _str;
     }
     [[nodiscard]] virtual inline SymbolType GetType() const
     {

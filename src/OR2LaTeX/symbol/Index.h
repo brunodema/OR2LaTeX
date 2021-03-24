@@ -12,8 +12,8 @@ class Index : public SymbolComponent
     Index() : SymbolComponent("", SymbolType::INDEX)
     {
     }
-    Index(const base_types::RegexString &name, const size_t plb, const size_t pub)
-        : SymbolComponent(name, SymbolType::INDEX), lb(plb), ub(pub)
+    Index(const base_types::RegexString &_name, const size_t _plb, const size_t _pub)
+        : SymbolComponent(_name, SymbolType::INDEX), lb(_plb), ub(_pub)
     {
         if (ub < lb)
         {
@@ -22,9 +22,9 @@ class Index : public SymbolComponent
     }
     ~Index() override = default;
 
-    inline bool operator==(const Index &B) const
+    inline bool operator==(const Index &_B) const
     {
-        return this->lb == B.lb && this->ub == B.ub && this->name_ == B.name_;
+        return this->lb == _B.lb && this->ub == _B.ub && this->name_ == _B.name_;
     }
 
     explicit operator base_types::Bounds() const
@@ -53,10 +53,10 @@ class Index : public SymbolComponent
 
 template <> struct std::hash<or2l::Index>
 {
-    std::size_t operator()(const or2l::Index &k) const
+    std::size_t operator()(const or2l::Index &_k) const
     {
         // changed it to be based on their names, which makes sense when thinking
         // about the LaTeX implementation
-        return std::hash<std::string>()(k.GetName());
+        return std::hash<std::string>()(_k.GetName());
     };
 };

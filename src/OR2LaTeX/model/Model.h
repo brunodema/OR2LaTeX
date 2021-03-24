@@ -17,34 +17,34 @@ namespace or2l
 class Model
 {
   public:
-    Model(const base_types::RegexString &name, std::initializer_list<Index> indexes,
-          std::initializer_list<Variable> variables, std::initializer_list<Constraint> constraints);
-    Model(const base_types::RegexString &name) : name_(name)
+    Model(const base_types::RegexString &_name, std::initializer_list<Index> _indexes,
+          std::initializer_list<Variable> _variables, std::initializer_list<Constraint> _constraints);
+    Model(const base_types::RegexString &_name) : name_(_name)
     {
     }
     virtual ~Model() = default;
 
     // symbol
-    [[nodiscard]] SymbolComponent *Get(const base_types::RegexString &str) const;
-    void RemoveSymbol(const base_types::RegexString &str);
-    void AddVariable(const Variable &var);
-    void RemoveVariable(const Variable &var);
-    void MapIndexesFromVariable(const Variable &var);
-    void AddIndex(const Index &index);
-    void RemoveIndex(const Index &index);
-    void AddConstraint(const Constraint &constraint);
-    void RemoveConstraint(const Constraint &constraint);
+    [[nodiscard]] SymbolComponent *Get(const base_types::RegexString &_str) const;
+    void RemoveSymbol(const base_types::RegexString &_str);
+    void AddVariable(const Variable &_var);
+    void RemoveVariable(const Variable &_var);
+    void MapIndexesFromVariable(const Variable &_var);
+    void AddIndex(const Index &_index);
+    void RemoveIndex(const Index &_index);
+    void AddConstraint(const Constraint &_constraint);
+    void RemoveConstraint(const Constraint &_constraint);
 
     // solver objects (variables, constraints)
-    [[nodiscard]] double GetVariable(const Variable &var, const std::vector<std::size_t> &index_values) const
+    [[nodiscard]] double GetVariable(const Variable &_var, const std::vector<std::size_t> &_index_values) const
     {
-        return solver->GetVariable(var, index_values);
+        return solver->GetVariable(_var, _index_values);
     }
 
     // solver
-    inline void DefineSolver(const SolverType type)
+    inline void DefineSolver(const SolverType _type)
     {
-        solver = std::make_unique<OrtoolsSolver>(type);
+        solver = std::make_unique<OrtoolsSolver>(_type);
     }
 #ifdef GUROBI
     inline void DefineSolver(const GRBEnv &env)

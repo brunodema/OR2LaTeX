@@ -22,8 +22,8 @@ enum class ObjectiveExpressionOperatorType
 class MathExpression
 {
   public:
-    MathExpression(const Expression &lhs, const MathExpressionOperatorType eq_type, const Expression &rhs)
-        : lhs(lhs), rhs(rhs), eq_type(eq_type)
+    MathExpression(const Expression &_lhs, const MathExpressionOperatorType _eq_type, const Expression &_rhs)
+        : lhs(_lhs), rhs(_rhs), eq_type(_eq_type)
     {
     }
     virtual ~MathExpression() = default;
@@ -37,7 +37,7 @@ class MathExpression
 class ObjectiveExpression
 {
   public:
-    ObjectiveExpression(ObjectiveExpressionOperatorType type, const Expression &expr) : type(type), expr(expr)
+    ObjectiveExpression(ObjectiveExpressionOperatorType _type, const Expression &_expr) : type(_type), expr(_expr)
     {
     }
     virtual ~ObjectiveExpression() = default;

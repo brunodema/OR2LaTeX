@@ -6,8 +6,8 @@ namespace or2l
 class Constraint : public SymbolComponent
 {
   public:
-    Constraint(const base_types::RegexString &name, const MathExpression &math_expression)
-        : SymbolComponent(name, SymbolType::CONSTRAINT), math_expression(math_expression)
+    Constraint(const base_types::RegexString &_name, const MathExpression &_math_expression)
+        : SymbolComponent(_name, SymbolType::CONSTRAINT), math_expression(_math_expression)
     {
     }
 

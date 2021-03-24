@@ -25,19 +25,19 @@ static std::map<ExceptionType, std::string_view> EXCEPTION_TEXT = {
 class Exception : public std::exception
 {
   public:
-    explicit Exception(const std::exception &e, const std::string &message = "")
+    explicit Exception(const std::exception &_e, const std::string &_message = "")
     {
-        buffer << e.what() << " | " << message << "\n";
+        buffer << _e.what() << " | " << _message << "\n";
     }
 
-    explicit Exception(ExceptionType type)
+    explicit Exception(ExceptionType _type)
     {
-        buffer << "OR2L Exception | " << or2l::EXCEPTION_TEXT.at(type) << "\n";
+        buffer << "OR2L Exception | " << or2l::EXCEPTION_TEXT.at(_type) << "\n";
     }
 
-    explicit Exception(const std::string &message = "")
+    explicit Exception(const std::string &_message = "")
     {
-        buffer << "OR2L Exception | " << message << "\n";
+        buffer << "OR2L Exception | " << _message << "\n";
     }
     ~Exception() override = default;
 

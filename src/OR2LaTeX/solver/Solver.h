@@ -12,10 +12,10 @@
 
 template <class T1, class T2> struct HashPair
 {
-    size_t operator()(const std::pair<T1, T2> &p) const
+    size_t operator()(const std::pair<T1, T2> &_p) const
     {
-        auto hash1 = std::hash<T1>{}(p.first);
-        auto hash2 = std::hash<T2>{}(p.second);
+        auto hash1 = std::hash<T1>{}(_p.first);
+        auto hash2 = std::hash<T2>{}(_p.second);
         // XOR is pottentially dangerous here
         return hash1 ^ hash2;
     }
@@ -24,11 +24,11 @@ template <class T1, class T2> struct HashPair
 using VariableIndexPair = std::pair<or2l::Variable, std::vector<size_t>>;
 struct Comp
 {
-    bool operator()(const VariableIndexPair &l, const VariableIndexPair &r) const
+    bool operator()(const VariableIndexPair &_l, const VariableIndexPair &_r) const
     {
-        if (l.first == r.first)
+        if (_l.first == _r.first)
         {
-            if (l.second == r.second)
+            if (_l.second == _r.second)
             {
                 return true;
             }
@@ -52,8 +52,8 @@ class ISolver
     virtual void ImplementModel() = 0;
     virtual void FreeSolver() = 0;
 
-    virtual double GetVariable(const Variable &var, const std::vector<std::size_t> &index_values) = 0;
-    virtual void AddVariableSet(const Variable &var) = 0;
+    virtual double GetVariable(const Variable &_var, const std::vector<std::size_t> &_index_values) = 0;
+    virtual void AddVariableSet(const Variable &_var) = 0;
     // virtual void RemoveVariable(const Variable& var) = 0;
 
   protected:
@@ -64,9 +64,9 @@ class ISolver
 class OrtoolsSolver : public ISolver
 {
   public:
-    explicit OrtoolsSolver(const SolverType type) : type_(type)
+    explicit OrtoolsSolver(const SolverType _type) : type_(_type)
     {
-        assert((int)type <= SOLVERTYPE_ORTOOLS_MAX);
+        assert((int)_type <= SOLVERTYPE_ORTOOLS_MAX);
         ImplementModel();
     }
     ~OrtoolsSolver() override = default;
@@ -83,15 +83,15 @@ class OrtoolsSolver : public ISolver
         model.reset();
     }
 
-    double GetVariable(const Variable &var, const std::vector<std::size_t> &index_values) override
+    double GetVariable(const Variable &_var, const std::vector<std::size_t> &_index_values) override
     {
-        VariableIndexPair a({var, index_values});
+        VariableIndexPair a({_var, _index_values});
 
         return variable_vec[a]->solution_value();
     }
-    void AddVariableSet(const Variable &var) override
+    void AddVariableSet(const Variable &_var) override
     {
-        const auto indexes = var.GetIndexSizes();
+        const auto indexes = _var.GetIndexSizes();
         auto it = ArrayIterator(indexes);
 
         while (it.HasNext())
@@ -103,18 +103,18 @@ class OrtoolsSolver : public ISolver
                           // therefore reducing the number of references to zero, and making the 'weak_ptr' point to
                           // nothing - or in this case, to some sort of malformed element. I decided to use a normal
                           // pointer in this, so it simply points to nothing if the associated variable gets destroyed
-            switch (var.GetVariableType())
+            switch (_var.GetVariableType())
             {
             case VariableType::CONTINUOUS:
                 var_ptr = model->MakeNumVar(0.00, 100000000,
-                                            var.GetName() + GetCurrentCombinationString(current_combination));
+                                            _var.GetName() + GetCurrentCombinationString(current_combination));
                 break;
             case VariableType::BINARY:
-                var_ptr = model->MakeBoolVar(var.GetName() + GetCurrentCombinationString(current_combination));
+                var_ptr = model->MakeBoolVar(_var.GetName() + GetCurrentCombinationString(current_combination));
                 break;
             case VariableType::INTEGER:
                 var_ptr = model->MakeIntVar(0.00, 100000000,
-                                            var.GetName() + GetCurrentCombinationString(current_combination));
+                                            _var.GetName() + GetCurrentCombinationString(current_combination));
                 break;
             default:
                 throw std::invalid_argument("An invalid variable type was assigned (not CONTINUOUS, "
@@ -123,7 +123,7 @@ class OrtoolsSolver : public ISolver
                 break;
             }
             variable_vec.emplace(std::pair<VariableIndexPair, operations_research::MPVariable *>(
-                VariableIndexPair({var, current_combination}), var_ptr));
+                VariableIndexPair({_var, current_combination}), var_ptr));
         }
     }
     // void RemoveVariable(const Variable& var) override {}

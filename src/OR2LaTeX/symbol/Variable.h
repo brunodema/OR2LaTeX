@@ -20,21 +20,21 @@ class Variable : public SymbolComponent
   public:
     friend struct std::hash<Variable>;
     Variable() : SymbolComponent("", SymbolType::VARIABLE){};
-    explicit Variable(const base_types::RegexString &name, VariableType var_type = VariableType::CONTINUOUS,
-                      std::initializer_list<Index> indexes = {});
+    explicit Variable(const base_types::RegexString &_name, VariableType _var_type = VariableType::CONTINUOUS,
+                      std::initializer_list<Index> _indexes = {});
     ~Variable() override = default;
 
-    inline bool operator==(const Variable &B) const
+    inline bool operator==(const Variable &_B) const
     {
-        return this->name_ == B.name_ && this->indexes_ == B.indexes_;
+        return this->name_ == _B.name_ && this->indexes_ == _B.indexes_;
     }
-    inline bool operator<(const Variable &A) const
+    inline bool operator<(const Variable &_A) const
     {
-        return this->name_ < A.name_;
+        return this->name_ < _A.name_;
     }
 
     std::size_t GetNumberOfIndexes();
-    Index GetIndex(const base_types::RegexString &key) const;
+    Index GetIndex(const base_types::RegexString &_key) const;
     std::vector<size_t> GetIndexSizes() const;
     std::vector<Index> GetIndexes() const;
     VariableType GetVariableType() const;
@@ -48,10 +48,10 @@ class Variable : public SymbolComponent
 
 template <> struct std::hash<or2l::Variable>
 {
-    std::size_t operator()(const or2l::Variable &k) const
+    std::size_t operator()(const or2l::Variable &_k) const
     {
         // changed it to be based on their names, which makes sense when thinking
         // about the LaTeX implementation
-        return std::hash<std::string>()(k.GetName());
+        return std::hash<std::string>()(_k.GetName());
     };
 };

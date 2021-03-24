@@ -19,9 +19,9 @@ class SolverTypeDictionary
     static std::map<SolverType, std::string> types;
 
   public:
-    [[nodiscard]] inline static std::string GetType(const SolverType ort_solver_type)
+    [[nodiscard]] inline static std::string GetType(const SolverType _ort_solver_type)
     {
-        return types.at(ort_solver_type);
+        return types.at(_ort_solver_type);
     }
 };
 } // namespace or2l
