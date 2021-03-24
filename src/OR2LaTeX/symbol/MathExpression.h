@@ -34,13 +34,13 @@ class MathExpression
     MathExpressionOperatorType eq_type = MathExpressionOperatorType::EQUAL;
 };
 
-class ObjectiveWrapper
+class ObjectiveExpression
 {
   public:
-    ObjectiveWrapper(ObjectiveExpressionOperatorType type, const Expression &expr) : type(type), expr(expr)
+    ObjectiveExpression(ObjectiveExpressionOperatorType type, const Expression &expr) : type(type), expr(expr)
     {
     }
-    virtual ~ObjectiveWrapper() = default;
+    virtual ~ObjectiveExpression() = default;
 
   private:
     ObjectiveExpressionOperatorType type = ObjectiveExpressionOperatorType::MINIMIZE;
