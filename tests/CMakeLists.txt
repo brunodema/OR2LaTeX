@@ -21,8 +21,7 @@ add_test(NAME or2lbinding COMMAND test-or2lbinding)
 # test-new-expression-operators
 add_executable(test-new-expression-operators test-new-expression-operators.cpp)
 target_link_libraries(test-new-expression-operators or2l_types gtest)
-add_test(NAME new-expression-operators
-         COMMAND test-test-new-expression-operators)
+add_test(NAME new-expression-operators COMMAND test-new-expression-operators)
 
 #test-memory
 add_executable(test-memory test-memory.cpp)

@@ -1,6 +1,7 @@
 #pragma once
 #include "Bounds.h"
 #include "auxiliary/Auxiliary.h"
+#include "auxiliary/Exception.h"
 #include "symbol/Variable.h"
 #include <absl/hash/hash.h>
 #include <initializer_list>
@@ -12,66 +13,102 @@ namespace or2l
 {
 using base_types::Bounds;
 
-class ExpressionCoefficient
+struct ExpressionCoefficient
 {
   public:
+    ExpressionCoefficient() = default;
     ExpressionCoefficient(const Variable &_var) : variable(_var), coefficient(1.00){};
+    ExpressionCoefficient(const double _coefficient, const Variable &_var)
+        : variable(_var), coefficient(_coefficient){};
     ExpressionCoefficient(const double &_value) : coefficient(_value){};
 
-  private:
+    bool operator==(const ExpressionCoefficient &_other) const
+    {
+        return this->variable == _other.variable && this->coefficient == _other.coefficient;
+    }
+    template <typename H> friend H AbslHashValue(H _h, const ExpressionCoefficient &_exprcoeff);
+
     Variable variable = {};
     double coefficient = 0.00;
 };
 
-class ExpressionV2
+template <typename H> H AbslHashValue(H _h, const or2l::ExpressionCoefficient &_exprcoeff)
+{
+    return H::combine(std::move(_h), _exprcoeff.variable, _exprcoeff.coefficient);
+}
+
+class InnerExpression
 {
   public:
-    ExpressionV2() = default;
-
-  private:
-    std::unordered_map<ExpressionCoefficient, double, absl::Hash<Variable>> coefficient_map = {};
-    double scalar_coefficient = 0.00;
-};
-
-namespace operators // should include all other operators in the future
-{
-enum class ExpressionOperatorType
-{
-    SCALAR,
-    SUMMATION
-};
-class ExpressionOperator
-{
-  public:
-    // implement custom rules for bounds in the future
-    ExpressionOperator() = default;
-    ExpressionOperator(const ExpressionOperatorType _type, const ExpressionV2 &_expr,
-                       const std::initializer_list<Index> _indexes)
-        : type(_type), inner_expression(_expr), indexes(_indexes){};
-
-    bool IsValid() const
+    InnerExpression() = default;
+    InnerExpression(const ExpressionCoefficient &_exprcoeff)
     {
+        coefficient_map.at(_exprcoeff.variable) = _exprcoeff.coefficient;
     }
 
-    operators::ExpressionOperatorType GetType() const
+    friend InnerExpression operator+(const ExpressionCoefficient &_a, const ExpressionCoefficient &_b);
+
+    double operator[](const Variable &_var) const
     {
-        return type;
-    }
-    ExpressionV2 GetExpression() const
-    {
-        return inner_expression;
-    }
-    std::vector<Index> GetIndexes() const
-    {
-        return indexes;
+        return coefficient_map.at(_var);
     }
 
   private:
-    operators::ExpressionOperatorType type = operators::ExpressionOperatorType::SCALAR;
-    ExpressionV2 inner_expression = {};
-    std::vector<Index> indexes = {};
+    std::unordered_map<Variable, double, absl::Hash<Variable>> coefficient_map = {};
 };
-} // namespace operators
+
+inline InnerExpression operator+(const ExpressionCoefficient &_a, const ExpressionCoefficient &_b)
+{
+    InnerExpression ret;
+    if (_a.variable == _b.variable)
+    {
+        ret.coefficient_map[_a.variable] = _a.coefficient + _b.coefficient;
+        return ret;
+    }
+    ret.coefficient_map[_a.variable] = _a.coefficient;
+    ret.coefficient_map[_b.variable] = _b.coefficient;
+    return ret;
+}
+
+// namespace operators // should include all other operators in the future
+// {
+// enum class ExpressionOperatorType
+// {
+//     SCALAR,
+//     SUMMATION
+// };
+// class ExpressionOperator
+// {
+//   public:
+//     // implement custom rules for bounds in the future
+//     ExpressionOperator() = default;
+//     ExpressionOperator(const ExpressionOperatorType _type, InnerExpression _expr,
+//                        const std::initializer_list<Index> _indexes)
+//         : type(_type), inner_expression(std::move(_expr)), indexes(_indexes){};
+
+//     bool IsValid() const
+//     {
+//     }
+
+//     operators::ExpressionOperatorType GetType() const
+//     {
+//         return type;
+//     }
+//     InnerExpression GetExpression() const
+//     {
+//         return inner_expression;
+//     }
+//     std::vector<Index> GetIndexes() const
+//     {
+//         return indexes;
+//     }
+
+//   private:
+//     operators::ExpressionOperatorType type = operators::ExpressionOperatorType::SCALAR;
+//     InnerExpression inner_expression = {};
+//     std::vector<Index> indexes = {};
+// };
+//} // namespace or2l
 
 // -----------------------------------------------------------------
 
@@ -212,14 +249,18 @@ class Expression
         return *this;
     }
 
+    // cross-variable sum/subtraction
     friend Expression operator+(const Variable &_var1, const Variable &_var2);
-    friend Expression operator+(const Variable &_var1, double _coeff);
-    friend Expression operator+(double _coeff, const Variable &_var);
     friend Expression operator-(const Variable &_var1, const Variable &_var2);
+    // variable-coefficient sum/subtraction
+    friend Expression operator+(const Variable &_var, double _coeff);
     friend Expression operator-(const Variable &_var, double _coeff);
+    friend Expression operator+(double _coeff, const Variable &_var);
     friend Expression operator-(double _coeff, const Variable &_var);
+    // variable-coefficient multiplication
     friend Expression operator*(double _coeff, const Variable &_var);
     friend Expression operator*(const Variable &_var, double _coeff);
+    // variable-coefficient division
     friend Expression operator/(const Variable &_var, double _coeff);
     friend Expression operator/(double _coeff, const Variable &_var);
 
