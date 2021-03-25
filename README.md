@@ -23,11 +23,11 @@ Given that one of the core ideas is to allow developers to use multiple solver i
 The current dependencies of the project are the following:
 
 * [BaseTypesLib](https://github.com/brunodema/BaseTypesLib): The goal of this library is to provide common types for general usage. Contains wrappers for regex classes, multi-dimensional arrays, test frameworks, and so on. This library is also developed by me, which means that it is pretty "hand-made" :)
-* 
+
 * [or-tools](https://github.com/google/or-tools): *If a library for something already exists, it is probably better than whatever you were planning to do in the first place.* OK, this sentence was made up by myself, but I find it pretty valid for this case. OR-Tools is a library developed by Google + its community, which is designed to offer pretty much the same goal of point (1) of this project. Not only this library offer wrappers for multiple solvers (seriously, there is a bunch of solvers comtemplated by this library), but it also presents actual algorithms for well-known problems, like TSPs, VRP, Bin-packing, etc. One major point about this library is that the compiled code can be very "heavy" (storage-wise), and that its releases contain (currently), only release mode binaries. [Let's see if this change in the future](https://github.com/google/or-tools/issues/2351).
-* 
+
 * [GoogleTest](https://github.com/google/googletest): One of the most popular testing frameworks, GoogleTest is starting to be implemented in this project in order to avoid issues with assertions and testing in general. Given the popularity of this library (for good reasons), this will eventually replace the hand-made testing framework from `BaseTypesLib`.
-* 
+
 * (optional) [Gurobi](https://www.gurobi.com/): Given my previous experiences with Gurobi, initial tests are also being designed with its academic library, in order to test the 'cross-solver' concept of this library. It is important to note that this library aims to directly wrap the Gurobi solver, meaning that it does not use the `or-tools` wrapper for it (this might change in the future), which can potentially impact performance in a good way.
 
 ## Installing
