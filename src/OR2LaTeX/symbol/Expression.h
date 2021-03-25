@@ -47,8 +47,18 @@ class InnerExpression
     }
 
     friend InnerExpression operator+(const ExpressionCoefficient &_a, const ExpressionCoefficient &_b);
+    inline InnerExpression operator+(const ExpressionCoefficient &_a)
+    {
+        InnerExpression ret;
+        ret[_a.variable] += _a.coefficient;
+        return ret;
+    }
 
     double operator[](const Variable &_var) const
+    {
+        return coefficient_map.at(_var);
+    }
+    double &operator[](const Variable &_var)
     {
         return coefficient_map.at(_var);
     }
@@ -69,6 +79,39 @@ inline InnerExpression operator+(const ExpressionCoefficient &_a, const Expressi
     ret.coefficient_map[_b.variable] = _b.coefficient;
     return ret;
 }
+
+namespace operators // should include all other operators in the future
+{
+enum class ExpressionOperatorType
+{
+    SUMMATION
+};
+class IExpressionOperator
+{
+  public:
+    IExpressionOperator() = default;
+    IExpressionOperator(const operators::ExpressionOperatorType _type, const InnerExpression &_inner_expr,
+                        const std::initializer_list<Index> _expr_indexes)
+        : type(_type), inner_expression(std::move(_inner_expr)), expression_indexes(_expr_indexes)
+    {
+    }
+    virtual ~IExpressionOperator() = default;
+
+  protected:
+    operators::ExpressionOperatorType type = {};
+    InnerExpression inner_expression = {};
+    std::vector<Index> expression_indexes = {};
+};
+
+class ExpressionOperator : IExpressionOperator
+{
+  public:
+    ExpressionOperator() = default;
+    ExpressionOperator(operators::ExpressionOperatorType _type, const InnerExpression &_inner_expr,
+                       std::initializer_list<Index> _expr_indexes)
+        : IExpressionOperator(_type, std::move(_inner_expr), _expr_indexes){};
+};
+} // namespace operators
 
 // namespace operators // should include all other operators in the future
 // {

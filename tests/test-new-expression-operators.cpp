@@ -41,7 +41,7 @@ TEST(NewExpressionOperators, EnsureThatVariablesAreCorrectlyHashed)
     ASSERT_EQ(map.size(), 3);
 }
 
-TEST(NewExpressionOperators, InnerExpressionOperators)
+TEST(NewExpressionOperators, InnerExpressionSumOperators)
 {
     Variable x("x");
     Variable y("y");
@@ -54,6 +54,7 @@ TEST(NewExpressionOperators, InnerExpressionOperators)
     auto test1 = a + b;
     auto test2 = a + c;
     auto test3 = a + d;
+    auto test4 = a + b + c + d;
 
     ASSERT_EQ(test1[x], 4.50);
 
@@ -62,6 +63,10 @@ TEST(NewExpressionOperators, InnerExpressionOperators)
 
     ASSERT_EQ(test3[x], 3.50);
     ASSERT_EQ(test3[{}], 7.00);
+
+    ASSERT_EQ(test4[x], 4.50);
+    ASSERT_EQ(test4[y], 1.00);
+    ASSERT_EQ(test4[{}], 7.00);
 }
 
 int main(int argc, char **argv)
