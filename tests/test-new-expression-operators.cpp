@@ -1,11 +1,14 @@
-#include "symbol/Expression.h"
 #include "symbol/Index.h"
+#include "symbol/NewExpression.h"
 #include "symbol/Variable.h"
 #include "gtest/gtest.h"
 
+using or2l::ExpandedExpression;
 using or2l::ExpressionCoefficient;
 using or2l::Index;
+using or2l::InnerExpression;
 using or2l::Variable;
+using or2l::operators::ExpressionOperatorType;
 
 TEST(NewExpressionOperators, EnsureThatVariablesAreCorrectlyHashed)
 {
@@ -53,7 +56,7 @@ TEST(NewExpressionOperators, InnerExpressionSumOperators)
 
     auto test1 = a + b;
     auto test2 = a + c;
-    auto test3 = a + d;
+    auto test3 = a + d + 11.25;
     auto test4 = a + b + c + d;
 
     ASSERT_EQ(test1[x], 4.50);
@@ -62,11 +65,27 @@ TEST(NewExpressionOperators, InnerExpressionSumOperators)
     ASSERT_EQ(test2[y], 1.00);
 
     ASSERT_EQ(test3[x], 3.50);
-    ASSERT_EQ(test3[{}], 7.00);
+    ASSERT_EQ(test3[{}], 18.25);
 
     ASSERT_EQ(test4[x], 4.50);
     ASSERT_EQ(test4[y], 1.00);
     ASSERT_EQ(test4[{}], 7.00);
+}
+
+TEST(NewExpressionOperators, ExpandedExpressionTests)
+{
+    Index i("i", 0, 20);
+    Index j("i", 0, 10);
+    Variable x("x", or2l::VariableType::CONTINUOUS, {i, j});
+    Variable y("y", or2l::VariableType::CONTINUOUS, {i});
+
+    InnerExpression inner1(x);
+    InnerExpression inner2(y);
+    // InnerExpression inner3 = 6.00 + x;
+
+    auto test1 = inner1 + inner2;
+    ASSERT_EQ(test1[x], 1.00);
+    ASSERT_EQ(test1[y], 1.00);
 }
 
 int main(int argc, char **argv)
