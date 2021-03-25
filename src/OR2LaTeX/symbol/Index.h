@@ -22,6 +22,7 @@ class Index : public SymbolComponent
     }
     ~Index() override = default;
 
+    template <typename H> friend H AbslHashValue(H _h, const Index &_index);
     inline bool operator==(const Index &_B) const
     {
         return this->lb == _B.lb && this->ub == _B.ub && this->name_ == _B.name_;
@@ -49,4 +50,10 @@ class Index : public SymbolComponent
     size_t lb = 0;
     size_t ub = 0;
 };
+
+template <typename H> H AbslHashValue(H _h, const or2l::Index &_index)
+{
+    return H::combine(std::move(_h), _index.name_, _index.lb, _index.ub);
+}
+
 } // namespace or2l
