@@ -56,12 +56,6 @@ class InnerExpression
     }
 
     friend InnerExpression operator+(const ExpressionCoefficient &_a, const ExpressionCoefficient &_b);
-    // inline InnerExpression operator+(const ExpressionCoefficient &_a) const
-    // {
-    //     InnerExpression ret;
-    //     ret[_a.variable] += _a.coefficient;
-    //     return ret;
-    // }
     inline InnerExpression operator+(const InnerExpression &_a) const
     {
         InnerExpression ret;
@@ -144,20 +138,40 @@ class IExpandedExpression
     IExpandedExpression() = default;
     IExpandedExpression(const operators::ExpressionOperatorType _type, const InnerExpression &_inner_expr,
                         const std::initializer_list<Index> _expr_indexes)
-        : type(_type), inner_expression(std::move(_inner_expr)), expression_indexes(_expr_indexes)
+        : type(_type), inner_expression(std::move(_inner_expr)), expression_indexes(std::move(_expr_indexes)),
+          coefficient(1.00)
+    {
+    }
+    IExpandedExpression(const double _coefficient, const operators::ExpressionOperatorType _type,
+                        const InnerExpression &_inner_expr, const std::initializer_list<Index> _expr_indexes)
+        : type(_type), inner_expression(std::move(_inner_expr)), expression_indexes(std::move(_expr_indexes)),
+          coefficient(_coefficient)
     {
     }
     virtual ~IExpandedExpression() = default;
 
+    virtual operators::ExpressionOperatorType GetType() const
+    {
+        return type;
+    }
     virtual InnerExpression GetInnerExpression() const
     {
         return inner_expression;
+    }
+    virtual std::vector<Index> GetExpressionIndexes() const
+    {
+        return expression_indexes;
+    }
+    virtual double GetCoefficient() const
+    {
+        return coefficient;
     }
 
   protected:
     operators::ExpressionOperatorType type = {};
     InnerExpression inner_expression = {};
     std::vector<Index> expression_indexes = {};
+    double coefficient = 0.00;
 };
 
 class ExpandedExpression : public IExpandedExpression
@@ -166,7 +180,10 @@ class ExpandedExpression : public IExpandedExpression
     ExpandedExpression() = default;
     ExpandedExpression(operators::ExpressionOperatorType _type, const InnerExpression &_inner_expr,
                        std::initializer_list<Index> _expr_indexes)
-        : IExpandedExpression(_type, std::move(_inner_expr), _expr_indexes){};
+        : IExpandedExpression(1.00, _type, std::move(_inner_expr), _expr_indexes){};
+    ExpandedExpression(const double _coefficient, operators::ExpressionOperatorType _type,
+                       const InnerExpression &_inner_expr, std::initializer_list<Index> _expr_indexes)
+        : IExpandedExpression(_coefficient, _type, std::move(_inner_expr), _expr_indexes){};
 
     bool operator==(const ExpandedExpression &_other) const
     {
@@ -194,8 +211,28 @@ class NewExpression
         expandable_expression[_expanded_expr] = 1.00;
     }
 
+    friend NewExpression operator+(const ExpandedExpression &_a, const ExpandedExpression &_b);
+
   private:
     InnerExpression inner_expression = {};
     std::unordered_map<ExpandedExpression, double, absl::Hash<ExpandedExpression>> expandable_expression = {};
 };
+
+inline NewExpression operator+(const ExpandedExpression &_a, const ExpandedExpression &_b)
+{
+    // attention: the assumptions here are that (1) the type of the operation match, after all it does not make sense to
+    // add a 'Summation' to a 'Product Notation'; (2) the indexes of the operator are EXACTLY the same. These
+    // assumptions might need to be reviewed in the future.
+    NewExpression ret;
+    if (_a.GetType() == _b.GetType() && _a.GetExpressionIndexes() == _b.GetExpressionIndexes())
+    {
+        auto expression_indexes = _a.GetExpressionIndexes(); // only way to make it work
+        ret.expandable_expression[_a] = _a.GetCoefficient() + _b.GetCoefficient();
+        return ret;
+    }
+    ret.expandable_expression[_a] = _a.GetCoefficient();
+    ret.expandable_expression[_b] = _b.GetCoefficient();
+    return ret;
+}
+
 } // namespace or2l

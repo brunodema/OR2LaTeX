@@ -70,6 +70,13 @@ TEST(NewExpressionOperators, InnerExpressionSumOperators)
     ASSERT_EQ(test4[x], 4.50);
     ASSERT_EQ(test4[y], 1.00);
     ASSERT_EQ(test4[{}], 7.00);
+
+    InnerExpression inner1(x + y + 60);
+    InnerExpression inner2(y + 30);
+    auto test5 = inner1 + inner2;
+    ASSERT_EQ(test5[x], 1.00);
+    ASSERT_EQ(test5[y], 2.00);
+    ASSERT_EQ(test5[{}], 90.00);
 }
 
 TEST(NewExpressionOperators, ExpandedExpressionTests)
@@ -79,13 +86,11 @@ TEST(NewExpressionOperators, ExpandedExpressionTests)
     Variable x("x", or2l::VariableType::CONTINUOUS, {i, j});
     Variable y("y", or2l::VariableType::CONTINUOUS, {i});
 
-    InnerExpression inner1(x);
-    InnerExpression inner2(y);
-    // InnerExpression inner3 = 6.00 + x;
+    ExpandedExpression exp_expr1(ExpressionOperatorType::SUMMATION, x + y + 1, {i, j});
+    ExpandedExpression exp_expr2(ExpressionOperatorType::SUMMATION, y + x + 1, {i, j});
+    ExpandedExpression exp_expr3(ExpressionOperatorType::SUMMATION, x, {i, j});
 
-    auto test1 = inner1 + inner2;
-    ASSERT_EQ(test1[x], 1.00);
-    ASSERT_EQ(test1[y], 1.00);
+    auto new_expr = exp_expr2 + exp_expr3;
 }
 
 int main(int argc, char **argv)
