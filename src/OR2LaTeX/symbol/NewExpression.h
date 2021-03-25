@@ -78,11 +78,11 @@ class InnerExpression
 
     double operator[](const Variable &_var) const
     {
-        return coefficient_map.at(_var);
+        return this->coefficient_map.at(_var);
     }
     double &operator[](const Variable &_var)
     {
-        return coefficient_map.at(_var);
+        return coefficient_map[_var];
     }
 
   private:
