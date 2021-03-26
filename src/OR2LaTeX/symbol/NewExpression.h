@@ -222,7 +222,7 @@ class NewExpression
     NewExpression(const InnerExpression &_inner_expr) : inner_expression(std::move(_inner_expr))
     {
     }
-    NewExpression(const ExpandedExpression &_expanded_expr) : inner_expression(_expanded_expr.GetInnerExpression())
+    NewExpression(const ExpandedExpression &_expanded_expr)
     {
         expandable_expression[_expanded_expr] = 1.00;
     }
