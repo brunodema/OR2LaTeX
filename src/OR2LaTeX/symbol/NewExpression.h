@@ -3,7 +3,6 @@
 #include "Variable.h"
 #include "absl/hash/hash.h"
 #include "symbol/Index.h"
-#include <c++/9/bits/c++config.h>
 #include <cstddef>
 #include <iterator>
 #include <vector>
