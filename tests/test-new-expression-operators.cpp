@@ -90,7 +90,13 @@ TEST(NewExpressionOperators, ExpandedExpressionTests)
     ExpandedExpression exp_expr2(ExpressionOperatorType::SUMMATION, y + x + 1, {i, j});
     ExpandedExpression exp_expr3(ExpressionOperatorType::SUMMATION, x, {i, j});
 
-    auto new_expr = exp_expr2 + exp_expr3;
+    auto test1 = exp_expr1 + exp_expr2 + exp_expr3;
+    ASSERT_EQ(test1.GetExpandableExpressionCoeff(exp_expr1), 2.00);
+    ASSERT_EQ(test1.GetExpandableExpressionCoeff(exp_expr3), 1.00);
+    ASSERT_EQ(test1.GetExpandableExpressionCoeff({}), 0.00);
+    ASSERT_EQ(test1[y], 0.00);
+    ASSERT_EQ(test1[x], 0.00);
+    ASSERT_EQ(test1[{}], 0.00);
 }
 
 int main(int argc, char **argv)

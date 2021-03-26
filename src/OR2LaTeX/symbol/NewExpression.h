@@ -2,6 +2,11 @@
 #include "Bounds.h"
 #include "Variable.h"
 #include "absl/hash/hash.h"
+#include "symbol/Index.h"
+#include <c++/9/bits/c++config.h>
+#include <cstddef>
+#include <iterator>
+#include <vector>
 
 namespace or2l
 {
@@ -70,13 +75,25 @@ class InnerExpression
         return ret;
     }
 
-    double operator[](const Variable &_var) const
-    {
-        return this->coefficient_map.at(_var);
-    }
+
     double &operator[](const Variable &_var)
     {
         return coefficient_map[_var];
+    }
+
+    std::size_t Size() const
+    {
+        return this->coefficient_map.size();
+    }
+
+    using Iterator = std::unordered_map<Variable, double, absl::Hash<Variable>>::const_iterator;
+    Iterator begin() const
+    {
+        return this->coefficient_map.begin();
+    }
+    Iterator end() const
+    {
+        return this->coefficient_map.end();
     }
 
   private:
@@ -212,10 +229,46 @@ class NewExpression
     }
 
     friend NewExpression operator+(const ExpandedExpression &_a, const ExpandedExpression &_b);
+    NewExpression operator+(const NewExpression &_a) const
+    {
+        NewExpression ret;
+        for (const auto &pair : this->inner_expression)
+        {
+            ret[pair.first] += pair.second;
+        }
+        for (const auto &pair : _a.inner_expression)
+        {
+            ret[pair.first] += pair.second;
+        }
+        for (const auto &pair : this->expandable_expression)
+        {
+            ret.expandable_expression[pair.first] += pair.second;
+        }
+        for (const auto &pair : _a.expandable_expression)
+        {
+            ret.expandable_expression[pair.first] += pair.second;
+        }
+        return ret;
+    }
+
+
+    double &operator[](const Variable &_var)
+    {
+        return inner_expression[_var];
+    }
+    double GetExpandableExpressionCoeff(const ExpandedExpression &_exp_expr) const
+    {
+        return this->expandable_expression.at(_exp_expr);
+    }
+    double GetExpandableExpressionCoeff(const ExpandedExpression &_exp_expr)
+    {
+        return this->expandable_expression[_exp_expr];
+    }
 
   private:
     InnerExpression inner_expression = {};
-    std::unordered_map<ExpandedExpression, double, absl::Hash<ExpandedExpression>> expandable_expression = {};
+    using ExpExprMap = std::unordered_map<ExpandedExpression, double, absl::Hash<ExpandedExpression>>;
+    ExpExprMap expandable_expression = {};
 };
 
 inline NewExpression operator+(const ExpandedExpression &_a, const ExpandedExpression &_b)
@@ -234,5 +287,4 @@ inline NewExpression operator+(const ExpandedExpression &_a, const ExpandedExpre
     ret.expandable_expression[_b] = _b.GetCoefficient();
     return ret;
 }
-
 } // namespace or2l
