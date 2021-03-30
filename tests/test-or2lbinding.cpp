@@ -37,7 +37,7 @@ TEST(VariableBinding, Test1)
     model.DefineSolver(SolverType::ORTOOLS_CBC);
     model.ImplementModel();
 
-    EXPECT_NEAR(model.GetVariable(x, {0, 0}), 0.00, 0.01);
+
 }
 
 int main(int argc, char** argv)
