@@ -7,11 +7,11 @@
 
 namespace or2l
 {
-class IndexedCoefficient
+class IndexedSymbol
 {
   public:
-    IndexedCoefficient() = default;
-    IndexedCoefficient(std::initializer_list<Index> _indexes)
+    IndexedSymbol() = default;
+    IndexedSymbol(std::initializer_list<Index> _indexes)
     {
         for (const auto& index : _indexes)
         {
@@ -51,7 +51,7 @@ enum class VariableType
     BINARY
 };
 
-class Variable : public Symbol, public IndexedCoefficient
+class Variable : public Symbol, public IndexedSymbol
 {
   public:
     Variable() : Symbol("", SymbolType::VARIABLE){};
