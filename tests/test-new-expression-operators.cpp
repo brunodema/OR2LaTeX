@@ -7,6 +7,7 @@ using or2l::ExpandedExpression;
 using or2l::ExpressionCoefficient;
 using or2l::Index;
 using or2l::InnerExpression;
+using or2l::NewExpression;
 using or2l::Variable;
 using or2l::operators::ExpressionOperatorType;
 
@@ -79,10 +80,10 @@ TEST(NewExpressionOperators, InnerExpressionSumOperators)
     ASSERT_EQ(test5[{}], 90.00);
 }
 
-TEST(NewExpressionOperators, ExpandedExpressionTests)
+TEST(NewExpressionOperators, ExpandedExpressionTests1)
 {
     Index i("i", 0, 20);
-    Index j("i", 0, 10);
+    Index j("j", 0, 10);
     Variable x("x", or2l::VariableType::CONTINUOUS, {i, j});
     Variable y("y", or2l::VariableType::CONTINUOUS, {i});
 
@@ -98,6 +99,34 @@ TEST(NewExpressionOperators, ExpandedExpressionTests)
     ASSERT_EQ(test1[x], 0.00);
     ASSERT_EQ(test1[{}], 0.00);
 }
+
+TEST(NewExpressionOperators, NewExpressionTest)
+{
+    Index i("i", 0, 3);
+    Index j("j", 0, 6);
+    Variable x("x", or2l::VariableType::CONTINUOUS, {i, j});
+    Variable y("y", or2l::VariableType::CONTINUOUS, {i});
+
+    NewExpression expr1(x + y);
+    NewExpression expr2(7.00 + x);
+    NewExpression expr3(y + y + y + x + 3.00);
+    ExpandedExpression expr4(ExpressionOperatorType::SUMMATION, x, {i, j});
+    ExpandedExpression expr5(ExpressionOperatorType::SUMMATION, x, {i, j});
+    ExpandedExpression expr6(ExpressionOperatorType::SUMMATION, x + y, {i, j});
+
+    auto test1 = expr1 + expr2 + expr3 + expr4 + expr5 + expr6;
+
+    ASSERT_EQ(test1[x], 3.00);
+    ASSERT_EQ(test1[y], 4.00);
+    ASSERT_EQ(test1[{}], 10.00);
+    ASSERT_EQ(test1.GetExpandableExpressionCoeff(expr4), 2.00);
+    ASSERT_EQ(test1.GetExpandableExpressionCoeff(expr5), 2.00);
+    ASSERT_EQ(test1.GetExpandableExpressionCoeff(expr6), 1.00);
+
+    //auto test1 = expr1 + expr2 + expr3 + expr4 + x + y + 5.00;
+}
+
+
 
 int main(int argc, char **argv)
 {
