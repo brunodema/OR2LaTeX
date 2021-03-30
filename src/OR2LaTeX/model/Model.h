@@ -25,7 +25,7 @@ class Model
     virtual ~Model() = default;
 
     // symbol
-    [[nodiscard]] SymbolComponent *Get(const base_types::RegexString &_str) const;
+    [[nodiscard]] Symbol *Get(const base_types::RegexString &_str) const;
     void RemoveSymbol(const base_types::RegexString &_str);
     void AddVariable(const Variable &_var);
     void RemoveVariable(const Variable &_var);
@@ -79,6 +79,6 @@ class Model
   protected:
     base_types::RegexString name_ = "";
     std::unique_ptr<ISolver> solver;
-    std::map<base_types::RegexString, std::unique_ptr<SymbolComponent>> symbol_map_ = {};
+    std::map<base_types::RegexString, std::unique_ptr<Symbol>> symbol_map_ = {};
 }; // namespace or2l
 } // namespace or2l

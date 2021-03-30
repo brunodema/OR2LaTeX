@@ -26,7 +26,7 @@ using or2l::Index;
 using or2l::MathExpression;
 using or2l::MathExpressionOperatorType;
 using or2l::Model;
-using or2l::SymbolComponent;
+using or2l::Symbol;
 using or2l::SymbolType;
 using or2l::Variable;
 using or2l::VariableType;
@@ -277,9 +277,9 @@ std::vector<std::function<void()>> ModuleTester::tests = {
         // test if function that use 'RegexString' have the regex on the
         // constructors working
         Variable var1("var1", VariableType::CONTINUOUS);
-        const SymbolComponent &symb1(var1);
+        const Symbol &symb1(var1);
 
-        ASSERT_THROW(SymbolComponent symb2("$var1", SymbolType::VARIABLE), std::invalid_argument);
+        ASSERT_THROW(Symbol symb2("$var1", SymbolType::VARIABLE), std::invalid_argument);
     },
     []() {
         std::unique_ptr<Model> model = std::make_unique<Model>("ValidName");

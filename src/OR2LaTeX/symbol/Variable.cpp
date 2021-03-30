@@ -4,7 +4,7 @@ namespace or2l
 {
 Variable::Variable(const base_types::RegexString &_name, const VariableType _var_type,
                    const std::initializer_list<Index> _indexes)
-    : SymbolComponent(_name, SymbolType::VARIABLE), variable_type_(_var_type)
+    : Symbol(_name, SymbolType::VARIABLE), variable_type_(_var_type)
 {
     for (auto &&index : _indexes)
     {

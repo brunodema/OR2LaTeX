@@ -6,14 +6,14 @@
 
 namespace or2l
 {
-class Index : public SymbolComponent
+class Index : public Symbol
 {
   public:
-    Index() : SymbolComponent("", SymbolType::INDEX)
+    Index() : Symbol("", SymbolType::INDEX)
     {
     }
     Index(const base_types::RegexString &_name, const size_t _plb, const size_t _pub)
-        : SymbolComponent(_name, SymbolType::INDEX), lb(_plb), ub(_pub)
+        : Symbol(_name, SymbolType::INDEX), lb(_plb), ub(_pub)
     {
         if (ub < lb)
         {

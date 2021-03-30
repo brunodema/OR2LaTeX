@@ -3,11 +3,11 @@
 
 namespace or2l
 {
-class Constraint : public SymbolComponent
+class Constraint : public Symbol
 {
   public:
     Constraint(const base_types::RegexString &_name, const MathExpression &_math_expression)
-        : SymbolComponent(_name, SymbolType::CONSTRAINT), math_expression(_math_expression)
+        : Symbol(_name, SymbolType::CONSTRAINT), math_expression(_math_expression)
     {
     }
 

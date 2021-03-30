@@ -14,10 +14,10 @@ enum class VariableType
     BINARY
 };
 
-class Variable : public SymbolComponent
+class Variable : public Symbol
 {
   public:
-    Variable() : SymbolComponent("", SymbolType::VARIABLE){};
+    Variable() : Symbol("", SymbolType::VARIABLE){};
     explicit Variable(const base_types::RegexString &_name, VariableType _var_type = VariableType::CONTINUOUS,
                       std::initializer_list<Index> _indexes = {});
     ~Variable() override = default;

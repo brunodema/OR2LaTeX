@@ -11,13 +11,13 @@ enum class SymbolType
     CONSTRAINT
 };
 
-class SymbolComponent
+class Symbol
 {
   public:
-    SymbolComponent(const base_types::RegexString &_str, const SymbolType &_type) : name_(_str), type(_type)
+    Symbol(const base_types::RegexString &_str, const SymbolType &_type) : name_(_str), type(_type)
     {
     }
-    virtual ~SymbolComponent() = default;
+    virtual ~Symbol() = default;
 
     // virtual std::unique_ptr<SymbolComponent> operator()();
     [[nodiscard]] virtual inline base_types::RegexString GetName() const

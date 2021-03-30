@@ -21,7 +21,7 @@ Model::Model(const base_types::RegexString &_name, const std::initializer_list<I
     }
 }
 
-[[nodiscard]] SymbolComponent *Model::Get(const base_types::RegexString &_str) const
+[[nodiscard]] Symbol *Model::Get(const base_types::RegexString &_str) const
 {
     // SymbolType type = symbol_map_.at(str).get()->GetType();
     switch (const SymbolType type = symbol_map_.at(_str).get()->GetType())
