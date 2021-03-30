@@ -7,6 +7,43 @@
 
 namespace or2l
 {
+class IndexedCoefficient
+{
+  public:
+    IndexedCoefficient() = default;
+    IndexedCoefficient(std::initializer_list<Index> _indexes)
+    {
+        for (const auto& index : _indexes)
+        {
+            indexes[index.GetName()] = index;
+        }
+    }
+
+    virtual Index GetIndex(const base_types::RegexString& _index_name) 
+    {
+        return indexes[_index_name];
+    }
+
+    virtual std::vector<Index> GetIndexes() const
+    {
+        std::vector<Index> ret(indexes.size());
+        for (const auto& pair : indexes)
+        {
+            ret.push_back(pair.second);
+        }
+    }
+
+  //private:
+    std::unordered_map<base_types::RegexString, Index> indexes = {};
+};
+
+class Constant : public Symbol
+{
+  public:
+    Constant() : Symbol("", SymbolType::CONSTANT){};
+    Constant(double coeff) : Symbol("", SymbolType::CONSTANT){};
+};
+
 enum class VariableType
 {
     CONTINUOUS,
@@ -14,17 +51,17 @@ enum class VariableType
     BINARY
 };
 
-class Variable : public Symbol
+class Variable : public Symbol, public IndexedCoefficient
 {
   public:
     Variable() : Symbol("", SymbolType::VARIABLE){};
-    explicit Variable(const base_types::RegexString &_name, VariableType _var_type = VariableType::CONTINUOUS,
-                      std::initializer_list<Index> _indexes = {});
+    Variable(const base_types::RegexString &_name, VariableType _var_type = VariableType::CONTINUOUS,
+             std::initializer_list<Index> _indexes = {});
     ~Variable() override = default;
 
     inline bool operator==(const Variable &_B) const
     {
-        return this->name_ == _B.name_ && this->indexes_ == _B.indexes_;
+        return this->name_ == _B.name_ && this->indexes == _B.indexes;
     }
     inline bool operator<(const Variable &_A) const
     {
@@ -41,7 +78,7 @@ class Variable : public Symbol
     std::vector<std::vector<size_t>> GetAllIndexCombinations() const;
 
   private:
-    std::unordered_map<base_types::RegexString, Index> indexes_ = {};
+
     VariableType variable_type_ = VariableType::CONTINUOUS;
 };
 } // namespace or2l

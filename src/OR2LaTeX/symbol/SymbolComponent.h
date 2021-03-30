@@ -8,6 +8,7 @@ enum class SymbolType
 {
     INDEX,
     VARIABLE,
+    CONSTANT,
     CONSTRAINT
 };
 

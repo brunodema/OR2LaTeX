@@ -8,26 +8,26 @@ Variable::Variable(const base_types::RegexString &_name, const VariableType _var
 {
     for (auto &&index : _indexes)
     {
-        indexes_.insert(std::pair<base_types::RegexString, Index>(index.GetName(), index));
+        indexes.insert(std::pair<base_types::RegexString, Index>(index.GetName(), index));
     }
 }
 
 std::size_t Variable::GetNumberOfIndexes()
 {
-    return indexes_.size();
+    return indexes.size();
 }
 
 Index Variable::GetIndex(const base_types::RegexString &_key) const
 {
-    return indexes_.at(_key);
+    return indexes.at(_key);
 }
 
 std::vector<std::size_t> Variable::GetIndexSizes() const
 {
     std::vector<size_t> index_sizes;
-    index_sizes.reserve(indexes_.size());
+    index_sizes.reserve(indexes.size());
     int i = 0;
-    for (const auto &index : indexes_)
+    for (const auto &index : indexes)
     {
         index_sizes.push_back(index.second.GetSize());
     }
@@ -37,7 +37,7 @@ std::vector<std::size_t> Variable::GetIndexSizes() const
 std::vector<Index> Variable::GetIndexes() const
 {
     std::vector<Index> ret;
-    for (auto &&index : indexes_)
+    for (auto &&index : indexes)
     {
         ret.push_back(index.second);
     }
