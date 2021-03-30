@@ -12,38 +12,6 @@ Variable::Variable(const base_types::RegexString &_name, const VariableType _var
     }
 }
 
-std::size_t Variable::GetNumberOfIndexes()
-{
-    return indexes.size();
-}
-
-Index Variable::GetIndex(const base_types::RegexString &_key) const
-{
-    return indexes.at(_key);
-}
-
-std::vector<std::size_t> Variable::GetIndexSizes() const
-{
-    std::vector<size_t> index_sizes;
-    index_sizes.reserve(indexes.size());
-    int i = 0;
-    for (const auto &index : indexes)
-    {
-        index_sizes.push_back(index.second.GetSize());
-    }
-    return index_sizes;
-}
-
-std::vector<Index> Variable::GetIndexes() const
-{
-    std::vector<Index> ret;
-    for (auto &&index : indexes)
-    {
-        ret.push_back(index.second);
-    }
-    return ret;
-}
-
 VariableType Variable::GetVariableType() const
 {
     return variable_type_;

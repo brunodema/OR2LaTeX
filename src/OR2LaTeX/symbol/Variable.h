@@ -23,7 +23,6 @@ class IndexedSymbol
     {
         return indexes[_index_name];
     }
-
     virtual std::vector<Index> GetIndexes() const
     {
         std::vector<Index> ret(indexes.size());
@@ -31,6 +30,16 @@ class IndexedSymbol
         {
             ret.push_back(pair.second);
         }
+        return ret;
+    }
+    virtual std::vector<std::size_t> GetIndexSizes() const
+    {
+        std::vector<std::size_t> ret(indexes.size());
+        for (const auto &pair : indexes)
+        {
+            ret.push_back(pair.second.GetSize());
+        }
+        return ret;
     }
 
   //private:
@@ -70,10 +79,6 @@ class Variable : public Symbol, public IndexedSymbol
 
     template <typename H> friend H AbslHashValue(H _h, const Variable &_var);
 
-    std::size_t GetNumberOfIndexes();
-    Index GetIndex(const base_types::RegexString &_key) const;
-    std::vector<size_t> GetIndexSizes() const;
-    std::vector<Index> GetIndexes() const;
     VariableType GetVariableType() const;
     std::vector<std::vector<size_t>> GetAllIndexCombinations() const;
 
