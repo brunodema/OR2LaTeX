@@ -191,10 +191,10 @@ class ExpandedExpression : public IExpandedExpression<T>
     ExpandedExpression() = default;
     ExpandedExpression(operators::ExpressionOperatorType _type, const InnerExpression<T> &_inner_expr,
                        std::initializer_list<Index> _expr_indexes)
-        : IExpandedExpression(1.00, _type, std::move(_inner_expr), _expr_indexes){};
+        : IExpandedExpression<T>(1.00, _type, std::move(_inner_expr), _expr_indexes){};
     ExpandedExpression(const double _coefficient, operators::ExpressionOperatorType _type,
                        const InnerExpression<T> &_inner_expr, std::initializer_list<Index> _expr_indexes)
-        : IExpandedExpression(_coefficient, _type, std::move(_inner_expr), _expr_indexes){};
+        : IExpandedExpression<T>(_coefficient, _type, std::move(_inner_expr), _expr_indexes){};
 
     bool operator==(const ExpandedExpression<T> &_other) const
     {
@@ -267,7 +267,7 @@ inline NewExpression<T> operator+(const ExpandedExpression<T> &_a, const Expande
     // attention: the assumptions here are that (1) the type of the operation match, after all it does not make sense to
     // add a 'Summation' to a 'Product Notation'; (2) the indexes of the operator are EXACTLY the same. These
     // assumptions might need to be reviewed in the future.
-    NewExpression ret;
+    NewExpression<T> ret;
     if (_a.GetType() == _b.GetType() && _a.GetExpressionIndexes() == _b.GetExpressionIndexes())
     {
         auto expression_indexes = _a.GetExpressionIndexes(); // only way to make it work
