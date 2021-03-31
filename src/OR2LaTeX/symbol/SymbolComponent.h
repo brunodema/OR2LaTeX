@@ -20,6 +20,11 @@ class Symbol
     }
     virtual ~Symbol() = default;
 
+    inline bool operator<(const Symbol &_symbol) const
+    {
+        return this->name_ < _symbol.name_;
+    }
+
     // virtual std::unique_ptr<SymbolComponent> operator()();
     [[nodiscard]] virtual inline base_types::RegexString GetName() const
     {
