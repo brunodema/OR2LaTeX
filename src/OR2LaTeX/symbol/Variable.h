@@ -73,7 +73,7 @@ class Variable : public Symbol, public IndexedObject
              std::initializer_list<Index> _indexes = {});
     ~Variable() override = default;
 
-    template <typename H> friend H AbslHashValue(H _h, const Variable &_var);
+
 
     inline bool operator==(const Variable& _other) const
     {
@@ -88,7 +88,3 @@ class Variable : public Symbol, public IndexedObject
 };
 } // namespace or2l
 
-template <typename H> H or2l::AbslHashValue(H _h, const or2l::Variable &_var)
-{
-    return H::combine(std::move(_h), _var.name_);
-}

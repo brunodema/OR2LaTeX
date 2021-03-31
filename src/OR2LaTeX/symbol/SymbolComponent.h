@@ -20,6 +20,8 @@ class Symbol
     }
     virtual ~Symbol() = default;
 
+
+    template <typename H> friend H AbslHashValue(H _h, const Symbol &_symbol);
     inline bool operator<(const Symbol &_symbol) const
     {
         return this->name_ < _symbol.name_;
@@ -44,3 +46,8 @@ class Symbol
     SymbolType type;
 };
 } // namespace or2l
+
+template <typename H> H or2l::AbslHashValue(H _h, const or2l::Symbol &_symbol)
+{
+    return H::combine(std::move(_h), _symbol.name_);
+}
