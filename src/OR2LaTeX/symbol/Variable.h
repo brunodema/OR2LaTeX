@@ -51,11 +51,17 @@ class IndexedObject
     std::unordered_map<base_types::RegexString, Index> indexes = {};
 };
 
-class Constant : public Symbol
+class Constant : public Symbol, public IndexedObject
 {
   public:
     Constant() : Symbol("", SymbolType::CONSTANT){};
-    Constant(double coeff) : Symbol("", SymbolType::CONSTANT){};
+    Constant(const base_types::RegexString &_name, std::initializer_list<Index> _indexes = {})
+        : Symbol(_name, SymbolType::CONSTANT), IndexedObject(_indexes){};
+
+    inline bool operator==(const Constant &_other) const
+    {
+        return this->name_ == _other.name_ && this->indexes == _other.indexes;
+    }
 };
 
 enum class VariableType
@@ -87,7 +93,6 @@ class Variable : public Symbol, public IndexedObject
 
     VariableType GetVariableType() const
     {
-
         return variable_type_;
     };
 
