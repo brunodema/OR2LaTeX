@@ -17,8 +17,9 @@ class Expression
     Expression(const double _coeff = 0.00) : scalar_coefficient(_coeff)
     {
     }
-    Expression(const Variable &_var) : coefficient_map({{_var, 1.00}})
+    Expression(const Variable &_var)
     {
+        coefficient_map[_var] = 1.00;
     }
     virtual ~Expression() = default;
 
@@ -37,7 +38,7 @@ class Expression
         for (auto &&var_coeff : _expr.coefficient_map)
         {
             if (this->coefficient_map.find(var_coeff.first) != this->coefficient_map.end())
-                this->coefficient_map.at(var_coeff.first) -= var_coeff.second;
+                this->coefficient_map[var_coeff.first] -= var_coeff.second;
             else
                 this->coefficient_map.emplace(var_coeff.first, var_coeff.second);
 
@@ -133,7 +134,7 @@ class Expression
 
     Expression &operator+(const Variable &_var)
     {
-        ++this->coefficient_map.at(_var);
+        ++this->coefficient_map[_var];
         return *this;
     }
 
