@@ -70,21 +70,28 @@ class Variable : public Symbol, public IndexedObject
   public:
     Variable() : Symbol("", SymbolType::VARIABLE){};
     Variable(const base_types::RegexString &_name, VariableType _var_type = VariableType::CONTINUOUS,
-             std::initializer_list<Index> _indexes = {});
+             std::initializer_list<Index> _indexes = {})
+        : Symbol(_name, SymbolType::VARIABLE), IndexedObject(_indexes), variable_type_(_var_type)
+    {
+        for (auto &&index : _indexes)
+        {
+            indexes.insert(std::pair<base_types::RegexString, Index>(index.GetName(), index));
+        }
+    };
     ~Variable() override = default;
 
-
-
-    inline bool operator==(const Variable& _other) const
+    inline bool operator==(const Variable &_other) const
     {
         return this->name_ == _other.name_ && this->indexes == _other.indexes;
     }
 
-    VariableType GetVariableType() const;
-    std::vector<std::vector<size_t>> GetAllIndexCombinations() const;
+    VariableType GetVariableType() const
+    {
+
+        return variable_type_;
+    };
 
   private:
     VariableType variable_type_ = VariableType::CONTINUOUS;
 };
 } // namespace or2l
-
