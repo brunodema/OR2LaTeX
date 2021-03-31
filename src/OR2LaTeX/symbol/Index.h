@@ -23,9 +23,9 @@ class Index : public Symbol
     ~Index() override = default;
 
     template <typename H> friend H AbslHashValue(H _h, const Index &_index);
-    inline bool operator==(const Index &_B) const
+    inline bool operator==(const Index &_other) const
     {
-        return this->lb == _B.lb && this->ub == _B.ub && this->name_ == _B.name_;
+        return this->lb == _other.lb && this->ub == _other.ub && this->name_ == _other.name_;
     }
 
     explicit operator base_types::Bounds() const

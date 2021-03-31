@@ -12,55 +12,52 @@ namespace or2l
 
 using base_types::Bounds;
 
-struct ExpressionCoefficient
+struct IndexedCoefficient
 {
   public:
-    ExpressionCoefficient() = default;
-    ExpressionCoefficient(const Variable &_var) : variable(_var), coefficient(1.00){};
-    ExpressionCoefficient(const double _coefficient, const Variable &_var)
-        : variable(_var), coefficient(_coefficient){};
-    ExpressionCoefficient(const double &_value) : coefficient(_value){};
+    IndexedCoefficient() = default;
+    IndexedCoefficient(const IndexedObject &_obj) : object(_obj), coefficient(1.00){};
+    IndexedCoefficient(const double _coefficient, const IndexedObject &_obj)
+        : object(_obj), coefficient(_coefficient){};
+    IndexedCoefficient(const double &_value) : coefficient(_value){};
 
-    bool operator==(const ExpressionCoefficient &_other) const
+    bool operator==(const IndexedCoefficient &_other) const
     {
-        return this->variable == _other.variable && this->coefficient == _other.coefficient;
+        return this->object == _other.object && this->coefficient == _other.coefficient;
     }
-    template <typename H> friend H AbslHashValue(H _h, const ExpressionCoefficient &_exprcoeff);
+    template <typename H> friend H AbslHashValue(H _h, const IndexedCoefficient &_exprcoeff);
 
-    Variable variable = {};
+    IndexedObject object = {};
     double coefficient = 0.00;
 };
 
-template <typename H> H AbslHashValue(H _h, const or2l::ExpressionCoefficient &_exprcoeff)
+template <typename H> H AbslHashValue(H _h, const or2l::IndexedCoefficient &_exprcoeff)
 {
-    return H::combine(std::move(_h), _exprcoeff.variable, _exprcoeff.coefficient);
+    return H::combine(std::move(_h), _exprcoeff.object, _exprcoeff.coefficient);
 }
 
+template<class T>
 class InnerExpression
 {
   public:
-    InnerExpression() = default;
-    InnerExpression(const ExpressionCoefficient &_exprcoeff)
+    InnerExpression<T>() = default;
+    InnerExpression<T>(const T& _obj)
     {
-        coefficient_map[_exprcoeff.variable] = _exprcoeff.coefficient;
+        coefficient_map[_obj] = 1.00;
     }
-    InnerExpression(const Variable &_var)
-    {
-        coefficient_map[_var] = 1.00;
-    }
-    InnerExpression(const double _value)
+    InnerExpression<T>(const double _value)
     {
         coefficient_map[{}] = _value;
     }
 
-    template <typename H> friend H AbslHashValue(H _h, const InnerExpression &_inner_expr);
-    bool operator==(const InnerExpression &_other) const
+    template <typename H> friend H AbslHashValue(H _h, const InnerExpression<T> &_inner_expr);
+    bool operator==(const InnerExpression<T> &_other) const
     {
         return this->GetCoefficients() == _other.GetCoefficients() && this->GetVariables() == _other.GetVariables();
     }
 
-    friend InnerExpression operator+(const ExpressionCoefficient &_a, const ExpressionCoefficient &_b);
-    inline InnerExpression operator+(const InnerExpression &_a) const
+    friend InnerExpression<T> operator+(const IndexedCoefficient &_a, const IndexedCoefficient &_b);
+    inline InnerExpression<T> operator+(const InnerExpression<T> &_a) const
     {
         InnerExpression ret;
         for (const auto &pair : this->coefficient_map)
@@ -75,9 +72,9 @@ class InnerExpression
     }
 
 
-    double &operator[](const Variable &_var)
+    double &operator[](const T &_obj)
     {
-        return coefficient_map[_var];
+        return coefficient_map[_obj];
     }
 
     std::size_t Size() const
@@ -85,7 +82,7 @@ class InnerExpression
         return this->coefficient_map.size();
     }
 
-    using Iterator = std::unordered_map<Variable, double, absl::Hash<Variable>>::const_iterator;
+    using Iterator = typename std::unordered_map<T, double, absl::Hash<T>>::const_iterator;
     Iterator begin() const
     {
         return this->coefficient_map.begin();
@@ -96,9 +93,9 @@ class InnerExpression
     }
 
   private:
-    std::vector<Variable> GetVariables() const
+    std::vector<T> GetObjects() const
     {
-        std::vector<Variable> ret(coefficient_map.size());
+        std::vector<T> ret(coefficient_map.size());
         for (const auto &pair : coefficient_map)
         {
             ret.push_back(pair.first);
@@ -114,29 +111,25 @@ class InnerExpression
         }
         return ret;
     }
-    std::unordered_map<Variable, double, absl::Hash<Variable>> coefficient_map = {};
+    std::unordered_map<T, double, absl::Hash<T>> coefficient_map = {};
 };
 
-template <typename H> H AbslHashValue(H _h, const or2l::InnerExpression &_inner_expr)
+template <class T, typename H> H AbslHashValue(H _h, const or2l::InnerExpression<T> &_inner_expr)
 {
-    return H::combine(std::move(_h), _inner_expr.GetVariables(), _inner_expr.GetCoefficients());
+    return H::combine(std::move(_h), _inner_expr.GetObjects(), _inner_expr.GetCoefficients());
 }
 
-// template <typename H> H AbslHashValue(H _h, const or2l::InnerExpression &_inner_expr)
-// {
-//     return H::combine(std::move(_h), _inner_expr.GetVariables(), _inner_expr.GetCoefficients());
-// }
-
-inline InnerExpression operator+(const ExpressionCoefficient &_a, const ExpressionCoefficient &_b)
+template<class T>
+inline InnerExpression<T> operator+(const IndexedCoefficient &_a, const IndexedCoefficient &_b)
 {
-    InnerExpression ret;
-    if (_a.variable == _b.variable)
+    InnerExpression<T> ret;
+    if (_a.object == _b.object)
     {
-        ret.coefficient_map[_a.variable] = _a.coefficient + _b.coefficient;
+        ret.coefficient_map[_a.object] = _a.coefficient + _b.coefficient;
         return ret;
     }
-    ret.coefficient_map[_a.variable] = _a.coefficient;
-    ret.coefficient_map[_b.variable] = _b.coefficient;
+    ret.coefficient_map[_a.object] = _a.coefficient;
+    ret.coefficient_map[_b.object] = _b.coefficient;
     return ret;
 }
 
@@ -148,18 +141,19 @@ enum class ExpressionOperatorType
 };
 } // namespace operators
 
+template<class T>
 class IExpandedExpression
 {
   public:
     IExpandedExpression() = default;
-    IExpandedExpression(const operators::ExpressionOperatorType _type, const InnerExpression &_inner_expr,
+    IExpandedExpression(const operators::ExpressionOperatorType _type, const InnerExpression<T> &_inner_expr,
                         const std::initializer_list<Index> _expr_indexes)
         : type(_type), inner_expression(std::move(_inner_expr)), expression_indexes(std::move(_expr_indexes)),
           coefficient(1.00)
     {
     }
     IExpandedExpression(const double _coefficient, const operators::ExpressionOperatorType _type,
-                        const InnerExpression &_inner_expr, const std::initializer_list<Index> _expr_indexes)
+                        const InnerExpression<T> &_inner_expr, const std::initializer_list<Index> _expr_indexes)
         : type(_type), inner_expression(std::move(_inner_expr)), expression_indexes(std::move(_expr_indexes)),
           coefficient(_coefficient)
     {
@@ -170,7 +164,7 @@ class IExpandedExpression
     {
         return type;
     }
-    virtual InnerExpression GetInnerExpression() const
+    virtual InnerExpression<T> GetInnerExpression() const
     {
         return inner_expression;
     }
@@ -185,52 +179,54 @@ class IExpandedExpression
 
   protected:
     operators::ExpressionOperatorType type = {};
-    InnerExpression inner_expression = {};
+    InnerExpression<T> inner_expression = {};
     std::vector<Index> expression_indexes = {};
     double coefficient = 0.00;
 };
 
-class ExpandedExpression : public IExpandedExpression
+template<class T>
+class ExpandedExpression : public IExpandedExpression<T>
 {
   public:
     ExpandedExpression() = default;
-    ExpandedExpression(operators::ExpressionOperatorType _type, const InnerExpression &_inner_expr,
+    ExpandedExpression(operators::ExpressionOperatorType _type, const InnerExpression<T> &_inner_expr,
                        std::initializer_list<Index> _expr_indexes)
         : IExpandedExpression(1.00, _type, std::move(_inner_expr), _expr_indexes){};
     ExpandedExpression(const double _coefficient, operators::ExpressionOperatorType _type,
-                       const InnerExpression &_inner_expr, std::initializer_list<Index> _expr_indexes)
+                       const InnerExpression<T> &_inner_expr, std::initializer_list<Index> _expr_indexes)
         : IExpandedExpression(_coefficient, _type, std::move(_inner_expr), _expr_indexes){};
 
-    bool operator==(const ExpandedExpression &_other) const
+    bool operator==(const ExpandedExpression<T> &_other) const
     {
         return this->type == _other.type && this->inner_expression == _other.inner_expression &&
                this->expression_indexes == _other.expression_indexes;
     }
-    template <typename H> friend H AbslHashValue(H _h, const ExpandedExpression &_expr_operator);
+    template <typename H> friend H AbslHashValue(H _h, const ExpandedExpression<T> &_expr_operator);
 };
 
-template <typename H> H AbslHashValue(H _h, const or2l::ExpandedExpression &_expr_operator)
+template <class T, typename H> H AbslHashValue(H _h, const or2l::ExpandedExpression<T> &_expr_operator)
 {
     return H::combine(std::move(_h), _expr_operator.type, _expr_operator.inner_expression,
                       _expr_operator.expression_indexes);
 }
 
+template<class T>
 class NewExpression
 {
   public:
     NewExpression() = default;
-    NewExpression(const InnerExpression &_inner_expr) : inner_expression(std::move(_inner_expr))
+    NewExpression(const InnerExpression<T> &_inner_expr) : inner_expression(std::move(_inner_expr))
     {
     }
-    NewExpression(const ExpandedExpression &_expanded_expr)
+    NewExpression(const ExpandedExpression<T> &_expanded_expr)
     {
         expandable_expression[_expanded_expr] = 1.00;
     }
 
-    friend NewExpression operator+(const ExpandedExpression &_a, const ExpandedExpression &_b);
-    NewExpression operator+(const NewExpression &_a) const
+    friend NewExpression<T> operator+(const ExpandedExpression<T> &_a, const ExpandedExpression<T> &_b);
+    NewExpression<T> operator+(const NewExpression<T> &_a) const
     {
-        NewExpression ret;
+        NewExpression<T> ret;
         for (const auto &pair : this->inner_expression)
         {
             ret[pair.first] += pair.second;
@@ -250,27 +246,23 @@ class NewExpression
         return ret;
     }
 
-
-    double &operator[](const Variable &_var)
+    double &operator[](const IndexedCoefficient &_obj)
     {
-        return inner_expression[_var];
+        return inner_expression[_obj];
     }
-    double GetExpandableExpressionCoeff(const ExpandedExpression &_exp_expr) const
-    {
-        return this->expandable_expression.at(_exp_expr);
-    }
-    double GetExpandableExpressionCoeff(const ExpandedExpression &_exp_expr)
+    double GetExpandableExpressionCoeff(const ExpandedExpression<T> &_exp_expr)
     {
         return this->expandable_expression[_exp_expr];
     }
 
   private:
-    InnerExpression inner_expression = {};
-    using ExpExprMap = std::unordered_map<ExpandedExpression, double, absl::Hash<ExpandedExpression>>;
+    InnerExpression<T> inner_expression = {};
+    using ExpExprMap = std::unordered_map<ExpandedExpression<T>, double, absl::Hash<ExpandedExpression<T>>>;
     ExpExprMap expandable_expression = {};
 };
 
-inline NewExpression operator+(const ExpandedExpression &_a, const ExpandedExpression &_b)
+template<class T>
+inline NewExpression<T> operator+(const ExpandedExpression<T> &_a, const ExpandedExpression<T> &_b)
 {
     // attention: the assumptions here are that (1) the type of the operation match, after all it does not make sense to
     // add a 'Summation' to a 'Product Notation'; (2) the indexes of the operator are EXACTLY the same. These

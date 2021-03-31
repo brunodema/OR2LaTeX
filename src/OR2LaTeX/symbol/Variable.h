@@ -19,9 +19,10 @@ class IndexedObject
         }
     }
 
+    template <typename H> friend H AbslHashValue(H _h, const IndexedObject &_obj);
     inline bool operator==(const IndexedObject &_obj) const
     {
-        return this->indexes == _obj.indexes;
+        return this->GetIndexes() == _obj.GetIndexes();
     }
 
     virtual Index GetIndex(const base_types::RegexString &_index_name)
@@ -30,7 +31,7 @@ class IndexedObject
     }
     virtual std::vector<Index> GetIndexes() const
     {
-        std::vector<Index> ret(indexes.size());
+        std::vector<Index> ret{};
         for (const auto &pair : indexes)
         {
             ret.push_back(pair.second);
@@ -39,7 +40,7 @@ class IndexedObject
     }
     virtual std::vector<std::size_t> GetIndexSizes() const
     {
-        std::vector<std::size_t> ret(indexes.size());
+        std::vector<std::size_t> ret{};
         for (const auto &pair : indexes)
         {
             ret.push_back(pair.second.GetSize());
@@ -50,6 +51,11 @@ class IndexedObject
     // private:
     std::unordered_map<base_types::RegexString, Index> indexes = {};
 };
+
+template <typename H> H AbslHashValue(H _h, const or2l::IndexedObject &_obj)
+{
+    return H::combine(std::move(_h), _obj.GetIndexes());
+}
 
 class Constant : public Symbol, public IndexedObject
 {
@@ -79,13 +85,14 @@ class Variable : public Symbol, public IndexedObject
              std::initializer_list<Index> _indexes = {})
         : Symbol(_name, SymbolType::VARIABLE), IndexedObject(_indexes), variable_type_(_var_type)
     {
-        for (auto &&index : _indexes)
+        for (const auto &index : _indexes)
         {
-            indexes.insert(std::pair<base_types::RegexString, Index>(index.GetName(), index));
+            indexes[(index.GetName())] = index;
         }
     };
     ~Variable() override = default;
 
+    template <typename H> friend H AbslHashValue(H _h, const Variable &_var);
     inline bool operator==(const Variable &_other) const
     {
         return this->name_ == _other.name_ && this->indexes == _other.indexes;
@@ -99,4 +106,9 @@ class Variable : public Symbol, public IndexedObject
   private:
     VariableType variable_type_ = VariableType::CONTINUOUS;
 };
+
+template <typename H> H AbslHashValue(H _h, const or2l::Variable &_var)
+{
+    return H::combine(std::move(_h), _var.name_, _var.GetIndexes());
+}
 } // namespace or2l
