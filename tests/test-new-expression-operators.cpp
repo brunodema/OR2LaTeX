@@ -4,8 +4,8 @@
 #include "gtest/gtest.h"
 
 using or2l::ExpandedExpression;
-using or2l::IndexedCoefficient;
 using or2l::Index;
+using or2l::IndexedCoefficient;
 using or2l::InnerExpression;
 using or2l::NewExpression;
 using or2l::Variable;
@@ -44,43 +44,43 @@ TEST(NewExpressionOperators, EnsureThatVariablesAreCorrectlyHashed)
     // Expects only three entries, since 'a' and 'b' variables are the same, and 'c' and 'd' differ by its name
     ASSERT_EQ(map.size(), 3);
 }
+
+TEST(NewExpressionOperators, InnerExpressionSumOperators)
+{
+    Variable x("x");
+    Variable y("y");
+
+    IndexedCoefficient a(3.50, x);
+    IndexedCoefficient b(1.00, x);
+    IndexedCoefficient c(y);
+    IndexedCoefficient d(7.00);
+
+    auto test1 = a + b;
+    auto test2 = a + c;
+    auto test3 = a + d + 11.25;
+    auto test4 = a + b + c + d;
+
+    ASSERT_EQ(test1[x], 4.50);
+
+    ASSERT_EQ(test2[x], 3.50);
+    ASSERT_EQ(test2[y], 1.00);
+
+    ASSERT_EQ(test3[x], 3.50);
+    ASSERT_EQ(test3[{}], 18.25);
+
+    ASSERT_EQ(test4[x], 4.50);
+    ASSERT_EQ(test4[y], 1.00);
+    ASSERT_EQ(test4[{}], 7.00);
+
+    //InnerExpression<IndexedCoefficient> inner1(x + y + 60);
+    //InnerExpression<IndexedCoefficient> inner2(y + 30);
+    //auto test5 = inner1 + inner2;
+    //ASSERT_EQ(test5[x], 1.00);
+    //ASSERT_EQ(test5[y], 2.00);
+    //ASSERT_EQ(test5[{}], 90.00);
+}
 //
-//TEST(NewExpressionOperators, InnerExpressionSumOperators)
-//{
-//    Variable x("x");
-//    Variable y("y");
-//
-//    IndexedCoefficient a(3.50, x);
-//    IndexedCoefficient b(1.00, x);
-//    IndexedCoefficient c(y);
-//    IndexedCoefficient d(7.00);
-//
-//    auto test1 = a + b;
-//    auto test2 = a + c;
-//    auto test3 = a + d + 11.25;
-//    auto test4 = a + b + c + d;
-//
-//    ASSERT_EQ(test1[x], 4.50);
-//
-//    ASSERT_EQ(test2[x], 3.50);
-//    ASSERT_EQ(test2[y], 1.00);
-//
-//    ASSERT_EQ(test3[x], 3.50);
-//    ASSERT_EQ(test3[{}], 18.25);
-//
-//    ASSERT_EQ(test4[x], 4.50);
-//    ASSERT_EQ(test4[y], 1.00);
-//    ASSERT_EQ(test4[{}], 7.00);
-//
-//    InnerExpression inner1(x + y + 60);
-//    InnerExpression inner2(y + 30);
-//    auto test5 = inner1 + inner2;
-//    ASSERT_EQ(test5[x], 1.00);
-//    ASSERT_EQ(test5[y], 2.00);
-//    ASSERT_EQ(test5[{}], 90.00);
-//}
-//
-//TEST(NewExpressionOperators, ExpandedExpressionTests1)
+// TEST(NewExpressionOperators, ExpandedExpressionTests1)
 //{
 //    Index i("i", 0, 20);
 //    Index j("j", 0, 10);
@@ -100,7 +100,7 @@ TEST(NewExpressionOperators, EnsureThatVariablesAreCorrectlyHashed)
 //    ASSERT_EQ(test1[{}], 0.00);
 //}
 //
-//TEST(NewExpressionOperators, NewExpressionTest)
+// TEST(NewExpressionOperators, NewExpressionTest)
 //{
 //    Index i("i", 0, 3);
 //    Index j("j", 0, 6);
@@ -125,8 +125,6 @@ TEST(NewExpressionOperators, EnsureThatVariablesAreCorrectlyHashed)
 //
 //    //auto test1 = expr1 + expr2 + expr3 + expr4 + x + y + 5.00;
 //}
-
-
 
 int main(int argc, char **argv)
 {

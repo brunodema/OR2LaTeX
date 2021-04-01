@@ -16,19 +16,19 @@ struct IndexedCoefficient
 {
   public:
     IndexedCoefficient() = default;
-    IndexedCoefficient(const IndexedObject &_obj) : object(_obj), coefficient(1.00){};
-    IndexedCoefficient(const double _coefficient, const IndexedObject &_obj)
+    IndexedCoefficient(const IndexedSymbol &_obj) : object(_obj), coefficient(1.00){};
+    IndexedCoefficient(const double _coefficient, const IndexedSymbol &_obj)
         : object(_obj), coefficient(_coefficient){};
     IndexedCoefficient(const double &_value) : coefficient(_value){};
 
+    template <typename H> friend H AbslHashValue(H _h, const IndexedCoefficient &_exprcoeff);
     bool operator==(const IndexedCoefficient &_other) const
     {
         return this->object == _other.object && this->coefficient == _other.coefficient;
     }
-    template <typename H> friend H AbslHashValue(H _h, const IndexedCoefficient &_exprcoeff);
 
-    IndexedObject object = {};
-    double coefficient = 0.00;
+    IndexedSymbol object = {};
+    double coefficient = 1.00;
 };
 
 template <typename H> H AbslHashValue(H _h, const or2l::IndexedCoefficient &_exprcoeff)
@@ -51,12 +51,15 @@ class InnerExpression
     }
 
     template <typename H> friend H AbslHashValue(H _h, const InnerExpression<T> &_inner_expr);
+    template <class T>
+    friend InnerExpression<T> operator+(const T&_lhs, const T&_rhs);
+    friend InnerExpression<IndexedCoefficient> operator+(const IndexedCoefficient &_lhs,
+                                                         const IndexedCoefficient &_rhs);
     bool operator==(const InnerExpression<T> &_other) const
     {
         return this->GetCoefficients() == _other.GetCoefficients() && this->GetVariables() == _other.GetVariables();
     }
 
-    friend InnerExpression<T> operator+(const IndexedCoefficient &_a, const IndexedCoefficient &_b);
     inline InnerExpression<T> operator+(const InnerExpression<T> &_a) const
     {
         InnerExpression ret;
@@ -119,19 +122,26 @@ template <class T, typename H> H AbslHashValue(H _h, const or2l::InnerExpression
     return H::combine(std::move(_h), _inner_expr.GetObjects(), _inner_expr.GetCoefficients());
 }
 
-template<class T>
-inline InnerExpression<T> operator+(const IndexedCoefficient &_a, const IndexedCoefficient &_b)
+InnerExpression<IndexedCoefficient> operator+(const IndexedCoefficient &_lhs, const IndexedCoefficient &_rhs)
 {
-    InnerExpression<T> ret;
-    if (_a.object == _b.object)
+    InnerExpression<IndexedCoefficient> ret;
+    if (_lhs.object == _rhs.object)
     {
-        ret.coefficient_map[_a.object] = _a.coefficient + _b.coefficient;
+        ret.coefficient_map[_lhs.object] = _lhs.coefficient + _rhs.coefficient;
         return ret;
     }
-    ret.coefficient_map[_a.object] = _a.coefficient;
-    ret.coefficient_map[_b.object] = _b.coefficient;
+    ret.coefficient_map[_lhs.object] = _lhs.coefficient;
+    ret.coefficient_map[_rhs.object] = _rhs.coefficient;
     return ret;
 }
+
+template<class T>
+InnerExpression<T> operator+(const T &_lhs, const T &_rhs)
+{
+    return _lhs + _rhs;
+}
+
+
 
 namespace operators // should include all other operators in the future
 {

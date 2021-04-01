@@ -6,6 +6,7 @@ namespace or2l
 {
 enum class SymbolType
 {
+    UNKNOWN,
     INDEX,
     VARIABLE,
     CONSTANT,
@@ -15,6 +16,7 @@ enum class SymbolType
 class Symbol
 {
   public:
+    Symbol() = default;
     Symbol(const base_types::RegexString &_str, const SymbolType &_type) : name_(_str), type(_type)
     {
     }
@@ -42,8 +44,8 @@ class Symbol
     }
 
   protected:
-    base_types::RegexString name_;
-    SymbolType type;
+    base_types::RegexString name_ = "";
+    SymbolType type = SymbolType::UNKNOWN;
 };
 } // namespace or2l
 
