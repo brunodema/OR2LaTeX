@@ -73,7 +73,7 @@ TEST(NewExpressionOperators, InnerExpressionSumOperators)
     ASSERT_EQ(test4[{}], 7.00);
 
     //InnerExpression<IndexedCoefficient> inner1(x + y + 60);
-    //InnerExpression<IndexedCoefficient> inner2(y + 30);
+    //auto inner2(y + 30);
     //auto test5 = inner1 + inner2;
     //ASSERT_EQ(test5[x], 1.00);
     //ASSERT_EQ(test5[y], 2.00);

@@ -12,23 +12,32 @@ namespace or2l
 
 using base_types::Bounds;
 
-struct IndexedCoefficient
+template <class T> class CoefficientObject
+{
+  public:
+    CoefficientObject() = default;
+    CoefficientObject(const T &_obj, const double _val) : object(_obj), coefficient(_val)
+    {
+    }
+
+    T object = {};
+    double coefficient = 0.00;
+};
+
+class IndexedCoefficient : public CoefficientObject<IndexedSymbol>
 {
   public:
     IndexedCoefficient() = default;
-    IndexedCoefficient(const IndexedSymbol &_obj) : object(_obj), coefficient(1.00){};
-    IndexedCoefficient(const double _coefficient, const IndexedSymbol &_obj)
-        : object(_obj), coefficient(_coefficient){};
-    IndexedCoefficient(const double &_value) : coefficient(_value){};
+    IndexedCoefficient(const IndexedSymbol &_obj) : CoefficientObject(_obj, 1.00){};
+    IndexedCoefficient(const double _coefficient, const IndexedSymbol &_obj) : CoefficientObject(_obj, _coefficient){};
+    IndexedCoefficient(const double &_value) : CoefficientObject({}, _value){};
+    IndexedCoefficient(const int &_value) : CoefficientObject({}, _value){};
 
     template <typename H> friend H AbslHashValue(H _h, const IndexedCoefficient &_exprcoeff);
     bool operator==(const IndexedCoefficient &_other) const
     {
         return this->object == _other.object && this->coefficient == _other.coefficient;
     }
-
-    IndexedSymbol object = {};
-    double coefficient = 1.00;
 };
 
 template <typename H> H AbslHashValue(H _h, const or2l::IndexedCoefficient &_exprcoeff)
@@ -36,48 +45,51 @@ template <typename H> H AbslHashValue(H _h, const or2l::IndexedCoefficient &_exp
     return H::combine(std::move(_h), _exprcoeff.object, _exprcoeff.coefficient);
 }
 
-template<class T>
-class InnerExpression
+template <class T> class InnerExpression
 {
+    using coefficient_type = CoefficientObject<T>;
   public:
     InnerExpression<T>() = default;
-    InnerExpression<T>(const T& _obj)
+    InnerExpression<T>(const T &_obj)
     {
-        coefficient_map[_obj] = 1.00;
+        coefficient_map[_obj] = coefficient_type(_obj, 1.00);
+    }
+    InnerExpression<T>(const coefficient_type &_obj)
+    {
+        coefficient_map[_obj.object] = _obj;
     }
     InnerExpression<T>(const double _value)
     {
-        coefficient_map[{}] = _value;
+        coefficient_map[{}] = coefficient_type({}, _value);
     }
 
     template <typename H> friend H AbslHashValue(H _h, const InnerExpression<T> &_inner_expr);
-    template <class T>
-    friend InnerExpression<T> operator+(const T&_lhs, const T&_rhs);
-    friend InnerExpression<IndexedCoefficient> operator+(const IndexedCoefficient &_lhs,
-                                                         const IndexedCoefficient &_rhs);
-    bool operator==(const InnerExpression<T> &_other) const
+    friend InnerExpression<T> operator+(const coefficient_type &_lhs, const coefficient_type &_rhs);
+    inline InnerExpression<T> operator+(const InnerExpression<T> &_other) const
     {
-        return this->GetCoefficients() == _other.GetCoefficients() && this->GetVariables() == _other.GetVariables();
-    }
-
-    inline InnerExpression<T> operator+(const InnerExpression<T> &_a) const
-    {
-        InnerExpression ret;
+        InnerExpression<T> ret;
         for (const auto &pair : this->coefficient_map)
         {
-            ret[pair.first] += pair.second;
+            ret[pair.first] += pair.second.coefficient;
         }
-        for (const auto &pair : _a.coefficient_map)
+        for (const auto &pair : _other.coefficient_map)
         {
-            ret[pair.first] += pair.second;
+            ret[pair.first] += pair.second.coefficient;
         }
         return ret;
     }
+    //friend InnerExpression<T> operator+(const T &_lhs, const T &_rhs);
+    /*friend InnerExpression<T> operator+(const T &_lhs, const double &_val);*/
 
-
-    double &operator[](const T &_obj)
+    bool operator==(const InnerExpression<T> &_other) const
     {
-        return coefficient_map[_obj];
+        return this->GetCoefficients() == _other.GetCoefficients() && this->GetObjects() == _other.GetObjects();
+    }
+
+    double& operator[](const T &_obj)
+    {
+        auto a = dynamic_cast<const T&>(_obj);
+        return coefficient_map[a].coefficient;
     }
 
     std::size_t Size() const
@@ -85,7 +97,7 @@ class InnerExpression
         return this->coefficient_map.size();
     }
 
-    using Iterator = typename std::unordered_map<T, double, absl::Hash<T>>::const_iterator;
+    using Iterator = typename std::unordered_map<T, coefficient_type, absl::Hash<T>>::const_iterator;
     Iterator begin() const
     {
         return this->coefficient_map.begin();
@@ -110,11 +122,11 @@ class InnerExpression
         std::vector<double> ret(coefficient_map.size());
         for (const auto &pair : coefficient_map)
         {
-            ret.push_back(pair.second);
+            ret.push_back(pair.second.coefficient);
         }
         return ret;
     }
-    std::unordered_map<T, double, absl::Hash<T>> coefficient_map = {};
+    std::unordered_map<T, coefficient_type, absl::Hash<T>> coefficient_map = {};
 };
 
 template <class T, typename H> H AbslHashValue(H _h, const or2l::InnerExpression<T> &_inner_expr)
@@ -122,26 +134,34 @@ template <class T, typename H> H AbslHashValue(H _h, const or2l::InnerExpression
     return H::combine(std::move(_h), _inner_expr.GetObjects(), _inner_expr.GetCoefficients());
 }
 
-InnerExpression<IndexedCoefficient> operator+(const IndexedCoefficient &_lhs, const IndexedCoefficient &_rhs)
+template <class T>
+inline InnerExpression<T> operator+(const CoefficientObject<T> &_lhs, const CoefficientObject<T> &_rhs)
 {
-    InnerExpression<IndexedCoefficient> ret;
+    InnerExpression<T> ret;
     if (_lhs.object == _rhs.object)
     {
-        ret.coefficient_map[_lhs.object] = _lhs.coefficient + _rhs.coefficient;
+        ret[_lhs.object] = _lhs.coefficient + _rhs.coefficient;
         return ret;
     }
-    ret.coefficient_map[_lhs.object] = _lhs.coefficient;
-    ret.coefficient_map[_rhs.object] = _rhs.coefficient;
+    ret[_lhs.object] = _lhs.coefficient;
+    ret[_rhs.object] = _rhs.coefficient;
     return ret;
 }
 
-template<class T>
-InnerExpression<T> operator+(const T &_lhs, const T &_rhs)
-{
-    return _lhs + _rhs;
-}
-
-
+//template<class T>
+//inline InnerExpression<T> operator+(const T& _lhs, const T& _rhs)
+//{
+//    auto coeff_lhs = CoefficientObject<T>(_lhs, 1.00);
+//    auto coeff_rhs = CoefficientObject<T>(_rhs, 1.00);
+//    return InnerExpression<T>(coeff_lhs + coeff_rhs);
+//}
+//template <class T>
+//InnerExpression<T> operator+(const T& _lhs, const double& _val)
+//{
+//    auto coeff_lhs = CoefficientObject<T>(_lhs, 1.00);
+//    auto coeff_val = CoefficientObject<T>({}, _val);
+//    return InnerExpression<T>(coeff_lhs + coeff_val);
+//}
 
 namespace operators // should include all other operators in the future
 {
@@ -151,8 +171,7 @@ enum class ExpressionOperatorType
 };
 } // namespace operators
 
-template<class T>
-class IExpandedExpression
+template <class T> class IExpandedExpression
 {
   public:
     IExpandedExpression() = default;
@@ -194,8 +213,7 @@ class IExpandedExpression
     double coefficient = 0.00;
 };
 
-template<class T>
-class ExpandedExpression : public IExpandedExpression<T>
+template <class T> class ExpandedExpression : public IExpandedExpression<T>
 {
   public:
     ExpandedExpression() = default;
@@ -220,8 +238,7 @@ template <class T, typename H> H AbslHashValue(H _h, const or2l::ExpandedExpress
                       _expr_operator.expression_indexes);
 }
 
-template<class T>
-class NewExpression
+template <class T> class NewExpression
 {
   public:
     NewExpression() = default;
@@ -271,12 +288,11 @@ class NewExpression
     ExpExprMap expandable_expression = {};
 };
 
-template<class T>
-inline NewExpression<T> operator+(const ExpandedExpression<T> &_a, const ExpandedExpression<T> &_b)
+template <class T> inline NewExpression<T> operator+(const ExpandedExpression<T> &_a, const ExpandedExpression<T> &_b)
 {
-    // attention: the assumptions here are that (1) the type of the operation match, after all it does not make sense to
-    // add a 'Summation' to a 'Product Notation'; (2) the indexes of the operator are EXACTLY the same. These
-    // assumptions might need to be reviewed in the future.
+    // attention: the assumptions here are that (1) the type of the operation match, after all it does not make
+    // sense to add a 'Summation' to a 'Product Notation'; (2) the indexes of the operator are EXACTLY the same.
+    // These assumptions might need to be reviewed in the future.
     NewExpression<T> ret;
     if (_a.GetType() == _b.GetType() && _a.GetExpressionIndexes() == _b.GetExpressionIndexes())
     {
