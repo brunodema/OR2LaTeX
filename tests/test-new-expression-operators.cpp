@@ -3,81 +3,93 @@
 #include "symbol/Variable.h"
 #include "gtest/gtest.h"
 
-using or2l::ExpandedExpression;
+//using or2l::ExpandedExpression;
 using or2l::Index;
-using or2l::IndexedCoefficient;
+//using or2l::IndexedCoefficient;
 using or2l::InnerExpression;
-using or2l::NewExpression;
+//using or2l::NewExpression;
 using or2l::Variable;
-using or2l::operators::ExpressionOperatorType;
+//using or2l::operators::ExpressionOperatorType;
+using or2l::IndexedSymbol;
+using or2l::Constant;
 
-TEST(NewExpressionOperators, EnsureThatVariablesAreCorrectlyHashed)
+//TEST(NewExpressionOperators, EnsureThatVariablesAreCorrectlyHashed)
+//{
+//    Index i("i", 0, 20);
+//    Variable x("x");
+//    Variable y("y", or2l::VariableType::CONTINUOUS, {i});
+//    Variable z("z", or2l::VariableType::CONTINUOUS, {i});
+//
+//    IndexedCoefficient a;
+//    IndexedCoefficient b;
+//    IndexedCoefficient c;
+//    IndexedCoefficient d;
+//
+//    a.object = x;
+//    a.coefficient = 3.00;
+//
+//    b.object = x;
+//    b.coefficient = 1.00;
+//
+//    c.object = y;
+//    c.coefficient = 1.00;
+//
+//    d.object = y;
+//    d.coefficient = 1.00;
+//
+//    std::unordered_map<IndexedCoefficient, double, absl::Hash<IndexedCoefficient>> map;
+//    map[a] = a.coefficient;
+//    map[b] = b.coefficient;
+//    map[c] = c.coefficient;
+//    map[d] = d.coefficient;
+//
+//    // Expects only three entries, since 'a' and 'b' variables are the same, and 'c' and 'd' differ by its name
+//    ASSERT_EQ(map.size(), 3);
+//}
+
+TEST(NewExpressionOperators, InnerExpressionSum1)
 {
-    Index i("i", 0, 20);
-    Variable x("x");
-    Variable y("y", or2l::VariableType::CONTINUOUS, {i});
-    Variable z("z", or2l::VariableType::CONTINUOUS, {i});
-
-    IndexedCoefficient a;
-    IndexedCoefficient b;
-    IndexedCoefficient c;
-    IndexedCoefficient d;
-
-    a.object = x;
-    a.coefficient = 3.00;
-
-    b.object = x;
-    b.coefficient = 1.00;
-
-    c.object = y;
-    c.coefficient = 1.00;
-
-    d.object = y;
-    d.coefficient = 1.00;
-
-    std::unordered_map<IndexedCoefficient, double, absl::Hash<IndexedCoefficient>> map;
-    map[a] = a.coefficient;
-    map[b] = b.coefficient;
-    map[c] = c.coefficient;
-    map[d] = d.coefficient;
-
-    // Expects only three entries, since 'a' and 'b' variables are the same, and 'c' and 'd' differ by its name
-    ASSERT_EQ(map.size(), 3);
-}
-
-TEST(NewExpressionOperators, InnerExpressionSumOperators)
-{
+    // two different variables (as IndexedSymbols) + a scalar (implicit InnerExpression<T>) should yield three different spots inside the map
     Variable x("x");
     Variable y("y");
+    auto expr = x + y + 7.00;
+    ASSERT_EQ(expr[x], 1.00);
+    ASSERT_EQ(expr[x], 1.00);
+    ASSERT_EQ(expr[x], 7.00);
+}
 
-    IndexedCoefficient a(3.50, x);
-    IndexedCoefficient b(1.00, x);
-    IndexedCoefficient c(y);
-    IndexedCoefficient d(7.00);
+TEST(NewExpressionOperators, InnerExpressionSum2)
+{
+    // two equal IndexedSymbols should yield one unique entry in the map
+    Variable a("a");
+    Variable b("a");
+    auto expr = a + b;
+    ASSERT_EQ(expr[a], 2.00);
+    ASSERT_EQ(expr[b], 2.00);
+}
 
-    auto test1 = a + b;
-    auto test2 = a + c;
-    auto test3 = a + d + 11.25;
-    auto test4 = a + b + c + d;
+TEST(NewExpressionOperators, InnerExpressionSum3)
+{
+    // three variables, two of them differing by their type, should yield two spots on the map, since as IndexSymbols they are the same (compares name and indexes)
+    Variable a("a");
+    Variable b("b", or2l::VariableType::CONTINUOUS);
+    Variable c("b",or2l::VariableType::BINARY);
+    auto expr = a + b + c;
+    ASSERT_EQ(expr[a], 1.00);
+    ASSERT_EQ(expr[b], 2.00); // as a IndexedSymbol, both are the same
+    ASSERT_EQ(expr[c], 2.00); // as a IndexedSymbol, both are the same
 
-    ASSERT_EQ(test1[x], 4.50);
+    auto expr2 = a + b + c;
+}
 
-    ASSERT_EQ(test2[x], 3.50);
-    ASSERT_EQ(test2[y], 1.00);
-
-    ASSERT_EQ(test3[x], 3.50);
-    ASSERT_EQ(test3[{}], 18.25);
-
-    ASSERT_EQ(test4[x], 4.50);
-    ASSERT_EQ(test4[y], 1.00);
-    ASSERT_EQ(test4[{}], 7.00);
-
-    //InnerExpression<IndexedCoefficient> inner1(x + y + 60);
-    //auto inner2(y + 30);
-    //auto test5 = inner1 + inner2;
-    //ASSERT_EQ(test5[x], 1.00);
-    //ASSERT_EQ(test5[y], 2.00);
-    //ASSERT_EQ(test5[{}], 90.00);
+TEST(NewExpressionOperators, InnerExpressionSum4)
+{
+    // considering that an IndexedSymbol is the parent of Variable and Constant, an sum between the two should be viable
+    Variable a("a");
+    Constant b("b");
+    auto expr = a + b;
+    ASSERT_EQ(expr[a], 1.00);
+    ASSERT_EQ(expr[b], 1.00);
 }
 //
 // TEST(NewExpressionOperators, ExpandedExpressionTests1)
