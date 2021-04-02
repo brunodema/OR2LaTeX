@@ -87,21 +87,8 @@ template <class T> class InnerExpression
     }
 
     // the two next functions allow child classes to be converted to the parent ones during summations. Please review them carefully in the future, since there are probably opportunities for optimziation/refactoring
-    template <typename H, typename = typename std::enable_if<std::is_base_of<T, H>::value>::type>
-    friend inline InnerExpression<T> operator+(const InnerExpression<H> &_other)
-    {
-        InnerExpression<T> ret;
-        for (const auto &pair : this->coefficient_map)
-        {
-            ret[pair.first] += pair.second;
-        }
-        for (const auto &pair : _other.coefficient_map)
-        {
-            auto new_key = static_cast<T>(pair.first);
-            ret[new_key] += pair.second;
-        }
-        return ret;
-    }
+    template<class H>
+    friend InnerExpression<T> operator+(const InnerExpression<H> &_other);
     template <typename H, typename = typename std::enable_if<std::is_base_of<H, T>::value>::type>
     inline InnerExpression<H> operator+(const InnerExpression<H> &_other)
     {
@@ -169,6 +156,22 @@ InnerExpression<T> operator+(const T &_lhs, const T &_rhs)
     ret[_rhs] += 1.00;
     return ret;
 };
+
+template <class T, typename H, typename = typename std::enable_if<std::is_base_of<T, H>::value>::type>
+InnerExpression<T> operator+(const InnerExpression<H> &_other)
+{
+    InnerExpression<T> ret;
+    for (const auto &pair : this->coefficient_map)
+    {
+        ret[pair.first] += pair.second;
+    }
+    for (const auto &pair : _other.coefficient_map)
+    {
+        auto new_key = static_cast<T>(pair.first);
+        ret[new_key] += pair.second;
+    }
+    return ret;
+}
 
 InnerExpression<IndexedSymbol> operator+(const IndexedSymbol &_lhs, const IndexedSymbol &_rhs)
 {
