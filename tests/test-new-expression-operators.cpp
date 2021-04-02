@@ -54,8 +54,8 @@ TEST(NewExpressionOperators, InnerExpressionSum1)
     Variable y("y");
     auto expr = x + y + 7.00;
     ASSERT_EQ(expr[x], 1.00);
-    ASSERT_EQ(expr[x], 1.00);
-    ASSERT_EQ(expr[x], 7.00);
+    ASSERT_EQ(expr[y], 1.00);
+    ASSERT_EQ(expr[{}], 7.00);
 }
 
 TEST(NewExpressionOperators, InnerExpressionSum2)
@@ -74,7 +74,7 @@ TEST(NewExpressionOperators, InnerExpressionSum3)
     Variable a("a");
     Variable b("b", or2l::VariableType::CONTINUOUS);
     Variable c("b",or2l::VariableType::BINARY);
-    auto expr = a + b + c;
+    InnerExpression<IndexedSymbol> expr = a + b + c;
     ASSERT_EQ(expr[a], 1.00);
     ASSERT_EQ(expr[b], 2.00); // as a IndexedSymbol, both are the same
     ASSERT_EQ(expr[c], 2.00); // as a IndexedSymbol, both are the same
