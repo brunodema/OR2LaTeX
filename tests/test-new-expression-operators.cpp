@@ -10,40 +10,6 @@ using or2l::IndexedSymbol;
 using or2l::Constant;
 using or2l::VariableType;
 
-//TEST(NewExpressionOperators, EnsureThatVariablesAreCorrectlyHashed)
-//{
-//    Index i("i", 0, 20);
-//    Variable x("x");
-//    Variable y("y", or2l::VariableType::CONTINUOUS, {i});
-//    Variable z("z", or2l::VariableType::CONTINUOUS, {i});
-//
-//    IndexedCoefficient a;
-//    IndexedCoefficient b;
-//    IndexedCoefficient c;
-//    IndexedCoefficient d;
-//
-//    a.object = x;
-//    a.coefficient = 3.00;
-//
-//    b.object = x;
-//    b.coefficient = 1.00;
-//
-//    c.object = y;
-//    c.coefficient = 1.00;
-//
-//    d.object = y;
-//    d.coefficient = 1.00;
-//
-//    std::unordered_map<IndexedCoefficient, double, absl::Hash<IndexedCoefficient>> map;
-//    map[a] = a.coefficient;
-//    map[b] = b.coefficient;
-//    map[c] = c.coefficient;
-//    map[d] = d.coefficient;
-//
-//    // Expects only three entries, since 'a' and 'b' variables are the same, and 'c' and 'd' differ by its name
-//    ASSERT_EQ(map.size(), 3);
-//}
-
 TEST(NewExpressionOperators, InnerExpressionSum1)
 {
     // two different variables (as IndexedSymbols) + a scalar (implicit InnerExpression<T>) should yield three different spots inside the map
@@ -124,7 +90,7 @@ TEST(NewExpressionOperators, InnerExpressionSum6)
 
 TEST(NewExpressionOperators, InnerExpressionSum7)
 {
-    // summation of InnerExpressions
+    // summation of Indexes - this is important for the future
     Index i("i", 0, 20);
     Index j("j", 0, 6);
     Index k("k", 0, 10);
@@ -136,6 +102,20 @@ TEST(NewExpressionOperators, InnerExpressionSum7)
     ASSERT_EQ(expr[k], 2.00);
     ASSERT_EQ(expr[l], 2.00);
     ASSERT_EQ(expr[{}], 7.29358239852348753489089089493492344);
+}
+
+TEST(NewExpressionOperators, InnerExpressionSum8)
+{
+    // extra tests with the base_types class... Bounds did not work since there is a is_class restriction on the definition (that does not warn the user about its existence)
+    InnerExpression<base_types::RegexString> expr = InnerExpression<base_types::RegexString>{"a"} + InnerExpression<base_types::RegexString>{"b"} +
+        InnerExpression<base_types::RegexString>{"c"} + InnerExpression<base_types::RegexString>{"d"} +
+        InnerExpression<base_types::RegexString>{"d"};
+
+    ASSERT_EQ(expr["a"], 1.00);
+    ASSERT_EQ(expr["b"], 1.00);
+    ASSERT_EQ(expr["c"], 1.00);
+    ASSERT_EQ(expr["d"], 2.00);
+    ASSERT_EQ(expr[""], 0.0);
 }
 //
 // TEST(NewExpressionOperators, ExpandedExpressionTests1)

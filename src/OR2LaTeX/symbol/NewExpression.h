@@ -139,7 +139,8 @@ template <class T, typename H> H AbslHashValue(H _h, const or2l::InnerExpression
     return H::combine(std::move(_h), _inner_expr.GetObjects(), _inner_expr.GetCoefficients());
 }
 
-template <class T> InnerExpression<T> operator+(const T &_lhs, const T &_rhs)
+template <typename T, typename = typename std::enable_if<std::is_class<T>::value>::type>
+InnerExpression<T> operator+(const T &_lhs, const T &_rhs)
 {
     InnerExpression<T> ret;
     ret[_lhs] += 1.00;
@@ -154,63 +155,6 @@ InnerExpression<IndexedSymbol> operator+(const IndexedSymbol &_lhs, const Indexe
     ret[_rhs] += 1.00;
     return ret;
 };
-
-// template <class T>
-// inline InnerExpression<T> operator+(const CoefficientObject<T> &_lhs, const CoefficientObject<T> &_rhs)
-//{
-//    InnerExpression<T> ret;
-//    if (_lhs.object == _rhs.object)
-//    {
-//        ret[_lhs.object] = _lhs.coefficient + _rhs.coefficient;
-//        return ret;
-//    }
-//    ret[_lhs.object] = _lhs.coefficient;
-//    ret[_rhs.object] = _rhs.coefficient;
-//    return ret;
-//}
-
-// inline InnerExpression<IndexedCoefficient> operator+(const IndexedCoefficient &_lhs, const IndexedCoefficient &_rhs)
-//{
-//    InnerExpression<IndexedCoefficient> ret;
-//    if (_lhs.object == _rhs.object)
-//    {
-//        ret[_lhs.object] = _lhs.coefficient + _rhs.coefficient;
-//        return ret;
-//    }
-//    ret[_lhs.object] = _lhs.coefficient;
-//    ret[_rhs.object] = _rhs.coefficient;
-//    return ret;
-//}
-
-// template <>
-// inline InnerExpression<IndexedCoefficient> operator+(const CoefficientObject<IndexedCoefficient> &_lhs,
-//                                    const CoefficientObject<IndexedCoefficient> &_rhs)
-//{
-//    InnerExpression<IndexedCoefficient> ret;
-//    if (_lhs.object == _rhs.object)
-//    {
-//        ret[_lhs.object] = _lhs.coefficient + _rhs.coefficient;
-//        return ret;
-//    }
-//    ret[_lhs.object] = _lhs.coefficient;
-//    ret[_rhs.object] = _rhs.coefficient;
-//    return ret;
-//}
-
-// template<class T>
-// inline InnerExpression<T> operator+(const T& _lhs, const T& _rhs)
-//{
-//    auto coeff_lhs = CoefficientObject<T>(_lhs, 1.00);
-//    auto coeff_rhs = CoefficientObject<T>(_rhs, 1.00);
-//    return InnerExpression<T>(coeff_lhs + coeff_rhs);
-//}
-// template <class T>
-// InnerExpression<T> operator+(const T& _lhs, const double& _val)
-//{
-//    auto coeff_lhs = CoefficientObject<T>(_lhs, 1.00);
-//    auto coeff_val = CoefficientObject<T>({}, _val);
-//    return InnerExpression<T>(coeff_lhs + coeff_val);
-//}
 
 // namespace operators // should include all other operators in the future
 //{
