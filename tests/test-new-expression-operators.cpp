@@ -3,15 +3,12 @@
 #include "symbol/Variable.h"
 #include "gtest/gtest.h"
 
-//using or2l::ExpandedExpression;
 using or2l::Index;
-//using or2l::IndexedCoefficient;
 using or2l::InnerExpression;
-//using or2l::NewExpression;
 using or2l::Variable;
-//using or2l::operators::ExpressionOperatorType;
 using or2l::IndexedSymbol;
 using or2l::Constant;
+using or2l::VariableType;
 
 //TEST(NewExpressionOperators, EnsureThatVariablesAreCorrectlyHashed)
 //{
@@ -79,7 +76,10 @@ TEST(NewExpressionOperators, InnerExpressionSum3)
     ASSERT_EQ(expr[b], 2.00); // as a IndexedSymbol, both are the same
     ASSERT_EQ(expr[c], 2.00); // as a IndexedSymbol, both are the same
 
-    auto expr2 = a + b + c;
+    InnerExpression<Variable> expr2 = a + b + c;
+    ASSERT_EQ(expr2[a], 1.00);
+    ASSERT_EQ(expr2[b], 1.00); // as a Variable, they are different
+    ASSERT_EQ(expr2[c], 1.00); // as a Variable, they are different
 }
 
 TEST(NewExpressionOperators, InnerExpressionSum4)
@@ -90,6 +90,52 @@ TEST(NewExpressionOperators, InnerExpressionSum4)
     auto expr = a + b;
     ASSERT_EQ(expr[a], 1.00);
     ASSERT_EQ(expr[b], 1.00);
+}
+
+TEST(NewExpressionOperators, InnerExpressionSum5)
+{
+    // doing operations with random classes - string works, char converts to int (which does not work)
+    std::string aba = "aba";
+    std::string bbb = "bbb";
+    std::string cdd = "bbb";
+    InnerExpression<std::string> expr =
+        InnerExpression<std::string>(aba) + InnerExpression<std::string>(bbb) + InnerExpression<std::string>(cdd); // if I cast it normally, it sums everything up first, since there is a default operator for std::string summation
+    ASSERT_EQ(expr[aba], 1.00);
+    ASSERT_EQ(expr[bbb], 2.00);
+    ASSERT_EQ(expr[cdd], 2.00);
+    // there are many things to work (and learn) in terms of templates and good practices
+}
+
+TEST(NewExpressionOperators, InnerExpressionSum6)
+{
+    // summation of InnerExpressions
+    Index i("i", 0, 20);
+    Index j("j", 0, 6);
+    Variable x("x", VariableType::INTEGER, {i, j});
+    Variable y("y", VariableType::CONTINUOUS, {j});
+
+    auto expr = x + x + y + y + y + 14.3;
+    auto expr2 = x + x + 5.7;
+    auto expr3 = expr + expr2;
+    ASSERT_EQ(expr3[x], 4);
+    ASSERT_EQ(expr3[y], 3);
+    ASSERT_EQ(expr3[{}], 20.0);
+}
+
+TEST(NewExpressionOperators, InnerExpressionSum7)
+{
+    // summation of InnerExpressions
+    Index i("i", 0, 20);
+    Index j("j", 0, 6);
+    Index k("k", 0, 10);
+    Index l("k", 0, 10);
+
+    auto expr = i + j + k + l + 7.29358239852348753489089089493492344;
+    ASSERT_EQ(expr[i], 1.00);
+    ASSERT_EQ(expr[j], 1.00);
+    ASSERT_EQ(expr[k], 2.00);
+    ASSERT_EQ(expr[l], 2.00);
+    ASSERT_EQ(expr[{}], 7.29358239852348753489089089493492344);
 }
 //
 // TEST(NewExpressionOperators, ExpandedExpressionTests1)
