@@ -3,16 +3,17 @@
 #include "symbol/Variable.h"
 #include "gtest/gtest.h"
 
+using or2l::Constant;
 using or2l::Index;
+using or2l::IndexedSymbol;
 using or2l::InnerExpression;
 using or2l::Variable;
-using or2l::IndexedSymbol;
-using or2l::Constant;
 using or2l::VariableType;
 
 TEST(NewExpressionOperators, InnerExpressionSum1)
 {
-    // two different variables (as IndexedSymbols) + a scalar (implicit InnerExpression<T>) should yield three different spots inside the map
+    // two different variables (as IndexedSymbols) + a scalar (implicit InnerExpression<T>) should yield three different
+    // spots inside the map
     Variable x("x");
     Variable y("y");
     auto expr = x + y + 7.00;
@@ -33,10 +34,11 @@ TEST(NewExpressionOperators, InnerExpressionSum2)
 
 TEST(NewExpressionOperators, InnerExpressionSum3)
 {
-    // three variables, two of them differing by their type, should yield two spots on the map, since as IndexSymbols they are the same (compares name and indexes)
+    // three variables, two of them differing by their type, should yield two spots on the map, since as IndexSymbols
+    // they are the same (compares name and indexes)
     Variable a("a");
     Variable b("b", or2l::VariableType::CONTINUOUS);
-    Variable c("b",or2l::VariableType::BINARY);
+    Variable c("b", or2l::VariableType::BINARY);
     InnerExpression<IndexedSymbol> expr = a + b + c;
     ASSERT_EQ(expr[a], 1.00);
     ASSERT_EQ(expr[b], 2.00); // as a IndexedSymbol, both are the same
@@ -65,7 +67,9 @@ TEST(NewExpressionOperators, InnerExpressionSum5)
     std::string bbb = "bbb";
     std::string cdd = "bbb";
     InnerExpression<std::string> expr =
-        InnerExpression<std::string>(aba) + InnerExpression<std::string>(bbb) + InnerExpression<std::string>(cdd); // if I cast it normally, it sums everything up first, since there is a default operator for std::string summation
+        InnerExpression<std::string>(aba) + InnerExpression<std::string>(bbb) +
+        InnerExpression<std::string>(cdd); // if I cast it normally, it sums everything up first, since there is a
+                                           // default operator for std::string summation
     ASSERT_EQ(expr[aba], 1.00);
     ASSERT_EQ(expr[bbb], 2.00);
     ASSERT_EQ(expr[cdd], 2.00);
@@ -106,8 +110,10 @@ TEST(NewExpressionOperators, InnerExpressionSum7)
 
 TEST(NewExpressionOperators, InnerExpressionSum8)
 {
-    // extra tests with the base_types class... Bounds did not work since there is a is_class restriction on the definition (that does not warn the user about its existence)
-    InnerExpression<base_types::RegexString> expr = InnerExpression<base_types::RegexString>{"a"} + InnerExpression<base_types::RegexString>{"b"} +
+    // extra tests with the base_types class... Bounds did not work since there is a is_class restriction on the
+    // definition (that does not warn the user about its existence)
+    InnerExpression<base_types::RegexString> expr =
+        InnerExpression<base_types::RegexString>{"a"} + InnerExpression<base_types::RegexString>{"b"} +
         InnerExpression<base_types::RegexString>{"c"} + InnerExpression<base_types::RegexString>{"d"} +
         InnerExpression<base_types::RegexString>{"d"};
 
@@ -116,6 +122,30 @@ TEST(NewExpressionOperators, InnerExpressionSum8)
     ASSERT_EQ(expr["c"], 1.00);
     ASSERT_EQ(expr["d"], 2.00);
     ASSERT_EQ(expr[""], 0.0);
+}
+
+TEST(NewExpressionOperators, InnerExpressionSum9)
+{
+    // summation of InnerExpressions with different template types (one is base of another). This is also another
+    // important test
+    Index i("i", 0, 1000);
+    Index j("j", 6, 600);
+
+    Variable x("x", VariableType::CONTINUOUS, {i, j});
+    Variable y("y", VariableType::BINARY, {i, j});
+    Constant c("c", {j});
+    const double scalar = 556.44;
+
+    auto expr_var = x + y + scalar;
+    auto expr_symbol = c + y + 443.56;
+    auto expr_mix = expr_symbol + expr_var;
+    auto expr_mix2 = expr_var + expr_symbol;
+
+    ASSERT_EQ(expr_mix, expr_mix2);
+    ASSERT_EQ(expr_mix[x], 1.00);
+    ASSERT_EQ(expr_mix[y], 2.00);
+    ASSERT_EQ(expr_mix[c], 1.00);
+    ASSERT_EQ(expr_mix[{}], 1000.00);
 }
 //
 // TEST(NewExpressionOperators, ExpandedExpressionTests1)
