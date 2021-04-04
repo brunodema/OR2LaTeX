@@ -1,3 +1,5 @@
+[Symbol page README]: https://github.com/brunodema/OR2LaTeX/blob/master/src/OR2LaTeX/symbol/README.md
+
 [![CMake](https://github.com/brunodema/OR2LaTeX/workflows/CMake/badge.svg?branch=master)](https://github.com/brunodema/OR2LaTeX/actions)
 
 # OR2LaTeX
@@ -6,6 +8,8 @@ A (concept) project to facilitate the integration of O.R. tools (Operations Rese
 ## Latest Updates
 
 (25/03/2021) Currently, the project is focusing on the first half of roadmap: the solver encapsulation into a generic mathematical programming platform. It is currently being tested the creation of variables and constraints into this new format, and its implementation in different solver libraries. I am currently stuck at the abstractio layer of the constraint object. I am trying to refactor the code related to the symbolic operations between `Variable` and constants, and also implement `ExpandableExpressions`(summations, for instance).
+
+Please check [this README][Symbol page README] for more information.
 
 ## Goals
 
