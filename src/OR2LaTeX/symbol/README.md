@@ -60,9 +60,10 @@ The established operators are as follows. Taking as an example the `+` operator,
 |5|`IE<parent_type> operator+(const sibling_type &lhs)`|
 |6|`IE<parent_type> operator+(const IE<parent_type> &lhs)`|
 |7|`IE<parent_type> operator+(const IE<sibling_type> &lhs)`|
-|8|`IE<T> operator+(const IE<Child> &lhs)`|
+|8|`IE<T> operator+(const IE<child_type> &lhs)`|
 
 Even though operator #2 is able to initialize an expression of type `IE<T> expr1 = expr1 + v`, the same does behavior does not happen for a nested child type as represented by operator #8, that's why an explicit function like the one required is necessary.
+
 The binary operators are:
 
 |#|Operator Template|
@@ -72,11 +73,11 @@ The binary operators are:
 |**11**|`IE<T> operator+(const numeric_type &lhs, const T &rhs)`|
 |12|`IE<T> operator+(const numeric_type &lhs, const IE<T> &rhs)`|
 |13|`IE<T> operator+(const T &lhs, const IE<T> &rhs)`|
-|14|`IE<parent_type> operator+(const Child &lhs, const parent_type &rhs)`|
-|**15**|`IE<parent_type> operator+(const parent_type &lhs, const Child &rhs)`|
-|16|`IE<parent_type> operator+(const Child1 &lhs, const Child2 &rhs)`|
-|17|`IE<parent_type> operator+(const Child &lhs, const IE<parent_type> &rhs)`|
-|18|`IE<parent_type> operator+(const parent_type &lhs, const IE<Child> &rhs)`|
-|19|`IE<parent_type> operator+(const Child1 &lhs, const IE<Child2> &rhs)`|
+|14|`IE<parent_type> operator+(const child_type &lhs, const parent_type &rhs)`|
+|**15**|`IE<parent_type> operator+(const parent_type &lhs, const child_type &rhs)`|
+|16|`IE<parent_type> operator+(const child_type1 &lhs, const child_type2 &rhs)`|
+|17|`IE<parent_type> operator+(const child_type &lhs, const IE<parent_type> &rhs)`|
+|18|`IE<parent_type> operator+(const parent_type &lhs, const IE<child_type> &rhs)`|
+|19|`IE<parent_type> operator+(const child_type1 &lhs, const IE<child_type2> &rhs)`|
 
 The commutative versions of the operator are highlighted in bold. Note that the complexity may vary between operators, since some combinations might not be valid depending on the type.
