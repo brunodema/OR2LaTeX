@@ -65,8 +65,8 @@ The established operators are as follows. Taking as an example the `+` operator,
 Even though operator #2 is able to initialize an expression of type `IE<T> expr1 = expr1 + v`, the same does behavior does not happen for a nested child type as represented by operator #8, that's why an explicit function like the one required is necessary.
 The binary operators are:
 
-|#|Operator Template|Description|
-|---|---|---|
+|#|Operator Template|
+|---|---|
 |9|`IE<T> operator+(const T &lhs, const T &rhs)`|
 |10|`IE<T> operator+(const T &lhs, const numeric_type &rhs)`|
 |**11**|`IE<T> operator+(const numeric_type &lhs, const T &rhs)`|
