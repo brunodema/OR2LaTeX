@@ -38,3 +38,45 @@ Constraint cstr(x + c + 1.00 <= 5.00, {}); // the empty set '{}' shows that no i
 * This concept is currently being ported to the code, which will also need to consider the actual business rules of each operation, and not only the type/inheritance aspects of them.
 
 This approach was designed entirely by me, so I would say that it definitely can still be improved with expert advice. However, it is already a *feasible* way to fix the previous scalability problems, while also providing an interface for mathematical operations between types, which was not even in the original plan - depending on the final complexity of this part of the project, I might port this to an individual sub-module.
+
+Before introducing the operator templates, consider the following conventions:
+
+* **IE**: nickname for inner expression class.
+* **T**: templated type.
+* **numeric_type**: class which represents a numeric type in C++ (in other words, class for which `std::is_numeric<T>::value` returns `true`).
+* **parent_type**: class which is the parent class in relation to the other classes involved in the calculations.
+* **child_type**: class which is the child class in relation to the other classes involved in the calculations.
+* **sibling_type**: class which inherits from the same parent as another class involved in the calculations.
+
+
+The established operators are as follows. Taking as an example the `+` operator, the unary operators would be:
+
+|#|Operator Template|
+|---|---|
+|1|`IE<T> operator+(const numeric_type &lhs)`|
+|2|`IE<T> operator+(const T &lhs)`|
+|3|`IE<T> operator+(const IE<T> &lhs)`|
+|4|`IE<parent_type> operator+(const parent_type &lhs)`|
+|5|`IE<parent_type> operator+(const sibling_type &lhs)`|
+|6|`IE<parent_type> operator+(const IE<parent_type> &lhs)`|
+|7|`IE<parent_type> operator+(const IE<sibling_type> &lhs)`|
+|8|`IE<T> operator+(const IE<Child> &lhs)`|
+
+Even though operator #2 is able to initialize an expression of type `IE<T> expr1 = expr1 + v`, the same does behavior does not happen for a nested child type as represented by operator #8, that's why an explicit function like the one required is necessary.
+The binary operators are:
+
+|#|Operator Template|Description|
+|---|---|---|
+|9|`IE<T> operator+(const T &lhs, const T &rhs)`|
+|10|`IE<T> operator+(const T &lhs, const numeric_type &rhs)`|
+|**11**|`IE<T> operator+(const numeric_type &lhs, const T &rhs)`|
+|12|`IE<T> operator+(const numeric_type &lhs, const IE<T> &rhs)`|
+|13|`IE<T> operator+(const T &lhs, const IE<T> &rhs)`|
+|14|`IE<parent_type> operator+(const Child &lhs, const parent_type &rhs)`|
+|**15**|`IE<parent_type> operator+(const parent_type &lhs, const Child &rhs)`|
+|16|`IE<parent_type> operator+(const Child1 &lhs, const Child2 &rhs)`|
+|17|`IE<parent_type> operator+(const Child &lhs, const IE<parent_type> &rhs)`|
+|18|`IE<parent_type> operator+(const parent_type &lhs, const IE<Child> &rhs)`|
+|19|`IE<parent_type> operator+(const Child1 &lhs, const IE<Child2> &rhs)`|
+
+The commutative versions of the operator are highlighted in bold. Note that the complexity may vary between operators, since some combinations might not be valid depending on the type.
