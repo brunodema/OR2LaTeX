@@ -99,6 +99,10 @@ template <class T> class InnerExpression
     {
         return this->coefficient_map.end();
     }
+    double operator[](const T& _obj)
+    {
+        return this->coefficient_map[_obj];
+    }
 
   private:
     map_type coefficient_map = {};
