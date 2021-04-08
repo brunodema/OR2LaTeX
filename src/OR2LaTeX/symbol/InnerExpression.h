@@ -33,16 +33,16 @@ template <class T> class InnerExpression
     InnerExpression() = default;
 
     template <class numeric_type, typename = typename std::enable_if<std::is_arithmetic<numeric_type>::value>::type>
-    InnerExpression<T> operator+(const numeric_type &lhs)
+    InnerExpression<T>& operator+(const numeric_type &lhs)
     {
 
-        return InnerExpression<T>();
+        return *this;
     }
 
-    InnerExpression<T> operator+(const T &lhs)
+    InnerExpression<T>& operator+(const T &lhs)
     {
 
-        return InnerExpression<T>();
+        return *this;
     }
 
     template <class parent_type = typename type_traits<T>::parent,
@@ -62,10 +62,10 @@ template <class T> class InnerExpression
     }
 
     template <class Child, typename = typename std::enable_if<std::is_base_of<T, Child>::value>::type>
-    InnerExpression<T> operator+(const InnerExpression<Child> &lhs)
+    InnerExpression<T>& operator+(const InnerExpression<Child> &lhs)
     {
 
-        return InnerExpression<T>();
+        return *this;
     }
 
     template <class parent_type, typename = typename std::enable_if<std::is_base_of<parent_type, T>::value>::type>
@@ -83,16 +83,17 @@ template <class T> class InnerExpression
         return InnerExpression<parent_type>();
     }
 
-    InnerExpression<T> operator+(const InnerExpression<T> &lhs)
+    InnerExpression<T>& operator+(const InnerExpression<T> &lhs)
     {
 
-        return InnerExpression<T>();
+        return *this;
     }
 
     using map_type = std::unordered_map<T, double, absl::Hash<T>>;
     using iterator_type = typename map_type::iterator;
 
   private:
+    map_type coefficient_map = {};
 };
 
 // solves the first batch
