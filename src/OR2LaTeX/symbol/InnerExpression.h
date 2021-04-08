@@ -91,6 +91,14 @@ template <class T> class InnerExpression
 
     using map_type = std::unordered_map<T, double, absl::Hash<T>>;
     using iterator_type = typename map_type::iterator;
+    iterator_type begin() const
+    {
+        return this->coefficient_map.begin();
+    }
+    iterator_type end() const 
+    {
+        return this->coefficient_map.end();
+    }
 
   private:
     map_type coefficient_map = {};
