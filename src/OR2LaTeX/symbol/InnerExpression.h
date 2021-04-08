@@ -1,5 +1,6 @@
+#pragma once
 #include "Variable.h"
-
+#include "absl/hash/hash.h"
 
 template <class T> struct type_traits
 {
@@ -27,24 +28,23 @@ template <class T, class U> constexpr bool inheritance_traits<T, U>::has_same_pa
 
 template <class T> class InnerExpression
 {
+
   public:
     InnerExpression() = default;
-    // solves seventh batch
-    // InnerExpression(const T &obj);
 
-    // solves fifth batch
     template <class numeric_type, typename = typename std::enable_if<std::is_arithmetic<numeric_type>::value>::type>
     InnerExpression<T> operator+(const numeric_type &lhs)
     {
 
         return InnerExpression<T>();
     }
+
     InnerExpression<T> operator+(const T &lhs)
     {
 
         return InnerExpression<T>();
     }
-    // solves sixth batch
+
     template <class parent_type = typename type_traits<T>::parent,
               typename = typename std::enable_if<std::is_base_of<parent_type, T>::value>::type>
     InnerExpression<parent_type> operator+(const parent_type &lhs)
@@ -52,6 +52,7 @@ template <class T> class InnerExpression
 
         return InnerExpression<parent_type>();
     }
+
     template <class parent_type = typename type_traits<T>::parent, class Child,
               typename = typename std::enable_if<inheritance_traits<T, Child>::has_same_parent()>::type>
     InnerExpression<parent_type> operator+(const Child &lhs)
@@ -59,19 +60,21 @@ template <class T> class InnerExpression
 
         return InnerExpression<parent_type>();
     }
-    // solves eighth batch
+
     template <class Child, typename = typename std::enable_if<std::is_base_of<T, Child>::value>::type>
     InnerExpression<T> operator+(const InnerExpression<Child> &lhs)
     {
 
         return InnerExpression<T>();
     }
+
     template <class parent_type, typename = typename std::enable_if<std::is_base_of<parent_type, T>::value>::type>
     InnerExpression<parent_type> operator+(const InnerExpression<parent_type> &lhs)
     {
 
         return InnerExpression<parent_type>();
     }
+
     template <class Child, class parent_type = typename type_traits<T>::parent,
               typename = typename std::enable_if<inheritance_traits<T, Child>::has_same_parent()>::type>
     InnerExpression<parent_type> operator+(const InnerExpression<Child> &lhs)
@@ -79,12 +82,17 @@ template <class T> class InnerExpression
 
         return InnerExpression<parent_type>();
     }
-    // solves ninth batch
+
     InnerExpression<T> operator+(const InnerExpression<T> &lhs)
     {
 
         return InnerExpression<T>();
     }
+
+    using map_type = std::unordered_map<T, double, absl::Hash<T>>;
+    using iterator_type = typename map_type::iterator;
+
+  private:
 };
 
 // solves the first batch
