@@ -31,75 +31,107 @@ template <class T> class InnerExpression
 
   public:
     InnerExpression() = default;
+    InnerExpression(const T& _obj)
+    {
+        this->coefficient_map[_obj] += 1.00;
+    }
 
     template <class numeric_type, typename = typename std::enable_if<std::is_arithmetic<numeric_type>::value>::type>
-    InnerExpression<T>& operator+(const numeric_type &lhs)
+    InnerExpression<T>& operator+(const numeric_type &_val)
     {
-
+        this->operator[]({}) += _val;
         return *this;
     }
 
-    InnerExpression<T>& operator+(const T &lhs)
+    InnerExpression<T>& operator+(const T &_obj)
     {
-
+        this->operator[](_obj) += 1.00;
         return *this;
     }
 
     template <class parent_type = typename type_traits<T>::parent,
               typename = typename std::enable_if<std::is_base_of<parent_type, T>::value>::type>
-    InnerExpression<parent_type> operator+(const parent_type &lhs)
+    InnerExpression<parent_type> operator+(const parent_type &_obj)
     {
-
+        InnerExpression<parent_type> ret;
+        for (const auto &pair : *this)
+        {
+            ret[static_cast<parent_type>(pair.first)] += pair.second;
+        }
+        ret[_obj] += 1.00;
         return InnerExpression<parent_type>();
     }
 
     template <class parent_type = typename type_traits<T>::parent, class Child,
               typename = typename std::enable_if<inheritance_traits<T, Child>::has_same_parent()>::type>
-    InnerExpression<parent_type> operator+(const Child &lhs)
+    InnerExpression<parent_type> operator+(const Child &_obj)
     {
-
+        InnerExpression<parent_type> ret;
+        for (const auto &pair : *this)
+        {
+            ret[static_cast<parent_type>(_obj)] += pair.second;
+        }
+        ret[static_cast<parent_type>(_obj)] += 1.00;
         return InnerExpression<parent_type>();
     }
 
     template <class Child, typename = typename std::enable_if<std::is_base_of<T, Child>::value>::type>
-    InnerExpression<T>& operator+(const InnerExpression<Child> &lhs)
+    InnerExpression<T>& operator+(InnerExpression<Child> &_expr) // no idea why but I have to drop 'const' here
     {
-
+        for (const auto& pair : _expr)
+        {
+            this->operator[](static_cast<T>(pair.first)) += pair.second;
+        }
         return *this;
     }
 
     template <class parent_type, typename = typename std::enable_if<std::is_base_of<parent_type, T>::value>::type>
-    InnerExpression<parent_type> operator+(const InnerExpression<parent_type> &lhs)
+    InnerExpression<parent_type> operator+(const InnerExpression<parent_type> &_expr)
     {
-
-        return InnerExpression<parent_type>();
+        InnerExpression<parent_type> ret(std::move(_expr));
+        for (const auto &pair : *this)
+        {
+            ret[static_cast<T>(pair.first)] += pair.second;
+        }
+        return ret;
     }
 
     template <class Child, class parent_type = typename type_traits<T>::parent,
               typename = typename std::enable_if<inheritance_traits<T, Child>::has_same_parent()>::type>
-    InnerExpression<parent_type> operator+(const InnerExpression<Child> &lhs)
+    InnerExpression<parent_type> operator+(InnerExpression<Child> &_expr) // no idea why but I have to drop 'const' here
     {
-
-        return InnerExpression<parent_type>();
+        InnerExpression<parent_type> ret;
+        for (const auto &pair : *this)
+        {
+            ret[static_cast<parent_type>(pair.first)] += pair.second;
+        }
+        for (const auto &pair : _expr)
+        {
+            ret[static_cast<parent_type>(pair.first)] += pair.second;
+        }
+        return ret;
     }
 
-    InnerExpression<T>& operator+(const InnerExpression<T> &lhs)
+    InnerExpression<T>& operator+(const InnerExpression<T> &_expr)
     {
-
+        for (const auto &pair : _expr)
+        {
+            this->operator[](pair.first)  += pair.second;
+        }
         return *this;
     }
 
     using map_type = std::unordered_map<T, double, absl::Hash<T>>;
-    using iterator_type = typename map_type::iterator;
-    iterator_type begin() const
+    //using iterator_type = typename map_type::iterator;
+    auto begin()
     {
         return this->coefficient_map.begin();
     }
-    iterator_type end() const 
+    auto end() 
     {
         return this->coefficient_map.end();
     }
-    double operator[](const T& _obj)
+    double& operator[](const T& _obj)
     {
         return this->coefficient_map[_obj];
     }
@@ -108,22 +140,23 @@ template <class T> class InnerExpression
     map_type coefficient_map = {};
 };
 
-// solves the first batch
 template <class T, class numeric_type,
           typename = typename std::enable_if<std::is_arithmetic<numeric_type>::value>::type>
-InnerExpression<T> operator+(const T &lhs, const numeric_type &rhs)
+InnerExpression<T> operator+(const T &_lhs, const numeric_type &_val)
 {
-
-    return InnerExpression<T>();
+    InnerExpression<T> ret(_lhs);
+    ret[{}] = _val;
+    return ret;
 }
 template <class T, class numeric_type,
           typename = typename std::enable_if<std::is_arithmetic<numeric_type>::value>::type>
-InnerExpression<T> operator+(const numeric_type &lhs, const T &rhs)
+InnerExpression<T> operator+(const numeric_type &_val, const T &_rhs)
 {
-
-    return InnerExpression<T>();
+    InnerExpression<T> ret(_rhs);
+    ret[{}] = _val;
+    return ret;
 }
-// solves the second batch
+
 template <class T> InnerExpression<T> operator+(const T &lhs, const T &rhs)
 {
 
@@ -151,7 +184,6 @@ InnerExpression<parent_type> operator+(const Child1 &lhs, const Child2 &rhs)
     return InnerExpression<parent_type>();
 }
 
-// solves tenth batch
 template <class T, class numeric_type,
           typename = typename std::enable_if<std::is_arithmetic<numeric_type>::value>::type>
 InnerExpression<T> operator+(const numeric_type &lhs, const InnerExpression<T> &rhs)
@@ -160,7 +192,6 @@ InnerExpression<T> operator+(const numeric_type &lhs, const InnerExpression<T> &
     return InnerExpression<T>();
 }
 
-// solves eleventh batch
 template <class T> InnerExpression<T> operator+(const T &lhs, const InnerExpression<T> &rhs)
 {
 
