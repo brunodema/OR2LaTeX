@@ -45,7 +45,7 @@ template <class T> class InnerExpression
 
     InnerExpression<T>& operator+(const T &_obj)
     {
-        this->operator[](_obj) += 1.00;
+        this->operator[](static_cast<T>(_obj)) += 1.00;
         return *this;
     }
 
@@ -142,46 +142,45 @@ template <class T> class InnerExpression
 
 template <class T, class numeric_type,
           typename = typename std::enable_if<std::is_arithmetic<numeric_type>::value>::type>
-InnerExpression<T> operator+(const T &_lhs, const numeric_type &_val)
+InnerExpression<T> operator+(const T &_obj, const numeric_type &_val)
 {
-    InnerExpression<T> ret(_lhs);
+    InnerExpression<T> ret(_obj);
     ret[{}] = _val;
     return ret;
 }
 template <class T, class numeric_type,
           typename = typename std::enable_if<std::is_arithmetic<numeric_type>::value>::type>
-InnerExpression<T> operator+(const numeric_type &_val, const T &_rhs)
+InnerExpression<T> operator+(const numeric_type &_val, const T &_obj)
 {
-    InnerExpression<T> ret(_rhs);
-    ret[{}] = _val;
+    return _obj + _val; // commutative
+}
+
+template <class T> InnerExpression<T> operator+(const T &_lhs, const T &_rhs)
+{
+    InnerExpression<T> ret(_lhs);
+    ret[_rhs] += 1.00;
     return ret;
 }
-
-template <class T> InnerExpression<T> operator+(const T &lhs, const T &rhs)
+template <class Child, class parent_type = typename type_traits<Child>::parent,
+          typename = typename std::enable_if<std::is_base_of<parent_type, Child>::value>::type>
+InnerExpression<parent_type> operator+(const Child &_child, const parent_type &_parent)
 {
-
-    return InnerExpression<T>();
+    InnerExpression<parent_type> ret(_parent);
+    ret[_child] += 1.00;
+    return ret;
 }
 template <class Child, class parent_type = typename type_traits<Child>::parent,
           typename = typename std::enable_if<std::is_base_of<parent_type, Child>::value>::type>
-InnerExpression<parent_type> operator+(const Child &lhs, const parent_type &rhs)
+InnerExpression<parent_type> operator+(const parent_type &_parent, const Child &_child)
 {
-
-    return InnerExpression<parent_type>();
-}
-template <class Child, class parent_type = typename type_traits<Child>::parent,
-          typename = typename std::enable_if<std::is_base_of<parent_type, Child>::value>::type>
-InnerExpression<parent_type> operator+(const parent_type &lhs, const Child &rhs)
-{
-
-    return InnerExpression<parent_type>();
+    return _child + _parent; // commutative
 }
 template <class Child1, class Child2, class parent_type = typename type_traits<Child1>::parent,
           typename = typename std::enable_if<inheritance_traits<Child1, Child2>::has_same_parent()>::type>
-InnerExpression<parent_type> operator+(const Child1 &lhs, const Child2 &rhs)
+InnerExpression<parent_type> operator+(const Child1 &_child1, const Child2 &_child2)
 {
-
-    return InnerExpression<parent_type>();
+    InnerExpression<parent_type> ret(static_cast<parent_type>(_child1));
+    return ret + _child2;
 }
 
 template <class T, class numeric_type,
