@@ -62,6 +62,7 @@ TEST(test, t5)
 }
 TEST(test, t6)
 {
+    // sixth batch
     auto expr1 = 1 + c + s + v + 1;
     auto expr2 = 1 + s + c + v + 1;
     auto expr3 = 1.0000 + c + 1 + s + 1.00 + v + 1;
@@ -72,6 +73,7 @@ TEST(test, t6)
 }
 TEST(test, t7)
 {
+    // seventh batch
     InnerExpression<Index> expr1 = 1 + r + 1;
     InnerExpression<IndexedSymbol> expr2 = 1 + s + 1;
     InnerExpression<Constant> expr3 = 1 + c + 1;
@@ -79,15 +81,16 @@ TEST(test, t7)
 }
 TEST(test, t8)
 {
+    // eighth batch
     InnerExpression<Index> expr1 = 1 + r + 1;
     InnerExpression<IndexedSymbol> expr2 = 1 + s + 1;
     InnerExpression<Constant> expr3 = 1 + c + 1;
     InnerExpression<Variable> expr4 = 1 + v + 1;
 
-     ////the first three can not compile, since the types are not compatible
-     //auto expr5 = expr1 + expr2;
-     //auto expr6 = expr1 + expr3;
-     //auto expr7 = expr1 + expr4;
+    // the first three can not compile, since the types are not compatible
+    // auto expr5 = expr1 + expr2;
+    // auto expr6 = expr1 + expr3;
+    // auto expr7 = expr1 + expr4;
 
     auto expr8 = expr2 + expr3;
     auto expr9 = expr2 + expr4;
@@ -101,6 +104,7 @@ TEST(test, t8)
 }
 TEST(test, t9)
 {
+    // ninth batch
     InnerExpression<Index> expr1 = r + 1;
     InnerExpression<IndexedSymbol> expr2 = 1 + s;
     InnerExpression<Constant> expr3 = c + 1;
@@ -115,6 +119,7 @@ TEST(test, t9)
 }
 TEST(test, t10)
 {
+    // tenth batch
     InnerExpression<Index> expr1 = r + 1;
     InnerExpression<IndexedSymbol> expr2 = 1 + s;
     InnerExpression<Constant> expr3 = c + 1;
@@ -131,6 +136,7 @@ TEST(test, t10)
 }
 TEST(test, t11)
 {
+    // eleventh batch
     InnerExpression<Index> expr1 = r + 1;
     InnerExpression<IndexedSymbol> expr2 = 1 + s;
     InnerExpression<Constant> expr3 = c + 1;
@@ -148,6 +154,7 @@ TEST(test, t11)
 }
 TEST(test, t12)
 {
+    // twelveth batch
     InnerExpression<Index> expr1 = r + 1;
     InnerExpression<IndexedSymbol> expr2 = 1 + s;
     InnerExpression<Constant> expr3 = c + 1;
@@ -169,6 +176,7 @@ TEST(test, t12)
 }
 TEST(test, t13)
 {
+    // thirteenth batch (automatically passes)
     InnerExpression<Index> expr1 = r + 1;
     InnerExpression<IndexedSymbol> expr2 = 1 + s;
     InnerExpression<Constant> expr3 = c + 1;
@@ -182,6 +190,7 @@ TEST(test, t13)
 }
 TEST(test, t14)
 {
+    // fourteenth batch (automatically passes)
     InnerExpression<Index> expr1 = r + 1;
     InnerExpression<IndexedSymbol> expr2 = 1 + s;
     InnerExpression<Constant> expr3 = c + 1;
