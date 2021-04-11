@@ -141,6 +141,11 @@ template <class T> class InnerExpression
         return this->coefficient_map[_obj];
     }
 
+    std::size_t GetSize() const
+    {
+        return this->coefficient_map.size();
+    }
+
   private:
     using map_type = std::unordered_map<T, double, absl::Hash<T>>;
     map_type coefficient_map = {};
