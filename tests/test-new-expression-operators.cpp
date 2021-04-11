@@ -355,32 +355,39 @@ TEST(test, t10)
     ASSERT_EQ(expr5[c], 1.00);
     ASSERT_EQ(expr5[v], 2.00);
     auto expr6 = 1 + expr4 + expr3 + expr2;
+    ASSERT_EQ(expr6.GetSize(), 4);
     ASSERT_EQ(expr6[{}], 3.00);
     ASSERT_EQ(expr6[s], 1.00);
     ASSERT_EQ(expr6[c], 1.00);
     ASSERT_EQ(expr6[v], 2.00);
     auto expr7 = expr2 + 1 + expr4 + 1 + expr3;
+    ASSERT_EQ(expr7.GetSize(), 4);
     ASSERT_EQ(expr7[{}], 4.00);
     ASSERT_EQ(expr7[s], 1.00);
     ASSERT_EQ(expr7[c], 1.00);
     ASSERT_EQ(expr7[v], 2.00);
     auto expr8 = 1 + expr3 + expr4 + expr2 + 1;
+    ASSERT_EQ(expr8.GetSize(), 4);
     ASSERT_EQ(expr8[{}], 4.00);
     ASSERT_EQ(expr8[s], 1.00);
     ASSERT_EQ(expr8[c], 1.00);
     ASSERT_EQ(expr8[v], 2.00);
     auto expr9 = 1 + expr3 + 1.000 + expr2 + 'b' + expr4 + 1;
+    ASSERT_EQ(expr9.GetSize(), 4);
     ASSERT_EQ(expr9[{}], 103.00);
     ASSERT_EQ(expr9[s], 1.00);
     ASSERT_EQ(expr9[c], 1.00);
     ASSERT_EQ(expr9[v], 2.00);
     auto expr10 = expr1 + expr1;
+    ASSERT_EQ(expr10.GetSize(), 2);
     ASSERT_EQ(expr10[{}], 2.00);
     ASSERT_EQ(expr10[r], 2.00);
     auto expr11 = expr2 + 1;
+    ASSERT_EQ(expr11.GetSize(), 2);
     ASSERT_EQ(expr11[{}], 2.00);
     ASSERT_EQ(expr11[s], 1.00);
     auto expr12 = 1 + expr3;
+    ASSERT_EQ(expr12.GetSize(), 2);
     ASSERT_EQ(expr12[{}], 2.00);
     ASSERT_EQ(expr12[c], 1.00);
 }
@@ -393,14 +400,38 @@ TEST(test, t11)
     InnerExpression<Variable> expr4 = v + v;
 
     auto expr5 = r + expr1;
+    ASSERT_EQ(expr5.GetSize(), 2);
+    ASSERT_EQ(expr5[{}], 1.00);
+    ASSERT_EQ(expr5[r], 2.00);
     auto expr6 = s + expr2;
+    ASSERT_EQ(expr6.GetSize(), 2);
+    ASSERT_EQ(expr6[{}], 1.00);
+    ASSERT_EQ(expr6[s], 2.00);
     auto expr7 = c + expr3;
+    ASSERT_EQ(expr7.GetSize(), 2);
+    ASSERT_EQ(expr7[{}], 1.00);
+    ASSERT_EQ(expr7[c], 2.00);
     auto expr8 = v + expr4;
+    ASSERT_EQ(expr8.GetSize(), 2);
+    ASSERT_EQ(expr8[{}], 0.00);
+    ASSERT_EQ(expr8[v], 3.00);
 
     auto expr9 = expr1 + r;
+    ASSERT_EQ(expr9.GetSize(), 2);
+    ASSERT_EQ(expr9[{}], 1.00);
+    ASSERT_EQ(expr9[r], 2.00);
     auto expr10 = expr2 + s;
+    ASSERT_EQ(expr10.GetSize(), 2);
+    ASSERT_EQ(expr10[{}], 1.00);
+    ASSERT_EQ(expr10[s], 2.00);
     auto expr11 = expr3 + c;
+    ASSERT_EQ(expr11.GetSize(), 2);
+    ASSERT_EQ(expr11[{}], 1.00);
+    ASSERT_EQ(expr11[c], 2.00);
     auto expr12 = expr4 + v;
+    ASSERT_EQ(expr12.GetSize(), 2);
+    ASSERT_EQ(expr12[{}], 0.00);
+    ASSERT_EQ(expr12[v], 3.00);
 }
 TEST(test, t12)
 {
@@ -411,18 +442,67 @@ TEST(test, t12)
     InnerExpression<Variable> expr4 = v + v;
 
     auto expr5 = r + expr1 + r;
+    ASSERT_EQ(expr5.GetSize(), 2);
+    ASSERT_EQ(expr5[{}], 1.00);
+    ASSERT_EQ(expr5[r], 3.00);
 
     auto expr6 = s + expr2 + v;
+    ASSERT_EQ(expr6.GetSize(), 3);
+    ASSERT_EQ(expr6[{}], 1.00);
+    ASSERT_EQ(expr6[s], 2.00);
+    ASSERT_EQ(expr6[v], 1.00);
     auto expr7 = v + expr2 + s;
+    ASSERT_EQ(expr7.GetSize(), 3);
+    ASSERT_EQ(expr7[{}], 1.00);
+    ASSERT_EQ(expr7[s], 2.00);
+    ASSERT_EQ(expr7[v], 1.00);
     auto expr8 = v + expr3 + s;
+    ASSERT_EQ(expr8.GetSize(), 4);
+    ASSERT_EQ(expr8[{}], 1.00);
+    ASSERT_EQ(expr8[s], 1.00);
+    ASSERT_EQ(expr8[v], 1.00);
+    ASSERT_EQ(expr8[c], 1.00);
     auto expr9 = s + expr3 + v;
+    ASSERT_EQ(expr9.GetSize(), 4);
+    ASSERT_EQ(expr9[{}], 1.00);
+    ASSERT_EQ(expr9[s], 1.00);
+    ASSERT_EQ(expr9[v], 1.00);
+    ASSERT_EQ(expr9[c], 1.00);
     auto expr10 = v + expr4 + s;
+    ASSERT_EQ(expr10.GetSize(), 3);
+    ASSERT_EQ(expr10[{}], 0.00);
+    ASSERT_EQ(expr10[s], 1.00);
+    ASSERT_EQ(expr10[v], 3.00);
     auto expr11 = s + expr4 + v;
+    ASSERT_EQ(expr11.GetSize(), 3);
+    ASSERT_EQ(expr11[{}], 0.00);
+    ASSERT_EQ(expr11[s], 1.00);
+    ASSERT_EQ(expr11[v], 3.00);
 
-    auto expr16 = 1 + s + 1 + expr2 + 1 + c + v;
-    auto expr17 = c + 1 + v + expr2 + 1 + s + 1;
-    auto expr18 = 1 + s + 1 + expr3 + 1 + c + v;
-    auto expr19 = c + 1 + v + expr4 + 1 + s + 1;
+    auto expr12 = 1 + s + 1 + expr2 + 1 + c + v;
+    ASSERT_EQ(expr12.GetSize(), 4);
+    ASSERT_EQ(expr12[{}], 4.00);
+    ASSERT_EQ(expr12[s], 2.00);
+    ASSERT_EQ(expr12[v], 1.00);
+    ASSERT_EQ(expr12[c], 1.00);
+    auto expr13 = c + 1 + v + expr2 + 1 + s + 1;
+    ASSERT_EQ(expr13.GetSize(), 4);
+    ASSERT_EQ(expr13[{}], 4.00);
+    ASSERT_EQ(expr13[s], 2.00);
+    ASSERT_EQ(expr13[v], 1.00);
+    ASSERT_EQ(expr13[c], 1.00);
+    auto expr14 = 1 + s + 1 + expr3 + 1 + c + v;
+    ASSERT_EQ(expr14.GetSize(), 4);
+    ASSERT_EQ(expr14[{}], 4.00);
+    ASSERT_EQ(expr14[s], 1.00);
+    ASSERT_EQ(expr14[v], 1.00);
+    ASSERT_EQ(expr14[c], 2.00);
+    auto expr15 = c + 1 + v + expr4 + 1 + s + 1;
+    ASSERT_EQ(expr15.GetSize(), 4);
+    ASSERT_EQ(expr15[{}], 3.00);
+    ASSERT_EQ(expr15[s], 1.00);
+    ASSERT_EQ(expr15[v], 3.00);
+    ASSERT_EQ(expr15[c], 1.00);
 }
 TEST(test, t13)
 {
@@ -433,10 +513,29 @@ TEST(test, t13)
     InnerExpression<Variable> expr4 = v + v;
 
     auto expr5 = expr2 + expr2;
+    ASSERT_EQ(expr5.GetSize(), 2);
+    ASSERT_EQ(expr5[{}], 2.00);
+    ASSERT_EQ(expr5[s], 2.00);
     auto expr6 = expr2 + expr3;
+    ASSERT_EQ(expr6.GetSize(), 3);
+    ASSERT_EQ(expr6[{}], 2.00);
+    ASSERT_EQ(expr6[s], 1.00);
+    ASSERT_EQ(expr6[c], 1.00);
     auto expr7 = expr3 + expr2;
+    ASSERT_EQ(expr7.GetSize(), 3);
+    ASSERT_EQ(expr7[{}], 2.00);
+    ASSERT_EQ(expr7[s], 1.00);
+    ASSERT_EQ(expr7[c], 1.00);
     auto expr8 = expr2 + expr4;
+    ASSERT_EQ(expr8.GetSize(), 3);
+    ASSERT_EQ(expr8[{}], 1.00);
+    ASSERT_EQ(expr8[s], 1.00);
+    ASSERT_EQ(expr8[v], 2.00);
     auto expr9 = expr4 + expr2;
+    ASSERT_EQ(expr9.GetSize(), 3);
+    ASSERT_EQ(expr9[{}], 1.00);
+    ASSERT_EQ(expr9[s], 1.00);
+    ASSERT_EQ(expr9[v], 2.00);
 }
 TEST(test, t14)
 {
@@ -447,11 +546,35 @@ TEST(test, t14)
     InnerExpression<Variable> expr4 = v + v;
 
     auto expr5 = 1.000 + r + 1 + expr1 + 1;
+    ASSERT_EQ(expr5.GetSize(), 2);
+    ASSERT_EQ(expr5[{}], 4.00);
+    ASSERT_EQ(expr5[r], 2.00);
     auto expr6 = expr1 + 1 + r + r + expr1;
+    ASSERT_EQ(expr6.GetSize(), 2);
+    ASSERT_EQ(expr6[{}], 3.00);
+    ASSERT_EQ(expr6[r], 4.00);
     auto expr7 = 1.00 + expr2 + expr2 + s;
+    ASSERT_EQ(expr7.GetSize(), 2);
+    ASSERT_EQ(expr7[{}], 3.00);
+    ASSERT_EQ(expr7[s], 3.00);
     auto expr8 = expr2 + s + expr2 + c + v;
+    ASSERT_EQ(expr8.GetSize(), 4);
+    ASSERT_EQ(expr8[{}], 2.00);
+    ASSERT_EQ(expr8[s], 3.00);
+    ASSERT_EQ(expr8[v], 1.00);
+    ASSERT_EQ(expr8[c], 1.00);
     auto expr9 = v + c + expr2 + s + expr2;
+    ASSERT_EQ(expr9.GetSize(), 4);
+    ASSERT_EQ(expr9[{}], 2.00);
+    ASSERT_EQ(expr9[s], 3.00);
+    ASSERT_EQ(expr9[v], 1.00);
+    ASSERT_EQ(expr9[c], 1.00);
     auto expr10 = expr2 + 1.00 + c + 1 + v + expr3 + s + 1 + expr4 + s + v + 'a' + c + 1.000;
+    ASSERT_EQ(expr10.GetSize(), 4);
+    ASSERT_EQ(expr10[{}], 103.00);
+    ASSERT_EQ(expr10[s], 3.00);
+    ASSERT_EQ(expr10[v], 4.00);
+    ASSERT_EQ(expr10[c], 3.00);
 }
 
 int main(int argc, char **argv)
