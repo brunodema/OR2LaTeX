@@ -148,7 +148,9 @@ template <class T> class InnerExpression
 
   private:
     using map_type = std::unordered_map<T, double, absl::Hash<T>>;
-    map_type coefficient_map = {};
+    map_type coefficient_map = {{
+        {}, 0.00
+    }};
 };
 
 template <class T, class numeric_type,
