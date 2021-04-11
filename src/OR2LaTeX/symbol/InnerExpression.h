@@ -128,13 +128,11 @@ template <class T> class InnerExpression
         return ret;
     }
 
-    using map_type = std::unordered_map<T, double, absl::Hash<T>>;
-    using iterator_type = typename map_type::const_iterator;
-    iterator_type begin() const
+    auto begin() const
     {
         return this->coefficient_map.begin();
     }
-    iterator_type end() const
+    auto end() const
     {
         return this->coefficient_map.end();
     }
@@ -144,6 +142,7 @@ template <class T> class InnerExpression
     }
 
   private:
+    using map_type = std::unordered_map<T, double, absl::Hash<T>>;
     map_type coefficient_map = {};
 };
 
@@ -161,14 +160,11 @@ InnerExpression<T> operator+(const numeric_type &_val, const T &_obj)
     return _obj + _val; // commutative
 }
 
-template <class T> 
-InnerExpression<T> operator+(const T &_lhs, const T &_rhs)
+template <class T> InnerExpression<T> operator+(const T &_lhs, const T &_rhs)
 {
     InnerExpression<T> ret(_lhs);
     return ret += _rhs;
 }
-
-
 
 template <class T> InnerExpression<T> operator+(InnerExpression<T> _expr1, const InnerExpression<T> &_expr2)
 {
