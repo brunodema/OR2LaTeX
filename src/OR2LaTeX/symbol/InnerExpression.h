@@ -101,17 +101,18 @@ template <class T> class InnerExpression
         return ret;
     }
 
-    template <class parent_type,
-              typename = typename std::enable_if<inheritance_traits<parent_type, T>::inherits_from()>::type>
-    InnerExpression<parent_type> operator+=(const InnerExpression<parent_type> &_expr)
-    {
-        InnerExpression<parent_type> ret(_expr);
-        for (const auto &pair : *this)
-        {
-            ret[static_cast<parent_type>(pair.first)] += pair.second;
-        }
-        return ret;
-    }
+    //// apparently this function is not necessary (detected on compiler explorer)... keeping it in case it is needed in the future
+    //template <class parent_type,
+    //          typename = typename std::enable_if<inheritance_traits<parent_type, T>::inherits_from()>::type>
+    //InnerExpression<parent_type> operator+=(const InnerExpression<parent_type> &_expr)
+    //{
+    //    InnerExpression<parent_type> ret(_expr);
+    //    for (const auto &pair : *this)
+    //    {
+    //        ret[static_cast<parent_type>(pair.first)] += pair.second;
+    //    }
+    //    return ret;
+    //}
 
     template <class Child, class parent_type = typename type_traits<T>::parent,
               typename = typename std::enable_if<inheritance_traits<T, Child>::has_same_parent()>::type>
