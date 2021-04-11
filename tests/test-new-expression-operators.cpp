@@ -251,47 +251,142 @@ TEST(test, t8)
     // auto expr7 = expr1 + expr4;
 
     auto expr8 = expr2 + expr3;
+    ASSERT_EQ(expr8.GetSize(), 3);
+    ASSERT_EQ(expr8[{}], 4.00);
+    ASSERT_EQ(expr8[s], 1.00);
+    ASSERT_EQ(expr8[c], 1.00);
     auto expr9 = expr2 + expr4;
+    ASSERT_EQ(expr9.GetSize(), 3);
+    ASSERT_EQ(expr9[{}], 4.00);
+    ASSERT_EQ(expr9[s], 1.00);
+    ASSERT_EQ(expr9[v], 1.00);
     auto expr10 = expr3 + expr4;
+    ASSERT_EQ(expr10.GetSize(), 3);
+    ASSERT_EQ(expr10[{}], 4.00);
+    ASSERT_EQ(expr10[v], 1.00);
+    ASSERT_EQ(expr10[c], 1.00);
 
     auto expr11 = expr2 + 1 + expr3 + v;
+    ASSERT_EQ(expr11.GetSize(), 4);
+    ASSERT_EQ(expr11[{}], 5.00);
+    ASSERT_EQ(expr11[s], 1.00);
+    ASSERT_EQ(expr11[c], 1.00);
+    ASSERT_EQ(expr11[v], 1.00);
     auto expr12 = expr2 + 1.0000 + expr4 + c;
+    ASSERT_EQ(expr12.GetSize(), 4);
+    ASSERT_EQ(expr12[{}], 5.00);
+    ASSERT_EQ(expr12[s], 1.00);
+    ASSERT_EQ(expr12[c], 1.00);
+    ASSERT_EQ(expr12[v], 1.00);
     auto expr13 = expr3 + 'a' + expr4 + s;
+    ASSERT_EQ(expr13.GetSize(), 4);
+    ASSERT_EQ(expr13[{}], 101.00);
+    ASSERT_EQ(expr13[s], 1.00);
+    ASSERT_EQ(expr13[c], 1.00);
+    ASSERT_EQ(expr13[v], 1.00);
     auto expr14 = expr3 + expr2;
+    ASSERT_EQ(expr14.GetSize(), 3);
+    ASSERT_EQ(expr14[{}], 4.00);
+    ASSERT_EQ(expr14[s], 1.00);
+    ASSERT_EQ(expr14[c], 1.00);
     auto expr15 = expr4 + expr2;
+    ASSERT_EQ(expr15.GetSize(), 3);
+    ASSERT_EQ(expr15[{}], 4.00);
+    ASSERT_EQ(expr15[s], 1.00);
+    ASSERT_EQ(expr15[v], 1.00);
 }
 TEST(test, t9)
 {
+    // won't bother testing this base declarations
     InnerExpression<Index> expr1 = r + 1;
     InnerExpression<IndexedSymbol> expr2 = 1 + s;
     InnerExpression<Constant> expr3 = c + 1;
     InnerExpression<Variable> expr4 = v + v;
 
     auto expr5 = /*expr1* +*/ expr2 + expr3 + expr4;
+    ASSERT_EQ(expr5.GetSize(), 4);
+    ASSERT_EQ(expr5[{}], 2.00);
+    ASSERT_EQ(expr5[s], 1.00);
+    ASSERT_EQ(expr5[c], 1.00);
+    ASSERT_EQ(expr5[v], 2.00);
     auto expr6 = expr4 + expr3 + expr2;
+    ASSERT_EQ(expr6.GetSize(), 4);
+    ASSERT_EQ(expr6[{}], 2.00);
+    ASSERT_EQ(expr6[s], 1.00);
+    ASSERT_EQ(expr6[c], 1.00);
+    ASSERT_EQ(expr6[v], 2.00);
     auto expr7 = expr2 + expr4 + expr3;
+    ASSERT_EQ(expr7.GetSize(), 4);
+    ASSERT_EQ(expr7[{}], 2.00);
+    ASSERT_EQ(expr7[s], 1.00);
+    ASSERT_EQ(expr7[c], 1.00);
+    ASSERT_EQ(expr7[v], 2.00);
     auto expr8 = expr3 + expr4 + expr2;
+    ASSERT_EQ(expr5.GetSize(), 4);
+    ASSERT_EQ(expr8[{}], 2.00);
+    ASSERT_EQ(expr8[s], 1.00);
+    ASSERT_EQ(expr8[c], 1.00);
+    ASSERT_EQ(expr8[v], 2.00);
     auto expr9 = expr3 + expr2 + expr4;
+    ASSERT_EQ(expr9.GetSize(), 4);
+    ASSERT_EQ(expr9[{}], 2.00);
+    ASSERT_EQ(expr9[s], 1.00);
+    ASSERT_EQ(expr9[c], 1.00);
+    ASSERT_EQ(expr9[v], 2.00);
     auto expr10 = expr4 + expr2 + expr3;
+    ASSERT_EQ(expr10.GetSize(), 4);
+    ASSERT_EQ(expr10[{}], 2.00);
+    ASSERT_EQ(expr10[s], 1.00);
+    ASSERT_EQ(expr10[c], 1.00);
+    ASSERT_EQ(expr10[v], 2.00);
 }
 TEST(test, t10)
 {
+    // won't bother testing this base declarations
     InnerExpression<Index> expr1 = r + 1;
     InnerExpression<IndexedSymbol> expr2 = 1 + s;
     InnerExpression<Constant> expr3 = c + 1;
     InnerExpression<Variable> expr4 = v + v;
 
     auto expr5 = /*expr1* +*/ expr2 + expr3 + expr4 + 1;
+    ASSERT_EQ(expr5.GetSize(), 4);
+    ASSERT_EQ(expr5[{}], 3.00);
+    ASSERT_EQ(expr5[s], 1.00);
+    ASSERT_EQ(expr5[c], 1.00);
+    ASSERT_EQ(expr5[v], 2.00);
     auto expr6 = 1 + expr4 + expr3 + expr2;
+    ASSERT_EQ(expr6[{}], 3.00);
+    ASSERT_EQ(expr6[s], 1.00);
+    ASSERT_EQ(expr6[c], 1.00);
+    ASSERT_EQ(expr6[v], 2.00);
     auto expr7 = expr2 + 1 + expr4 + 1 + expr3;
+    ASSERT_EQ(expr7[{}], 4.00);
+    ASSERT_EQ(expr7[s], 1.00);
+    ASSERT_EQ(expr7[c], 1.00);
+    ASSERT_EQ(expr7[v], 2.00);
     auto expr8 = 1 + expr3 + expr4 + expr2 + 1;
+    ASSERT_EQ(expr8[{}], 4.00);
+    ASSERT_EQ(expr8[s], 1.00);
+    ASSERT_EQ(expr8[c], 1.00);
+    ASSERT_EQ(expr8[v], 2.00);
     auto expr9 = 1 + expr3 + 1.000 + expr2 + 'b' + expr4 + 1;
+    ASSERT_EQ(expr9[{}], 103.00);
+    ASSERT_EQ(expr9[s], 1.00);
+    ASSERT_EQ(expr9[c], 1.00);
+    ASSERT_EQ(expr9[v], 2.00);
     auto expr10 = expr1 + expr1;
+    ASSERT_EQ(expr10[{}], 2.00);
+    ASSERT_EQ(expr10[r], 2.00);
     auto expr11 = expr2 + 1;
+    ASSERT_EQ(expr11[{}], 2.00);
+    ASSERT_EQ(expr11[s], 1.00);
     auto expr12 = 1 + expr3;
+    ASSERT_EQ(expr12[{}], 2.00);
+    ASSERT_EQ(expr12[c], 1.00);
 }
 TEST(test, t11)
 {
+    // won't bother testing this base declarations
     InnerExpression<Index> expr1 = r + 1;
     InnerExpression<IndexedSymbol> expr2 = 1 + s;
     InnerExpression<Constant> expr3 = c + 1;
@@ -309,6 +404,7 @@ TEST(test, t11)
 }
 TEST(test, t12)
 {
+    // won't bother testing this base declarations
     InnerExpression<Index> expr1 = r + 1;
     InnerExpression<IndexedSymbol> expr2 = 1 + s;
     InnerExpression<Constant> expr3 = c + 1;
@@ -330,6 +426,7 @@ TEST(test, t12)
 }
 TEST(test, t13)
 {
+    // won't bother testing this base declarations
     InnerExpression<Index> expr1 = r + 1;
     InnerExpression<IndexedSymbol> expr2 = 1 + s;
     InnerExpression<Constant> expr3 = c + 1;
@@ -343,6 +440,7 @@ TEST(test, t13)
 }
 TEST(test, t14)
 {
+    // won't bother testing this base declarations
     InnerExpression<Index> expr1 = r + 1;
     InnerExpression<IndexedSymbol> expr2 = 1 + s;
     InnerExpression<Constant> expr3 = c + 1;
