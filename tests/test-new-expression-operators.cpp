@@ -17,21 +17,60 @@ TEST(test, t1)
 {
 
     auto expr1 = 1 + v;
+    ASSERT_EQ(expr1.GetSize(), 2);
+    ASSERT_EQ(expr1[{}], 1.00);
+    ASSERT_EQ(expr1[v], 1.00);
     auto expr2 = 1.00 + s;
+    ASSERT_EQ(expr2.GetSize(), 2);
+    ASSERT_EQ(expr2[{}], 1.00);
+    ASSERT_EQ(expr2[s], 1.00);
     auto expr3 = 1.00000000000000 + r;
+    ASSERT_EQ(expr3.GetSize(), 2);
+    ASSERT_EQ(expr3[{}], 1.00);
+    ASSERT_EQ(expr3[r], 1.00);
     auto expr4 = v + 1;
+    ASSERT_EQ(expr4.GetSize(), 2);
+    ASSERT_EQ(expr4[{}], 1.00);
+    ASSERT_EQ(expr4[v], 1.00);
     auto expr5 = s + 1.00;
+    ASSERT_EQ(expr5.GetSize(), 2);
+    ASSERT_EQ(expr5[{}], 1.00);
+    ASSERT_EQ(expr5[s], 1.00);
     auto expr6 = r + 1.00000000000000;
+    ASSERT_EQ(expr6.GetSize(), 2);
+    ASSERT_EQ(expr6[{}], 1.00);
+    ASSERT_EQ(expr6[r], 1.00);
 }
  TEST(test, t2)
  {
-
      auto expr1 = v + v;
+     ASSERT_EQ(expr1.GetSize(), 2);
+     ASSERT_EQ(expr1[{}], 0.00);
+     ASSERT_EQ(expr1[v], 2.00);
      auto expr2 = v + s;
+     ASSERT_EQ(expr2.GetSize(), 2);
+     ASSERT_EQ(expr2[{}], 0.00);
+     ASSERT_EQ(expr2[v], 1.00);
+     ASSERT_EQ(expr2[s], 1.00);
      auto expr3 = v + c;
+     ASSERT_EQ(expr3.GetSize(), 2);
+     ASSERT_EQ(expr3[{}], 0.00);
+     ASSERT_EQ(expr3[v], 1.00);
+     ASSERT_EQ(expr3[c], 1.00);
      auto expr4 = c + c;
+     ASSERT_EQ(expr4.GetSize(), 2);
+     ASSERT_EQ(expr4[{}], 0.00);
+     ASSERT_EQ(expr4[c], 2.00);
      auto expr5 = s + v;
+     ASSERT_EQ(expr5.GetSize(), 2);
+     ASSERT_EQ(expr5[{}], 0.00);
+     ASSERT_EQ(expr5[v], 1.00);
+     ASSERT_EQ(expr5[s], 1.00);
      auto expr6 = c + v;
+     ASSERT_EQ(expr2.GetSize(), 2);
+     ASSERT_EQ(expr2[{}], 0.00);
+     ASSERT_EQ(expr2[v], 1.00);
+     ASSERT_EQ(expr2[c], 1.00);
  }
  TEST(test, t3)
  {
@@ -73,7 +112,6 @@ TEST(test, t1)
  }
  TEST(test, t7)
  {
-     // seventh batch
      InnerExpression<Index> expr1 = 1 + r + 1;
      InnerExpression<IndexedSymbol> expr2 = 1 + s + 1;
      InnerExpression<Constant> expr3 = 1 + c + 1;
@@ -81,7 +119,6 @@ TEST(test, t1)
  }
  TEST(test, t8)
  {
-     // eighth batch
      InnerExpression<Index> expr1 = 1 + r + 1;
      InnerExpression<IndexedSymbol> expr2 = 1 + s + 1;
      InnerExpression<Constant> expr3 = 1 + c + 1;
@@ -104,7 +141,6 @@ TEST(test, t1)
  }
  TEST(test, t9)
  {
-     // ninth batch
      InnerExpression<Index> expr1 = r + 1;
      InnerExpression<IndexedSymbol> expr2 = 1 + s;
      InnerExpression<Constant> expr3 = c + 1;
@@ -119,7 +155,6 @@ TEST(test, t1)
  }
  TEST(test, t10)
  {
-     // tenth batch
      InnerExpression<Index> expr1 = r + 1;
      InnerExpression<IndexedSymbol> expr2 = 1 + s;
      InnerExpression<Constant> expr3 = c + 1;
@@ -136,7 +171,6 @@ TEST(test, t1)
  }
  TEST(test, t11)
  {
-     // eleventh batch
      InnerExpression<Index> expr1 = r + 1;
      InnerExpression<IndexedSymbol> expr2 = 1 + s;
      InnerExpression<Constant> expr3 = c + 1;
@@ -154,7 +188,6 @@ TEST(test, t1)
  }
  TEST(test, t12)
  {
-     // twelveth batch
      InnerExpression<Index> expr1 = r + 1;
      InnerExpression<IndexedSymbol> expr2 = 1 + s;
      InnerExpression<Constant> expr3 = c + 1;
@@ -176,7 +209,6 @@ TEST(test, t1)
  }
  TEST(test, t13)
  {
-     // thirteenth batch (automatically passes)
      InnerExpression<Index> expr1 = r + 1;
      InnerExpression<IndexedSymbol> expr2 = 1 + s;
      InnerExpression<Constant> expr3 = c + 1;
@@ -190,7 +222,6 @@ TEST(test, t1)
  }
  TEST(test, t14)
  {
-     // fourteenth batch (automatically passes)
      InnerExpression<Index> expr1 = r + 1;
      InnerExpression<IndexedSymbol> expr2 = 1 + s;
      InnerExpression<Constant> expr3 = c + 1;
