@@ -39,7 +39,8 @@ template <class T> class InnerExpression
     InnerExpression() = default;
     InnerExpression(const T &_obj)
     {
-        this->coefficient_map[_obj] += 1.00;
+        this->coefficient_map[_obj] = 1.00;
+        this->coefficient_map[{}] = 0.00;
     }
 
     template <class numeric_type, typename = typename std::enable_if<std::is_arithmetic<numeric_type>::value>::type>
@@ -94,7 +95,7 @@ template <class T> class InnerExpression
         InnerExpression<parent_type> ret;
         for (const auto &pair : *this)
         {
-            ret[static_cast<parent_type>(_obj)] += pair.second;
+            ret[static_cast<parent_type>(pair.first)] += pair.second;
         }
         ret[static_cast<parent_type>(_obj)] += 1.00;
         return ret;
