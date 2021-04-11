@@ -138,11 +138,11 @@ template <class T> class InnerExpression
     }
     double &operator[](const T &_obj)
     {
-        return this->coefficient_map[_obj];
+        return this->coefficient_map[static_cast<T>(_obj)];
     }
     double operator[](const T &_obj) const
     {
-        return this->coefficient_map.at(obj);
+        return this->coefficient_map.at(static_cast<T>(obj));
     }
     std::size_t GetSize() const
     {
