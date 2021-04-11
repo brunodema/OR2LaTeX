@@ -48,12 +48,12 @@ TEST(test, t1)
      ASSERT_EQ(expr1[{}], 0.00);
      ASSERT_EQ(expr1[v], 2.00);
      auto expr2 = v + s;
-     ASSERT_EQ(expr2.GetSize(), 2);
+     ASSERT_EQ(expr2.GetSize(), 3);
      ASSERT_EQ(expr2[{}], 0.00);
      ASSERT_EQ(expr2[v], 1.00);
      ASSERT_EQ(expr2[s], 1.00);
      auto expr3 = v + c;
-     ASSERT_EQ(expr3.GetSize(), 2);
+     ASSERT_EQ(expr3.GetSize(), 3);
      ASSERT_EQ(expr3[{}], 0.00);
      ASSERT_EQ(expr3[v], 1.00);
      ASSERT_EQ(expr3[c], 1.00);
@@ -62,15 +62,15 @@ TEST(test, t1)
      ASSERT_EQ(expr4[{}], 0.00);
      ASSERT_EQ(expr4[c], 2.00);
      auto expr5 = s + v;
-     ASSERT_EQ(expr5.GetSize(), 2);
+     ASSERT_EQ(expr5.GetSize(), 3);
      ASSERT_EQ(expr5[{}], 0.00);
      ASSERT_EQ(expr5[v], 1.00);
      ASSERT_EQ(expr5[s], 1.00);
      auto expr6 = c + v;
-     ASSERT_EQ(expr2.GetSize(), 2);
-     ASSERT_EQ(expr2[{}], 0.00);
-     ASSERT_EQ(expr2[v], 1.00);
-     ASSERT_EQ(expr2[c], 1.00);
+     ASSERT_EQ(expr6.GetSize(), 3);
+     ASSERT_EQ(expr6[{}], 0.00);
+     ASSERT_EQ(expr6[v], 1.00);
+     ASSERT_EQ(expr6[c], 1.00);
  }
  TEST(test, t3)
  {
