@@ -577,6 +577,24 @@ TEST(test, t14)
     ASSERT_EQ(expr10[c], 3.00);
 }
 
+TEST(test, t15)
+{
+    InnerExpression<Constant> expr1 = 1.00;
+    InnerExpression<Constant> expr2 = c;
+    InnerExpression<Variable, InnerExpression<Constant>> expr3 = v + 1 + 1 + v;
+    InnerExpression<IndexedSymbol, InnerExpression<Constant>> expr4 = c + v + 1 + s + /* expr3 */ 1 + v;
+    InnerExpression<IndexedSymbol, InnerExpression<Constant>> expr5;
+    expr5[v] = 1 + c; // it works :D
+    expr5 += expr4;
+}
+
+TEST(test, t16)
+{
+    InnerExpression<Constant> expr1 = c + c;
+    InnerExpression<IndexedSymbol> expr2 = s;
+    auto expr3 = expr1 += expr2;
+}
+
 int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);

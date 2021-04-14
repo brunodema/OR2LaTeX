@@ -32,11 +32,15 @@ template <class T, class U> constexpr bool inheritance_traits<T, U>::inherits_fr
     return std::is_base_of<T, U>::value && !std::is_same<T, U>::value;
 }
 
-template <class T> class InnerExpression
+template <class T, class coefficient_type = double> class InnerExpression
 {
 
   public:
     InnerExpression() = default;
+    InnerExpression(const double _val)
+    {
+        this->coefficient_map[{}] = _val;
+    }
     InnerExpression(const T &_obj)
     {
         this->coefficient_map[_obj] = 1.00;
@@ -44,40 +48,21 @@ template <class T> class InnerExpression
     }
 
     template <class numeric_type, typename = typename std::enable_if<std::is_arithmetic<numeric_type>::value>::type>
-    InnerExpression<T> &operator+=(const numeric_type &_val)
+    InnerExpression<T, coefficient_type> &operator+=(const numeric_type &_val)
     {
         this->operator[]({}) += _val;
         return *this;
     }
 
-    InnerExpression<T> &operator+=(const T &_obj)
+    InnerExpression<T, coefficient_type> &operator+=(const T &_obj)
     {
         this->operator[](static_cast<T>(_obj)) += 1.00;
         return *this;
     }
 
-    template <class Child, typename = typename std::enable_if<inheritance_traits<T, Child>::inherits_from()>::type>
-    InnerExpression<T> &operator+=(const InnerExpression<Child> &_expr)
-    {
-        for (const auto &pair : _expr)
-        {
-            this->operator[](static_cast<T>(pair.first)) += pair.second;
-        }
-        return *this;
-    }
-
-    InnerExpression<T> &operator+=(const InnerExpression<T> &_expr)
-    {
-        for (const auto &pair : _expr)
-        {
-            this->operator[](pair.first) += pair.second;
-        }
-        return *this;
-    }
-
     template <class parent_type = typename type_traits<T>::parent,
               typename = typename std::enable_if<inheritance_traits<parent_type, T>::inherits_from()>::type>
-    InnerExpression<parent_type> operator+=(const parent_type &_obj)
+    InnerExpression<parent_type, coefficient_type> operator+=(const parent_type &_obj)
     {
         InnerExpression<parent_type> ret;
         for (const auto &pair : *this)
@@ -90,7 +75,7 @@ template <class T> class InnerExpression
 
     template <class parent_type = typename type_traits<T>::parent, class Child,
               typename = typename std::enable_if<inheritance_traits<T, Child>::has_same_parent()>::type>
-    InnerExpression<parent_type> operator+=(const Child &_obj)
+    InnerExpression<parent_type, coefficient_type> operator+=(const Child &_obj)
     {
         InnerExpression<parent_type> ret;
         for (const auto &pair : *this)
@@ -101,22 +86,42 @@ template <class T> class InnerExpression
         return ret;
     }
 
-    //// apparently this function is not necessary (detected on compiler explorer)... keeping it in case it is needed in the future
-    //template <class parent_type,
-    //          typename = typename std::enable_if<inheritance_traits<parent_type, T>::inherits_from()>::type>
-    //InnerExpression<parent_type> operator+=(const InnerExpression<parent_type> &_expr)
-    //{
-    //    InnerExpression<parent_type> ret(_expr);
-    //    for (const auto &pair : *this)
-    //    {
-    //        ret[static_cast<parent_type>(pair.first)] += pair.second;
-    //    }
-    //    return ret;
-    //}
+    template <class Child, typename = typename std::enable_if<inheritance_traits<T, Child>::inherits_from()>::type>
+    InnerExpression<T, coefficient_type> &operator+=(const InnerExpression<Child, coefficient_type> &_expr)
+    {
+        for (const auto &pair : _expr)
+        {
+            this->operator[](static_cast<T>(pair.first)) += pair.second;
+        }
+        return *this;
+    }
+
+    InnerExpression<T, coefficient_type> &operator+=(
+        const InnerExpression<T, coefficient_type> &_expr)
+    {
+        for (const auto &pair : _expr)
+        {
+            this->operator[](pair.first) += pair.second;
+        }
+        return *this;
+    }
+
+    template <class parent_type,
+              typename = typename std::enable_if<inheritance_traits<parent_type, T>::inherits_from()>::type>
+    InnerExpression<parent_type, coefficient_type> operator+=(
+        const InnerExpression<parent_type, coefficient_type> &_expr)
+    {
+        InnerExpression<parent_type> ret(_expr);
+        for (const auto &pair : *this)
+        {
+            ret[static_cast<parent_type>(pair.first)] += pair.second;
+        }
+        return ret;
+    }
 
     template <class Child, class parent_type = typename type_traits<T>::parent,
               typename = typename std::enable_if<inheritance_traits<T, Child>::has_same_parent()>::type>
-    InnerExpression<parent_type> operator+=(const InnerExpression<Child> &_expr)
+    InnerExpression<parent_type, coefficient_type> operator+=(const InnerExpression<Child, coefficient_type> &_expr)
     {
         InnerExpression<parent_type> ret;
         for (const auto &pair : *this)
@@ -138,11 +143,11 @@ template <class T> class InnerExpression
     {
         return this->coefficient_map.end();
     }
-    double &operator[](const T &_obj)
+    auto &operator[](const T &_obj)
     {
         return this->coefficient_map[static_cast<T>(_obj)];
     }
-    double operator[](const T &_obj) const
+    auto operator[](const T &_obj) const
     {
         return this->coefficient_map.at(static_cast<T>(_obj));
     }
@@ -151,141 +156,170 @@ template <class T> class InnerExpression
         return this->coefficient_map.size();
     }
 
+    template <class V, class W,
+              typename = typename std::enable_if<std::is_base_of<V, T>::value &&
+                                                 std::is_convertible<coefficient_type, W>::value>::type>
+    operator InnerExpression<V, W>()
+    {
+        return InnerExpression<V, W>();
+    }
+
   private:
-    using map_type = std::unordered_map<T, double, absl::Hash<T>>;
+    using map_type = std::unordered_map<T, coefficient_type, absl::Hash<T>>;
     map_type coefficient_map = {{{}, 0.00}};
 };
 
-template <class T, class numeric_type,
+// -----------------------------------------
+
+template <class T, class coefficient_type = double, class numeric_type,
           typename = typename std::enable_if<std::is_arithmetic<numeric_type>::value>::type>
-InnerExpression<T> operator+(const T &_obj, const numeric_type &_val)
+InnerExpression<T, coefficient_type> operator+(const T &_obj, const numeric_type &_val)
 {
     InnerExpression<T> ret(_obj);
     return ret += _val;
 }
-template <class T, class numeric_type,
+template <class T, class coefficient_type = double, class numeric_type,
           typename = typename std::enable_if<std::is_arithmetic<numeric_type>::value>::type>
-InnerExpression<T> operator+(const numeric_type &_val, const T &_obj)
+InnerExpression<T, coefficient_type> operator+(const numeric_type &_val, const T &_obj)
 {
     return _obj + _val; // commutative
 }
 
-template <class T> InnerExpression<T> operator+(const T &_lhs, const T &_rhs)
+template <class T, class coefficient_type = double>
+InnerExpression<T, coefficient_type> operator+(const T &_lhs, const T &_rhs)
 {
-    InnerExpression<T> ret(_lhs);
+    InnerExpression<T, coefficient_type> ret(_lhs);
     return ret += _rhs;
 }
 
-template <class T> InnerExpression<T> operator+(InnerExpression<T> _expr1, const InnerExpression<T> &_expr2)
+template <class T, class coefficient_type = double>
+InnerExpression<T, coefficient_type> operator+(InnerExpression<T, coefficient_type> _expr1,
+                                               const InnerExpression<T, coefficient_type> &_expr2)
 {
     return _expr1 += _expr2; // uses copy of _expr to speed things up
 }
 
-template <class Child1, class Child2, class parent_type = typename type_traits<Child1>::parent,
+template <class Child1, class Child2, class coefficient_type = double,
+          class parent_type = typename type_traits<Child1>::parent,
           typename = typename std::enable_if<inheritance_traits<Child1, Child2>::has_same_parent()>::type>
-InnerExpression<parent_type> operator+(const Child1 &_child1, const Child2 &_child2)
+InnerExpression<parent_type, coefficient_type> operator+(const Child1 &_child1, const Child2 &_child2)
 {
-    InnerExpression<parent_type> ret(static_cast<parent_type>(_child1));
+    InnerExpression<parent_type, coefficient_type> ret(static_cast<parent_type>(_child1));
     return ret += _child2;
 }
 
-template <class Child, class parent_type = typename type_traits<Child>::parent,
+template <class Child, class coefficient_type = double, class parent_type = typename type_traits<Child>::parent,
           typename = typename std::enable_if<inheritance_traits<parent_type, Child>::inherits_from()>::type>
-InnerExpression<parent_type> operator+(const parent_type &_parent, const Child &_child)
+InnerExpression<parent_type, coefficient_type> operator+(const parent_type &_parent, const Child &_child)
 {
-    InnerExpression<parent_type> ret(_parent);
+    InnerExpression<parent_type, coefficient_type> ret(_parent);
     return ret += _child;
 }
-template <class Child, class parent_type = typename type_traits<Child>::parent,
+template <class Child, class coefficient_type = double, class parent_type = typename type_traits<Child>::parent,
           typename = typename std::enable_if<inheritance_traits<parent_type, Child>::inherits_from()>::type>
-InnerExpression<parent_type> operator+(const Child &_child, const parent_type &_parent)
+InnerExpression<parent_type, coefficient_type> operator+(const Child &_child, const parent_type &_parent)
 {
     return _parent + _child; // commutative
 }
 
-template <class T, class numeric_type,
+template <class T, class coefficient_type = double, class numeric_type,
           typename = typename std::enable_if<std::is_arithmetic<numeric_type>::value>::type>
-InnerExpression<T> operator+(InnerExpression<T> _expr, const numeric_type &_val)
+InnerExpression<T, coefficient_type> operator+(InnerExpression<T, coefficient_type> _expr, const numeric_type &_val)
 {
     return _expr += _val; // uses copy of _expr to speed things up
 }
 
-template <class T, class numeric_type,
+template <class T, class coefficient_type = double, class numeric_type,
           typename = typename std::enable_if<std::is_arithmetic<numeric_type>::value>::type>
-InnerExpression<T> operator+(const numeric_type &_val, const InnerExpression<T> &_expr)
+InnerExpression<T, coefficient_type> operator+(const numeric_type &_val,
+                                               const InnerExpression<T, coefficient_type> &_expr)
 {
     return _expr + _val; // commutative
 }
 
-template <class T> InnerExpression<T> operator+(InnerExpression<T> _expr, const T &_obj)
+template <class T, class coefficient_type = double>
+InnerExpression<T, coefficient_type> operator+(InnerExpression<T, coefficient_type> _expr, const T &_obj)
 {
     return _expr += _obj; // uses copy of _expr to speed things up
 }
 
-template <class T> InnerExpression<T> operator+(const T &_obj, const InnerExpression<T> &_expr)
+template <class T, class coefficient_type = double>
+InnerExpression<T, coefficient_type> operator+(const T &_obj, const InnerExpression<T, coefficient_type> &_expr)
 {
     return _expr + _obj; // commutative
 }
 
-template <class Child, class parent_type = typename type_traits<Child>::parent,
+template <class Child, class coefficient_type = double, class parent_type = typename type_traits<Child>::parent,
           typename = typename std::enable_if<inheritance_traits<parent_type, Child>::inherits_from()>::type>
-InnerExpression<parent_type> operator+(InnerExpression<parent_type> _expr, const Child &_child)
+InnerExpression<parent_type, coefficient_type> operator+(InnerExpression<parent_type, coefficient_type> _expr,
+                                                         const Child &_child)
 {
     return _expr += _child; // uses copy of _expr to speed things up
 }
 
-template <class Child, class parent_type = typename type_traits<Child>::parent,
+template <class Child, class coefficient_type = double, class parent_type = typename type_traits<Child>::parent,
           typename = typename std::enable_if<inheritance_traits<parent_type, Child>::inherits_from()>::type>
-InnerExpression<parent_type> operator+(const Child &_child, const InnerExpression<parent_type> &_expr)
+InnerExpression<parent_type, coefficient_type> operator+(const Child &_child,
+                                                         const InnerExpression<parent_type, coefficient_type> &_expr)
 {
     return _expr + _child; // commutative
 }
 
-template <class Child, class parent_type = typename type_traits<Child>::parent,
+template <class Child, class coefficient_type = double, class parent_type = typename type_traits<Child>::parent,
           typename = typename std::enable_if<inheritance_traits<parent_type, Child>::inherits_from()>::type>
-InnerExpression<parent_type> operator+(InnerExpression<Child> _expr, const parent_type &_parent)
+InnerExpression<parent_type, coefficient_type> operator+(InnerExpression<Child, coefficient_type> _expr,
+                                                         const parent_type &_parent)
 {
     return _expr += _parent; // uses copy of _expr to speed things up
 }
 
-template <class Child, class parent_type = typename type_traits<Child>::parent,
+template <class Child, class coefficient_type = double, class parent_type = typename type_traits<Child>::parent,
           typename = typename std::enable_if<inheritance_traits<parent_type, Child>::inherits_from()>::type>
-InnerExpression<parent_type> operator+(const parent_type &_parent, const InnerExpression<Child> &_expr)
+InnerExpression<parent_type, coefficient_type> operator+(const parent_type &_parent,
+                                                         const InnerExpression<Child, coefficient_type> &_expr)
 {
     return _expr + _parent; // commutative
 }
 
-template <class Child1, class Child2, class parent_type = typename type_traits<Child1>::parent,
+template <class Child1, class Child2, class coefficient_type = double,
+          class parent_type = typename type_traits<Child1>::parent,
           typename = typename std::enable_if<inheritance_traits<Child1, Child2>::has_same_parent()>::type>
-InnerExpression<parent_type> operator+(InnerExpression<Child2> _expr, const Child1 &_child)
+InnerExpression<parent_type, coefficient_type> operator+(InnerExpression<Child2, coefficient_type> _expr,
+                                                         const Child1 &_child)
 {
     return _expr += _child; // uses copy of _expr to speed things up
 }
 
-template <class Child1, class Child2, class parent_type = typename type_traits<Child1>::parent,
+template <class Child1, class Child2, class coefficient_type = double,
+          class parent_type = typename type_traits<Child1>::parent,
           typename = typename std::enable_if<inheritance_traits<Child1, Child2>::has_same_parent()>::type>
-InnerExpression<parent_type> operator+(const Child1 &_child, const InnerExpression<Child2> &_expr)
+InnerExpression<parent_type, coefficient_type> operator+(const Child1 &_child,
+                                                         const InnerExpression<Child2, coefficient_type> &_expr)
 {
     return _expr + _child; // commutative
 }
 
-template <class Child, class parent_type = typename type_traits<Child>::parent,
+template <class Child, class coefficient_type = double, class parent_type = typename type_traits<Child>::parent,
           typename = typename std::enable_if<inheritance_traits<parent_type, Child>::inherits_from()>::type>
-InnerExpression<parent_type> operator+(InnerExpression<parent_type> _expr, const InnerExpression<Child> &_child)
+InnerExpression<parent_type, coefficient_type> operator+(InnerExpression<parent_type, coefficient_type> _expr,
+                                                         const InnerExpression<Child, coefficient_type> &_child)
 {
     return _expr += _child; // uses copy of _expr to speed things up
 }
 
-template <class Child, class parent_type = typename type_traits<Child>::parent,
+template <class Child, class coefficient_type = double, class parent_type = typename type_traits<Child>::parent,
           typename = typename std::enable_if<inheritance_traits<parent_type, Child>::inherits_from()>::type>
-InnerExpression<parent_type> operator+(const InnerExpression<Child> &_child, InnerExpression<parent_type> _expr)
+InnerExpression<parent_type, coefficient_type> operator+(const InnerExpression<Child, coefficient_type> &_child,
+                                                         InnerExpression<parent_type, coefficient_type> _expr)
 {
     return _expr + _child; // commutative
 }
 
-template <class Child1, class Child2, class parent_type = typename type_traits<Child1>::parent,
+template <class Child1, class Child2, class coefficient_type = double,
+          class parent_type = typename type_traits<Child1>::parent,
           typename = typename std::enable_if<inheritance_traits<Child1, Child2>::has_same_parent()>::type>
-InnerExpression<parent_type> operator+(InnerExpression<Child1> _expr1, const InnerExpression<Child2> &_expr2)
+InnerExpression<parent_type, coefficient_type> operator+(InnerExpression<Child1, coefficient_type> _expr1,
+                                                         const InnerExpression<Child2, coefficient_type> &_expr2)
 {
     return _expr1 += _expr2; // uses copy of _expr to speed things up
 }
