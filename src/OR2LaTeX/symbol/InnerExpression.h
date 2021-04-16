@@ -43,8 +43,8 @@ template <class T, class coefficient_type = double> class InnerExpression
     }
     InnerExpression(const T &_obj)
     {
-        this->coefficient_map[_obj] = 1.00;
         this->coefficient_map[{}] = 0.00;
+        this->coefficient_map[_obj] = 1.00;
     }
 
     template <class numeric_type, typename = typename std::enable_if<std::is_arithmetic<numeric_type>::value>::type>
@@ -56,7 +56,7 @@ template <class T, class coefficient_type = double> class InnerExpression
 
     InnerExpression<T, coefficient_type> &operator+=(const T &_obj)
     {
-        this->operator[](static_cast<T>(_obj)) += 1.00;
+        this->operator[](static_cast<T>(_obj)) += 1.00; // our current problem is that objects are getting inserted as scalars instead of actual objects when dealing with coefficient_type = InnerExpression<Constant>. This happens due to this declaration, which accesses the InnerExpression<Constant> and adds a scalar into it. In theory, it should be passed as an object, but I am not able to "forward" the object into the nested InnerExpression. Maybe try to specialize the template?*******************
         return *this;
     }
 
@@ -96,8 +96,7 @@ template <class T, class coefficient_type = double> class InnerExpression
         return *this;
     }
 
-    InnerExpression<T, coefficient_type> &operator+=(
-        const InnerExpression<T, coefficient_type> &_expr)
+    InnerExpression<T, coefficient_type> &operator+=(const InnerExpression<T, coefficient_type> &_expr)
     {
         for (const auto &pair : _expr)
         {
@@ -156,12 +155,34 @@ template <class T, class coefficient_type = double> class InnerExpression
         return this->coefficient_map.size();
     }
 
-    template <class V, class W,
-              typename = typename std::enable_if<std::is_base_of<V, T>::value &&
-                                                 std::is_convertible<coefficient_type, W>::value>::type>
-    operator InnerExpression<V, W>()
+    template <
+        class target_type, class target_coefficient,
+        typename = typename std::enable_if<std::is_base_of<target_type, T>::value &&
+                                           std::is_convertible<coefficient_type, target_coefficient>::value>::type>
+    operator InnerExpression<target_type, target_coefficient>()
     {
-        return InnerExpression<V, W>();
+        InnerExpression<target_type, target_coefficient> ret;
+        for (const auto &pair : *this)
+        {
+            ret[static_cast<target_type>(pair.first)] = static_cast<target_coefficient>(pair.second);
+        }
+        return ret;
+    }
+
+    bool operator==(const InnerExpression<T, coefficient_type> &_expr) const
+    {
+        if (this->GetSize() != _expr.GetSize())
+        {
+            return false;
+        }
+        for (const auto &pair : *this)
+        {
+            if (this->operator[](pair.first) != _expr.operator[](pair.first))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
   private:

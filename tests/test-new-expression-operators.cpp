@@ -580,19 +580,67 @@ TEST(test, t14)
 TEST(test, t15)
 {
     InnerExpression<Constant> expr1 = 1.00;
+    ASSERT_EQ(expr1.GetSize(), 1);
+    ASSERT_EQ(expr1[{}], 1.00);
     InnerExpression<Constant> expr2 = c;
+    ASSERT_EQ(expr2.GetSize(), 2);
+    ASSERT_EQ(expr2[{}], 0.00);
+    ASSERT_EQ(expr2[c], 1.00);
     InnerExpression<Variable, InnerExpression<Constant>> expr3 = v + 1 + 1 + v;
+    ASSERT_EQ(expr3.GetSize(), 2);
+    ASSERT_EQ(expr3[{}], 2.00);
+    ASSERT_EQ(expr3[v], 2.00);
     InnerExpression<IndexedSymbol, InnerExpression<Constant>> expr4 = c + v + 1 + s + /* expr3 */ 1 + v;
+    ASSERT_EQ(expr4.GetSize(), 4);
+    ASSERT_EQ(expr4[{}], 2.00);
+    ASSERT_EQ(expr4[v], 2.00);
+    ASSERT_EQ(expr4[s], 1.00);
+    ASSERT_EQ(expr4[c], 1.00);
     InnerExpression<IndexedSymbol, InnerExpression<Constant>> expr5;
     expr5[v] = 1 + c; // it works :D
+    ASSERT_EQ(expr5.GetSize(), 2);
+    ASSERT_EQ(expr5[{}], 0.00);
+    ASSERT_EQ(expr5[v], 1 + c);
     expr5 += expr4;
+    ASSERT_EQ(expr5.GetSize(), 4);
+    ASSERT_EQ(expr5[{}], 2.00);
+    ASSERT_EQ(expr5[v], c + 3.00);
+    ASSERT_EQ(expr5[s], 1.00);
+    ASSERT_EQ(expr5[c], 1.00);
 }
 
 TEST(test, t16)
 {
-    InnerExpression<Constant> expr1 = c + c;
-    InnerExpression<IndexedSymbol> expr2 = s;
-    auto expr3 = expr1 += expr2;
+    // this batch will consist of the tests that are not working at the moment.
+    // it is still necessary to enable the "default constructed" inner expressions with 'coefficient_type = double' to auto-convert to more complex types (like 'Constant).
+    // since this seems as a corner case at the moment, we will focus on more important/interesting stuff.
+    // nevertheless, any corner cases will be included here.
+
+    InnerExpression<IndexedSymbol, InnerExpression<Constant>> expr1;
+    expr1[v] += c;
+    expr1[v] += 1;
+    expr1 += 2.00;
+    ASSERT_EQ(expr1.GetSize(), 2);
+    ASSERT_EQ(expr1[{}], 2.00);
+    ASSERT_EQ(expr1[v], c + 1.00);
+
+    auto expr2 = expr1 + c + c;
+    
+    InnerExpression<IndexedSymbol, InnerExpression<Constant>> expr3 = expr1 + 1 + c;
+    ASSERT_EQ(expr3.GetSize(), 2);
+    ASSERT_EQ(expr3[{}], 3.00);
+    ASSERT_EQ(expr3[v], c + c + 1.00);
+    auto expr4 = 1 + expr1;
+    ASSERT_EQ(expr4.GetSize(), 2);
+    ASSERT_EQ(expr4[{}], 1.00);
+    ASSERT_EQ(expr4[v], c + 1.00);
+    auto expr5 = c + expr1;
+    ASSERT_EQ(expr5.GetSize(), 2);
+    ASSERT_EQ(expr5[{}], 1.00);
+    ASSERT_EQ(expr5[v], c + c + 1.00);
+
+    //auto expr6 = c + c + expr1; // C++ no operator matches these operands operand types are: InnerExpression<or2l::Constant, double> + InnerExpression<or2l::Constant, InnerExpression<or2l::Constant, double>>
+    //auto expr7 = 1 + c + expr1; // C++ no operator matches these operands operand types are: InnerExpression<or2l::Constant, double> + InnerExpression<or2l::Constant, InnerExpression<or2l::Constant, double>>
 }
 
 int main(int argc, char **argv)
