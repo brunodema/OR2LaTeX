@@ -632,6 +632,15 @@ TEST(test, t16)
     ASSERT_EQ(expr5[{}], 2.00);
     ASSERT_EQ(expr5[v], c + 1.00);
     ASSERT_EQ(expr5[c], 1.00);
+
+    InnerExpression<IndexedSymbol, InnerExpression<Constant>> expr6;
+    expr6[v] += c;
+    expr6[v] += 1;
+    expr6 += 2.00;
+    auto expr7 = expr1 + expr6;
+    ASSERT_EQ(expr7.GetSize(), 2);
+    ASSERT_EQ(expr7[{}], 4.00);
+    ASSERT_EQ(expr7[v], c + c + 2.00);
 }
 
 TEST(test, t17)
