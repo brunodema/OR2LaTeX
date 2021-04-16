@@ -611,11 +611,6 @@ TEST(test, t15)
 
 TEST(test, t16)
 {
-    // this batch will consist of the tests that are not working at the moment.
-    // it is still necessary to enable the "default constructed" inner expressions with 'coefficient_type = double' to auto-convert to more complex types (like 'Constant).
-    // since this seems as a corner case at the moment, we will focus on more important/interesting stuff.
-    // nevertheless, any corner cases will be included here.
-
     InnerExpression<IndexedSymbol, InnerExpression<Constant>> expr1;
     expr1[v] += c;
     expr1[v] += 1;
@@ -623,24 +618,36 @@ TEST(test, t16)
     ASSERT_EQ(expr1.GetSize(), 2);
     ASSERT_EQ(expr1[{}], 2.00);
     ASSERT_EQ(expr1[v], c + 1.00);
-
-    auto expr2 = expr1 + c + c;
-    
+ 
     InnerExpression<IndexedSymbol, InnerExpression<Constant>> expr3 = expr1 + 1 + c;
-    ASSERT_EQ(expr3.GetSize(), 2);
+    ASSERT_EQ(expr3.GetSize(), 3);
     ASSERT_EQ(expr3[{}], 3.00);
-    ASSERT_EQ(expr3[v], c + c + 1.00);
+    ASSERT_EQ(expr3[v], c + 1.00);
     auto expr4 = 1 + expr1;
     ASSERT_EQ(expr4.GetSize(), 2);
-    ASSERT_EQ(expr4[{}], 1.00);
+    ASSERT_EQ(expr4[{}], 3.00);
     ASSERT_EQ(expr4[v], c + 1.00);
     auto expr5 = c + expr1;
-    ASSERT_EQ(expr5.GetSize(), 2);
-    ASSERT_EQ(expr5[{}], 1.00);
-    ASSERT_EQ(expr5[v], c + c + 1.00);
+    ASSERT_EQ(expr5.GetSize(), 3);
+    ASSERT_EQ(expr5[{}], 2.00);
+    ASSERT_EQ(expr5[v], c + 1.00);
+    ASSERT_EQ(expr5[c], 1.00);
+}
 
-    //auto expr6 = c + c + expr1; // C++ no operator matches these operands operand types are: InnerExpression<or2l::Constant, double> + InnerExpression<or2l::Constant, InnerExpression<or2l::Constant, double>>
-    //auto expr7 = 1 + c + expr1; // C++ no operator matches these operands operand types are: InnerExpression<or2l::Constant, double> + InnerExpression<or2l::Constant, InnerExpression<or2l::Constant, double>>
+TEST(test, t17)
+{
+    // this batch will consist of the tests that are not working at the moment.
+    // it is still necessary to enable the "default constructed" inner expressions with 'coefficient_type = double' to
+    // auto-convert to more complex types (like 'Constant). since this seems as a corner case at the moment, we will
+    // focus on more important/interesting stuff. nevertheless, any corner cases will be included here.
+
+    //auto expr1 = c + c + expr1; // C++ no operator matches these operands operand types are: InnerExpression<or2l::Constant, double> + InnerExpression<or2l::Constant, InnerExpression<or2l::Constant, double>>
+    //auto expr2 = 1 + c + expr1; // C++ no operator matches these operands operand types are: InnerExpression<or2l::Constant, double> + InnerExpression<or2l::Constant, InnerExpression<or2l::Constant, double>>
+
+    //InnerExpression<IndexedSymbol, InnerExpression<Constant>> expr3;
+    //InnerExpression<IndexedSymbol, double> expr4 = s + v + 1;
+    //auto expr7 = expr3 + expr4; // C++ no operator matches these operands operand types are: InnerExpression<or2l::IndexedSymbol, InnerExpression<or2l::Constant, double>> + InnerExpression<or2l::IndexedSymbol, double>
+    //auto expr8 = expr4 + expr3; // C++ no operator matches these operands operand types are: InnerExpression<or2l::IndexedSymbol, double> + InnerExpression<or2l::IndexedSymbol, InnerExpression<or2l::Constant, double>>
 }
 
 int main(int argc, char **argv)

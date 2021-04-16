@@ -56,7 +56,17 @@ template <class T, class coefficient_type = double> class InnerExpression
 
     InnerExpression<T, coefficient_type> &operator+=(const T &_obj)
     {
-        this->operator[](static_cast<T>(_obj)) += 1.00; // our current problem is that objects are getting inserted as scalars instead of actual objects when dealing with coefficient_type = InnerExpression<Constant>. This happens due to this declaration, which accesses the InnerExpression<Constant> and adds a scalar into it. In theory, it should be passed as an object, but I am not able to "forward" the object into the nested InnerExpression. Maybe try to specialize the template?*******************
+        if (std::is_same_v<coefficient_type, InnerExpression>)
+        {
+
+            return *this;
+        }
+        this->operator[](static_cast<T>(_obj)) +=
+            1.00; // our current problem is that objects are getting inserted as scalars instead of actual objects
+                  // when dealing with coefficient_type = InnerExpression<Constant>. This happens due to this
+                  // declaration, which accesses the InnerExpression<Constant> and adds a scalar into it. In theory,
+                  // it should be passed as an object, but I am not able to "forward" the object into the nested
+                  // InnerExpression. Maybe try to specialize the template?*******************
         return *this;
     }
 
