@@ -7,7 +7,9 @@ A (concept) project to facilitate the integration of O.R. tools (Operations Rese
 
 ## Latest Updates
 
-(25/03/2021) Currently, the project is focusing on the first half of roadmap: the solver encapsulation into a generic mathematical programming platform. It is currently being tested the creation of variables and constraints into this new format, and its implementation in different solver libraries. I am currently stuck at the abstractio layer of the constraint object. I am trying to refactor the code related to the symbolic operations between `Variable` and constants, and also implement `ExpandableExpressions`(summations, for instance).
+(25/03/2021) Currently, the project is focusing on the first half of roadmap: the solver encapsulation into a generic mathematical programming platform. It is currently being tested the creation of variables and constraints into this new format, and its implementation in different solver libraries. I am currently stuck at the abstraction layer of the constraint object. I am trying to refactor the code related to the symbolic operations between `Variable` and constants, and also implement `ExpandableExpressions`(summations, for instance).
+
+(24/04/2021) As some new things have come up in my life, I need to move my attention from this project for a while, so I can focus on learning Angular. This means that my other project, FlashMEMO, will gain more attention in the upcoming months. The implementation stopped with ~30 sum operators, which are also able to interpret (not fully tested yet) nested `InnerExpressions` with secondary types. This means that types such as `Constant` can also be used as coefficients in these expressions. Since this was not planned from the beggining of the rework (as fatal oversight), this will require more efforts to fully evaluate if the operators are working properly, and to also add support for exponential expressions within coefficients (ex: 1 + c², which is indeed valid in terms of linear programming).
 
 Please check [this README][Symbol page README] for more information.
 
