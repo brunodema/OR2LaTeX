@@ -41,4 +41,4 @@ This approach was designed entirely by me, so I would say that it definitely can
 
 As of 20/02/2021, great advances in terms of doce design was acheived, however, the oversight when considering that objects such as constants can also be coefficients (that is, there is the possibility of nested `InnerExpression` objects), and that exponential expressions are also valid within this context (ex: 1 + c²), it will be necessary to (1) enable support for exponential calculations (probably replace the base type of coefficients from `double` to a struct `PoweredCoefficient` containing the exponential index ()1, 2, 3, ...) and the actual coefficient value (numerica value of an object). It will also be necessary to refactor the tests to eliminate redundant ones (the test file is currently very polluted visually).
 
-All the afore-mentioned details can be observed in branch called `operator_reformulation`.
+All the afore-mentioned details can be observed in the branch called `operator_reformulation`.
